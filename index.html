@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Nutrición: Control Total v6</title>
+<title>Nutrición: Control Total v8</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -89,7 +89,7 @@
     
     <div class="grid-circles" id="circulosHoy"></div>
     <div id="listaComidasHoy"></div>
-    <button id="btnFinalizar" class="btn-green" onclick="cerrarDia()">💾 FINALIZAR DÍA</button>
+    <button id="btnFinalizar" class="btn-green" onclick="cerrarDia()">💾 FINALIZAR DÍA Y EVALUAR</button>
   </div>
 
   <div id="page-semanal" class="page">
@@ -154,6 +154,7 @@ let usuarioActual = null;
 const COMIDAS_BASE = ["🍳 Desayuno", "🍎 Colación AM", "🍱 Almuerzo", "🥪 Colación PM", "🍽️ Cena", "💧 Solo Agua"];
 const COLORES = { kcal: '#ff453a', prot: '#0a84ff', carbs: '#ff9f0a', grasas: '#32d74b', fibra: '#bf5af2', agua: '#00bfff' };
 const ICONOS = { kcal: '🔥', prot: '💪', carbs: '🍞', grasas: '🥑', fibra: '🌿', agua: '💧' };
+const NOMBRES = { kcal: 'Calorías', prot: 'Proteína', carbs: 'Carbohidratos', grasas: 'Grasas', fibra: 'Fibra', agua: 'Agua' };
 
 function obtenerFechaLocal() {
     const hoy = new Date();
@@ -304,10 +305,54 @@ function renderCircle(label, actual, meta) {
 }
 
 function cerrarDia() {
-  if(perfiles[usuarioActual].hoy.length === 0) return;
+  if(perfiles[usuarioActual].hoy.length === 0) {
+      alert("No hay comidas para registrar hoy.");
+      return;
+  }
+  
   const hoy = perfiles[usuarioActual].hoy;
   const totales = obtenerTotales(hoy);
   const metas = perfiles[usuarioActual].METAS;
+  
+  // Evaluador Inteligente v8 con Excesos
+  let logrados = [];
+  let excedidos = [];
+  let noLogrados = [];
+  
+  for(let key in metas) {
+      if(metas[key] > 0) {
+          let porcentaje = totales[key] / metas[key];
+          
+          if(porcentaje > 1.10) { 
+              excedidos.push(ICONOS[key] + " " + NOMBRES[key]);
+          } else if(porcentaje >= 0.90) { 
+              logrados.push(ICONOS[key] + " " + NOMBRES[key]);
+          } else {
+              noLogrados.push(ICONOS[key] + " " + NOMBRES[key]);
+          }
+      }
+  }
+  
+  let mensajeResumen = "📊 RESUMEN DE HOY\n\n";
+  
+  if(logrados.length > 0) {
+      mensajeResumen += "✅ ¡En el punto ideal (90-110%)!:\n" + logrados.join(", ") + "\n\n";
+  }
+  if(excedidos.length > 0) {
+      mensajeResumen += "⚠️ ¡Cuidado! Te pasaste más del 10% en:\n" + excedidos.join(", ") + "\n\n";
+  }
+  if(noLogrados.length > 0) {
+      mensajeResumen += "📉 Te faltó un poco para alcanzar:\n" + noLogrados.join(", ") + "\n\n";
+  }
+  
+  if(excedidos.length === 0 && noLogrados.length === 0) {
+      mensajeResumen += "🏆 ¡PERFECTO! Cumpliste todas tus metas exactas.";
+      confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 } });
+  } else if (logrados.length > 0) {
+      confetti({ particleCount: 50, spread: 60, origin: { y: 0.6 } });
+  }
+  
+  alert(mensajeResumen);
   
   totales.fechaISO = obtenerFechaLocal(); 
   totales.fechaCorta = formatearFechaCorta(new Date());
@@ -315,9 +360,6 @@ function cerrarDia() {
   perfiles[usuarioActual].historial = perfiles[usuarioActual].historial.filter(h => h.fechaISO !== totales.fechaISO);
   perfiles[usuarioActual].historial.unshift(totales);
   perfiles[usuarioActual].hoy = [];
-  
-  confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
-  alert("Día guardado en el historial ✅");
   
   guardarYActualizar();
   actualizarDropdown();
@@ -369,7 +411,6 @@ function renderReporteMensual() {
 function renderHistorial() {
   const m = perfiles[usuarioActual].METAS;
   
-  // Generar Encabezado con Metas
   document.getElementById('historialHeader').innerHTML = `
     <th style="text-align:left;">Fecha</th>
     <th>🔥<span class="meta-blue">${m.kcal}</span></th>
@@ -380,7 +421,6 @@ function renderHistorial() {
     <th>💧<span class="meta-blue">${m.agua}</span></th>
   `;
 
-  // Llenar Tabla
   const tabla = document.getElementById('tablaHistorial');
   tabla.innerHTML = perfiles[usuarioActual].historial.map(h => `
     <tr><td style="text-align:left; font-weight:bold;">${h.fechaCorta}</td><td>${h.kcal}</td><td>${h.prot}</td><td>${h.carbs}</td><td>${h.grasas}</td><td>${h.fibra}</td><td>${h.agua}</td></tr>
