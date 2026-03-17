@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Nutrición: Control Total v2</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/2614/2614368.png">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <style>
+        body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif; padding:10px; background:#000; color:#eee; margin-bottom:90px; -webkit-tap-highlight-color: transparent; }
+        .container{background:#1c1c1e; padding:20px; border-radius:25px; max-width:420px; margin:auto; box-shadow:0 10px 25px rgba(0,0,0,0.5);}
+        h2,h3{text-align:center;color:#fff;margin-bottom:15px;}
+        .page{display:none;} .active-page{display:block;}
+        .nav-bar{position:fixed;bottom:0;left:0;right:0;background:rgba(28,28,30,0.95);backdrop-filter:blur(15px);display:flex;justify-content:space-around;padding:12px 5px 30px 5px;border-top:0.5px solid #38383a;z-index:1000;}
+        .nav-btn{background:none;border:none;color:#8e8e93;cursor:pointer;display:flex;flex-direction:column;align-items:center;font-size:0.7em;flex:1;}
+        .nav-btn.active{color:#0a84ff;font-weight:bold;}
+        .nav-icon{font-size:1.6em;margin-bottom:4px;}
+        .grid-circles{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:20px 0;text-align:center;}
+        .circle-container{position:relative;width:85px;height:85px;margin:0 auto;}
+        .circle-svg{transform:rotate(-90deg);width:100%;height:100%;}
+        .circle-bg{fill:none;stroke:#2c2c2e;stroke-width:6;}
+        .circle-bar{fill:none;stroke-width:6;stroke-linecap:round;transition:stroke-dasharray 0.8s ease;}
+        .circle-text{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:0.85em;font-weight:bold;}
+        .circle-header{font-size:1.1em;margin-bottom:2px;}
+        .circle-label{font-size:0.6em;color:#aaa;font-weight:bold;text-transform:uppercase;}
+        .scroll-area{max-height:380px;overflow-y:auto;border:1px solid #38383a;border-radius:15px;margin-top:10px;}
+        .history-table{width:100%;border-collapse:collapse;font-size:0.75em;text-align:center;color:#ccc;}
+        .history-table th,.history-table td{border-bottom:1px solid #38383a;padding:12px 5px;}
+        input, select{background:#2c2c2e;border:1px solid #3a3a3c;color:#fff;padding:14px;border-radius:12px;width:100%;box-sizing:border-box;margin-bottom:12px;font-size:16px;}
+        .btn-blue{background:#007aff;color:white;width:100%;padding:16px;border:none;border-radius:14px;font-weight:bold;cursor:pointer; margin-bottom: 10px;}
+        .btn-green{background:#34c759;color:white;width:100%;padding:16px;border:none;border-radius:14px;font-weight:bold;cursor:pointer;margin-top:15px;}
+        .log-item{display:flex;justify-content:space-between;background:#2c2c2e;padding:10px 15px;border-radius:12px;margin-bottom:6px;font-size:0.85em;border-left:4px solid #007aff;}
+        .delete-btn{color:#ff453a; font-weight:bold; margin-left:10px;}
+    </style>
+</head>
+<body onload="cargarTodo()">
+
+<div class="container">
+    <div id="page-perfil" class="page active-page">
+        <h2>Seleccionar Usuario</h2>
+        <button class="btn-blue" onclick="seleccionarPerfil('Viviana')">👩 Viviana</button>
+        <button class="btn-blue" onclick="seleccionarPerfil('Enrique')">👨 Enrique</button>
+    </div>
+
+    <div id="page-hoy" class="page">
+        <h2>Hoy - <span id="perfilActual"></span></h2>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+            <select id="tipoComida" style="grid-column:span 2;"></select>
+            <input type="number" id="kcal" placeholder="🔥 KCal">
+            <input type="number" id="prot" placeholder="💪 Prot">
+            <input type="number" id="carbs" placeholder="🍞 Carb">
+            <input type="number" id="grasas" placeholder="🥑 Gras">
+            <input type="number" id="fibra" placeholder="🌿 Fibr" style="grid-column:span 2;">
+        </div>
+        <button class="btn-blue" id="btnRegistrar" onclick="registrarComida()">+ REGISTRAR</button>
+        <div class="grid-circles" id="circulosHoy"></div>
+        <div id="listaComidasHoy"></div>
+        <button id="btnFinalizar" class="btn-green" onclick="cerrarDia()">💾 GUARDAR DÍA</button>
+    </div>
+
+    <div id="page-historial" class="page">
+        <h3>📚 Historial</h3>
+        <div class="scroll-area">
+            <table class="history-table">
+                <thead>
+                    <tr><th>Fecha</th><th>🔥</th><th>💪</th><th>🍞</th><th>🥑</th><th>🌿</th></tr>
+                </thead>
+                <tbody id="tablaHistorial"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="page-config" class="page">
+        <h3>⚙️ Metas Diarias</h3>
+        <p style="text-align:center; color:#8e8e93;">Configura para: <b id="perfilConfigLabel"></b></p>
+        <label>🔥 KCal:</label><input type="number" id="mKcal">
+        <label>💪 Proteína:</label><input type="number" id="mProt">
+        <label>🍞 Carbos:</label><input type="number" id="mCarbs">
+        <label>🥑 Grasas:</label><input type="number" id="mGrasas">
+        <label>🌿 Fibra:</label><input type="number" id="mFibra">
+        <button class="btn-blue" onclick="guardarMetas()">💾 GUARDAR METAS</button>
+        <button class="btn-blue" style="background:#ff453a;" onclick="cambiarPerfil()">🔄 CAMBIAR USUARIO</button>
+    </div>
+</div>
+
+<div class="nav-bar" id="main-nav" style="display:none;">
+    <button class="nav-btn active" onclick="verPagina('hoy', this)"><span class="nav-icon">📝</span>Hoy</button>
+    <button class="nav-btn" onclick="verPagina('historial', this)"><span class="nav-icon">📚</span>Historial</button>
+    <button class="nav-btn" onclick="verPagina('config', this)"><span class="nav-icon">⚙️</span>Metas</button>
+</div>
+
+<script>
+let perfiles = {
+    Viviana: { METAS: { kcal: 1500, prot: 90, carbs: 168, grasas: 50, fibra: 75 }, hoy: [], historial: [] },
+    Enrique: { METAS: { kcal: 2000, prot: 120, carbs: 220, grasas: 60, fibra: 40 }, hoy: [], historial: [] }
+};
+let usuarioActual = null;
+const COMIDAS = ["🍳 Desayuno", "🍎 Colación AM", "🍱 Almuerzo", "🥪 Colación PM", "🍽️ Cena"];
+const COLORES = { kcal: '#ff453a', prot: '#0a84ff', carbs: '#ff9f0a', grasas: '#32d74b', fibra: '#bf5af2' };
+
+function cargarTodo() {
+    let datosGuardados = localStorage.getItem('nutriDataV2');
+    if (datosGuardados) perfiles = JSON.parse(datosGuardados);
+    const sel = document.getElementById('tipoComida');
+    COMIDAS.forEach(c => sel.innerHTML += `<option value="${c}">${c}</option>`);
+}
+
+function seleccionarPerfil(nombre) {
+    usuarioActual = nombre;
+    document.getElementById('perfilActual').innerText = nombre;
+    document.getElementById('perfilConfigLabel').innerText = nombre;
+    document.getElementById('page-perfil').classList.remove('active-page');
+    document.getElementById('page-hoy').classList.add('active-page');
+    document.getElementById('main-nav').style.display = 'flex';
+    actualizarUI();
+}
+
+function verPagina(id, btn) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
+    document.getElementById('page-' + id).classList.add('active-page');
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    if(id === 'historial') renderHistorial();
+    if(id === 'config') cargarMetasInputs();
+}
+
+function registrarComida() {
+    const nueva = {
+        id: Date.now(),
+        tipo: document.getElementById('tipoComida').value,
+        kcal: +document.getElementById('kcal').value || 0,
+        prot: +document.getElementById('prot').value || 0,
+        carbs: +document.getElementById('carbs').value || 0,
+        grasas: +document.getElementById('grasas').value || 0,
+        fibra: +document.getElementById('fibra').value || 0
+    };
+    perfiles[usuarioActual].hoy.push(nueva);
+    ['kcal','prot','carbs','grasas','fibra'].forEach(id => document.getElementById(id).value = '');
+    guardarYActualizar();
+}
+
+function borrarComida(id) {
+    perfiles[usuarioActual].hoy = perfiles[usuarioActual].hoy.filter(c => c.id !== id);
+    guardarYActualizar();
+}
+
+function guardarYActualizar() {
+    localStorage.setItem('nutriDataV2', JSON.stringify(perfiles));
+    actualizarUI();
+}
+
+function actualizarUI() {
+    const hoy = perfiles[usuarioActual].hoy;
+    const metas = perfiles[usuarioActual].METAS;
+    const totales = hoy.reduce((acc, c) => ({
+        kcal: acc.kcal + c.kcal, prot: acc.prot + c.prot, carbs: acc.carbs + c.carbs, grasas: acc.grasas + c.grasas, fibra: acc.fibra + c.fibra
+    }), { kcal: 0, prot: 0, carbs: 0, grasas: 0, fibra: 0 });
+
+    const container = document.getElementById('circulosHoy');
+    container.innerHTML = '';
+    for (let key in metas) {
+        container.innerHTML += renderCircle(key, totales[key], metas[key]);
+    }
+
+    const lista = document.getElementById('listaComidasHoy');
+    lista.innerHTML = hoy.map(c => `
+        <div class="log-item">
+            <span><b>${c.tipo}</b>: ${c.kcal}k | ${c.prot}P | ${c.carbs}C</span>
+            <span class="delete-btn" onclick="borrarComida(${c.id})">✕</span>
+        </div>
+    `).join('');
+}
+
+function renderCircle(label, actual, meta) {
+    const pct = Math.min((actual / meta) * 100, 100);
+    const dash = pct * 2.2; 
+    return `
+        <div class="circle-container">
+            <svg class="circle-svg" viewBox="0 0 85 85">
+                <circle class="circle-bg" cx="42.5" cy="42.5" r="35"/>
+                <circle class="circle-bar" cx="42.5" cy="42.5" r="35" 
+                    style="stroke:${COLORES[label]}; stroke-dasharray: ${dash} 220;"/>
+            </svg>
+            <div class="circle-text">
+                <div class="circle-header">${Math.round(actual)}</div>
+                <div class="circle-label">${label}</div>
+            </div>
+        </div>`;
+}
+
+function cerrarDia() {
+    if(perfiles[usuarioActual].hoy.length === 0) return;
+    const hoy = perfiles[usuarioActual].hoy;
+    const resumen = hoy.reduce((acc, c) => ({
+        kcal: acc.kcal + c.kcal, prot: acc.prot + c.prot, carbs: acc.carbs + c.carbs, grasas: acc.grasas + c.grasas, fibra: acc.fibra + c.fibra
+    }), { kcal: 0, prot: 0, carbs: 0, grasas: 0, fibra: 0 });
+    
+    resumen.fecha = new Date().toLocaleDateString('es-ES', {day:'2-digit', month:'2-digit'});
+    perfiles[usuarioActual].historial.unshift(resumen);
+    perfiles[usuarioActual].hoy = [];
+    confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+    guardarYActualizar();
+    alert("Día guardado en el historial ✅");
+}
+
+function renderHistorial() {
+    const tabla = document.getElementById('tablaHistorial');
+    tabla.innerHTML = perfiles[usuarioActual].historial.map(h => `
+        <tr>
+            <td>${h.fecha}</td><td>${h.kcal}</td><td>${h.prot}</td><td>${h.carbs}</td><td>${h.grasas}</td><td>${h.fibra}</td>
+        </tr>
+    `).join('');
+}
+
+function cargarMetasInputs() {
+    const m = perfiles[usuarioActual].METAS;
+    document.getElementById('mKcal').value = m.kcal;
+    document.getElementById('mProt').value = m.prot;
+    document.getElementById('mCarbs').value = m.carbs;
+    document.getElementById('mGrasas').value = m.grasas;
+    document.getElementById('mFibra').value = m.fibra;
+}
+
+function guardarMetas() {
+    perfiles[usuarioActual].METAS = {
+        kcal: +document.getElementById('mKcal').value,
+        prot: +document.getElementById('mProt').value,
+        carbs: +document.getElementById('mCarbs').value,
+        grasas: +document.getElementById('mGrasas').value,
+        fibra: +document.getElementById('mFibra').value
+    };
+    guardarYActualizar();
+    alert("Metas actualizadas ✅");
+}
+
+function cambiarPerfil() {
+    usuarioActual = null;
+    document.getElementById('main-nav').style.display = 'none';
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
+    document.getElementById('page-perfil').classList.add('active-page');
+}
+</script>
+</body>
+</html>
