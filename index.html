@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Nutrición: Control Total v9</title>
+<title>Nutrición: Control Total v10</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -314,7 +314,7 @@ function cerrarDia() {
   const totales = obtenerTotales(hoy);
   const metas = perfiles[usuarioActual].METAS;
   
-  // Evaluador Inteligente v9 con Porcentajes Exactos
+  // Evaluador Inteligente v10 con Frases Exactas ("te falta" / "te sobra")
   let logrados = [];
   let excedidos = [];
   let noLogrados = [];
@@ -322,34 +322,43 @@ function cerrarDia() {
   for(let key in metas) {
       if(metas[key] > 0) {
           let pctExacto = (totales[key] / metas[key]) * 100;
-          let pctRedondeado = Math.round(pctExacto);
+          let diff = pctExacto - 100;
+          // Redondeamos a un decimal para mayor precisión sin saturar la pantalla
+          let diffStr = Number(Math.abs(diff).toFixed(1)); 
           
-          if(pctExacto > 110) { 
-              let extra = pctRedondeado - 100;
-              excedidos.push(`${ICONOS[key]} ${NOMBRES[key]} (+${extra}% extra)`);
-          } else if(pctExacto >= 90) { 
-              logrados.push(`${ICONOS[key]} ${NOMBRES[key]} (${pctRedondeado}%)`);
+          let textoItem = "";
+          if (diff > 0) {
+              textoItem = `${ICONOS[key]} ${NOMBRES[key]} (te sobra el ${diffStr}%)`;
+          } else if (diff < 0) {
+              textoItem = `${ICONOS[key]} ${NOMBRES[key]} (te falta el ${diffStr}%)`;
           } else {
-              let falta = 100 - pctRedondeado;
-              noLogrados.push(`${ICONOS[key]} ${NOMBRES[key]} (faltó ${falta}%)`);
+              textoItem = `${ICONOS[key]} ${NOMBRES[key]} (100% exacto)`;
+          }
+
+          if(pctExacto > 110) { 
+              excedidos.push(textoItem);
+          } else if(pctExacto >= 90) { 
+              logrados.push(textoItem);
+          } else {
+              noLogrados.push(textoItem);
           }
       }
   }
   
-  let mensajeResumen = "📊 RESUMEN EXACTO DE HOY\n\n";
+  let mensajeResumen = "📊 RESUMEN DE PRECISIÓN DE HOY\n\n";
   
   if(logrados.length > 0) {
-      mensajeResumen += "✅ En el punto ideal:\n  • " + logrados.join("\n  • ") + "\n\n";
+      mensajeResumen += "✅ En la zona ideal (90-110%):\n  • " + logrados.join("\n  • ") + "\n\n";
   }
   if(excedidos.length > 0) {
-      mensajeResumen += "⚠️ ¡Cuidado! Te excediste en:\n  • " + excedidos.join("\n  • ") + "\n\n";
+      mensajeResumen += "⚠️ Excediste tu límite (>110%):\n  • " + excedidos.join("\n  • ") + "\n\n";
   }
   if(noLogrados.length > 0) {
-      mensajeResumen += "📉 Te faltó para el 100% en:\n  • " + noLogrados.join("\n  • ") + "\n\n";
+      mensajeResumen += "📉 Aún necesitas consumir (<90%):\n  • " + noLogrados.join("\n  • ") + "\n\n";
   }
   
   if(excedidos.length === 0 && noLogrados.length === 0) {
-      mensajeResumen += "🏆 ¡PERFECTO! Cumpliste todas tus metas con precisión.";
+      mensajeResumen += "🏆 ¡BRUTAL! Todo quedó en tu rango ideal.";
       confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 } });
   } else if (logrados.length > 0) {
       confetti({ particleCount: 50, spread: 60, origin: { y: 0.6 } });
