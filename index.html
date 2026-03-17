@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Nutrición: Control Total v5</title>
+<title>Nutrición: Control Total v6</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -22,9 +22,9 @@
   .circle-svg{transform:rotate(-90deg);width:100%;height:100%;}
   .circle-bg{fill:none;stroke:#2c2c2e;stroke-width:6;}
   .circle-bar{fill:none;stroke-width:6;stroke-linecap:round;transition:stroke-dasharray 0.8s ease;}
-  .circle-text{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:0.85em;font-weight:bold;}
+  .circle-text{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:0.8em;font-weight:bold;}
   .circle-header{font-size:1.1em;margin-bottom:2px;}
-  .circle-label{font-size:0.55em;color:#aaa;font-weight:bold;text-transform:uppercase;}
+  .circle-label{font-size:0.6em;color:#aaa;font-weight:bold;text-transform:uppercase;}
   
   .scroll-area{max-height:350px;overflow-y:auto;border:1px solid #38383a;border-radius:15px;margin-top:10px; position:relative;}
   .history-table{width:100%;border-collapse:collapse;font-size:0.75em;text-align:center;color:#ccc;}
@@ -80,7 +80,7 @@
 
   <div id="page-semanal" class="page">
     <h3>📊 Reporte Semanal</h3>
-    <p class="subtitulo">Lunes a Domingo Actual</p>
+    <p class="subtitulo" id="rangoSemanaStr"></p>
     <div class="grid-circles" id="circulosSemanal"></div>
     <p id="msgSemana" style="text-align:center; font-size:0.8em; color:#8e8e93;"></p>
     <button class="btn-white" onclick="window.print()">📄 EXPORTAR PDF SEMANAL</button>
@@ -88,19 +88,19 @@
 
   <div id="page-mensual" class="page">
     <h3>📆 Reporte Mensual</h3>
-    <p class="subtitulo">Acumulado del Mes Actual</p>
+    <p class="subtitulo" id="rangoMesStr"></p>
     <div class="grid-circles" id="circulosMensual"></div>
     <p id="msgMes" style="text-align:center; font-size:0.8em; color:#8e8e93;"></p>
     <button class="btn-white" onclick="window.print()">📄 EXPORTAR PDF MENSUAL</button>
   </div>
 
   <div id="page-historial" class="page">
-    <h3>📚 Historial Anual</h3>
+    <h3>📚 Historial Diario</h3>
     <div class="metas-banner" id="historialMetas"></div>
     <div class="scroll-area">
       <table class="history-table">
         <thead>
-          <tr><th>Fecha</th><th>🔥</th><th>💪</th><th>🍞</th><th>🥑</th><th>🌿</th><th>💧</th></tr>
+          <tr><th>Fecha</th><th>Meta</th><th>KCal</th><th>Prot</th><th>Carb</th><th>Gras</th><th>Fibr</th><th>Agua</th></tr>
         </thead>
         <tbody id="tablaHistorial"></tbody>
       </table>
@@ -130,47 +130,36 @@
 </div>
 
 <script>
-// Cambiamos a V5 para empezar limpio con el nuevo sistema de calendario
 let perfiles = {
   Viviana: { METAS: { kcal: 1500, prot: 90, carbs: 168, grasas: 50, fibra: 75, agua: 2000 }, hoy: [], historial: [] },
   Enrique: { METAS: { kcal: 2000, prot: 120, carbs: 220, grasas: 60, fibra: 40, agua: 2500 }, hoy: [], historial: [] }
 };
 let usuarioActual = null;
-const COMIDAS = ["🍳 Desayuno", "🍎 Colación AM", "🍱 Almuerzo", "🥪 Colación PM", "🍽️ Cena", "💧 Solo Agua"];
+const TODAS_LAS_COMIDAS = ["🍳 Desayuno", "🍎 Colación AM", "🍱 Almuerzo", "🥪 Colación PM", "🍽️ Cena", "💧 Más Agua"];
 const COLORES = { kcal: '#ff453a', prot: '#0a84ff', carbs: '#ff9f0a', grasas: '#32d74b', fibra: '#bf5af2', agua: '#00bfff' };
+const ICONOS = { kcal: '🔥', prot: '💪', carbs: '🍞', grasas: '🥑', fibra: '🌿', agua: '💧' };
 
-// Funciones de Calendario
 function obtenerFechaLocal() {
     const hoy = new Date();
-    // Ajuste simple para evitar desfases de zona horaria
     return new Date(hoy.getTime() - (hoy.getTimezoneOffset() * 60000)).toISOString().split('T')[0];
 }
 
 function getRangoSemana() {
     let hoy = new Date();
     let dia = hoy.getDay(); 
-    let diff = hoy.getDate() - dia + (dia === 0 ? -6 : 1); // Ajustar para que Lunes sea el primer día
+    let diff = hoy.getDate() - dia + (dia === 0 ? -6 : 1); 
     let lunes = new Date(hoy.setDate(diff));
     let domingo = new Date(lunes);
     domingo.setDate(lunes.getDate() + 6);
-    
     return {
         inicio: new Date(lunes.getTime() - (lunes.getTimezoneOffset() * 60000)).toISOString().split('T')[0],
         fin: new Date(domingo.getTime() - (domingo.getTimezoneOffset() * 60000)).toISOString().split('T')[0]
     };
 }
 
-function getMesActualStr() {
-    const hoy = new Date();
-    const mes = (hoy.getMonth() + 1).toString().padStart(2, '0');
-    return `${hoy.getFullYear()}-${mes}`;
-}
-
 function cargarTodo() {
-  let datosGuardados = localStorage.getItem('nutriDataV5');
+  let datosGuardados = localStorage.getItem('nutriDataV6');
   if (datosGuardados) perfiles = JSON.parse(datosGuardados);
-  const sel = document.getElementById('tipoComida');
-  COMIDAS.forEach(c => sel.innerHTML += `<option value="${c}">${c}</option>`);
   document.getElementById('fechaHoy').innerText = new Date().toLocaleDateString('es-ES', { weekday:'long', day:'numeric', month:'long' }).toUpperCase();
 }
 
@@ -190,22 +179,41 @@ function verPagina(id, btn) {
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   
+  if(id === 'hoy') actualizarUI();
   if(id === 'historial') renderHistorial();
   if(id === 'config') cargarMetasInputs();
   if(id === 'semanal') renderReporteSemanal();
   if(id === 'mensual') renderReporteMensual();
 }
 
+function actualizarSelectComidas() {
+  const hoy = perfiles[usuarioActual].hoy;
+  const registradas = hoy.map(c => c.tipo);
+  const sel = document.getElementById('tipoComida');
+  sel.innerHTML = '';
+  // Filtramos las comidas ya registradas (excepto el agua extra que siempre se puede agregar)
+  const disponibles = TODAS_LAS_COMIDAS.filter(c => !registradas.includes(c) || c === "💧 Más Agua");
+  
+  if(disponibles.length === 0) {
+      sel.innerHTML = `<option value="">Todo registrado ✅</option>`;
+      document.getElementById('btnRegistrar').disabled = true;
+      document.getElementById('btnRegistrar').style.opacity = '0.5';
+  } else {
+      disponibles.forEach(c => sel.innerHTML += `<option value="${c}">${c}</option>`);
+      document.getElementById('btnRegistrar').disabled = false;
+      document.getElementById('btnRegistrar').style.opacity = '1';
+  }
+}
+
 function registrarComida() {
+  const sel = document.getElementById('tipoComida');
+  if(!sel.value) return;
   const nueva = {
     id: Date.now(),
-    tipo: document.getElementById('tipoComida').value,
-    kcal: +document.getElementById('kcal').value || 0,
-    prot: +document.getElementById('prot').value || 0,
-    carbs: +document.getElementById('carbs').value || 0,
-    grasas: +document.getElementById('grasas').value || 0,
-    fibra: +document.getElementById('fibra').value || 0,
-    agua: +document.getElementById('agua').value || 0
+    tipo: sel.value,
+    kcal: +document.getElementById('kcal').value || 0, prot: +document.getElementById('prot').value || 0,
+    carbs: +document.getElementById('carbs').value || 0, grasas: +document.getElementById('grasas').value || 0,
+    fibra: +document.getElementById('fibra').value || 0, agua: +document.getElementById('agua').value || 0
   };
   perfiles[usuarioActual].hoy.push(nueva);
   ['kcal','prot','carbs','grasas','fibra','agua'].forEach(id => document.getElementById(id).value = '');
@@ -218,7 +226,7 @@ function borrarComida(id) {
 }
 
 function guardarYActualizar() {
-  localStorage.setItem('nutriDataV5', JSON.stringify(perfiles));
+  localStorage.setItem('nutriDataV6', JSON.stringify(perfiles));
   actualizarUI();
 }
 
@@ -236,32 +244,31 @@ function actualizarUI() {
 
   const container = document.getElementById('circulosHoy');
   container.innerHTML = '';
-  for (let key in metas) {
-    container.innerHTML += renderCircle(key, totales[key], metas[key]);
-  }
+  for (let key in metas) container.innerHTML += renderCircle(key, totales[key], metas[key]);
 
   const lista = document.getElementById('listaComidasHoy');
   lista.innerHTML = hoy.map(c => `
     <div class="log-item">
-      <span><b>${c.tipo}</b>: ${c.kcal}k | ${c.prot}P | ${c.agua}ml 💧</span>
+      <span><b>${c.tipo}</b>: 🔥${c.kcal} | 💪${c.prot} | 💧${c.agua}</span>
       <span class="delete-btn" onclick="borrarComida(${c.id})">✕</span>
     </div>
   `).join('');
+  
+  actualizarSelectComidas();
 }
 
-function renderCircle(label, actual, meta) {
+function renderCircle(key, actual, meta) {
   const pct = Math.min((actual / meta) * 100, 100) || 0;
   const dash = pct * 2.2; 
   return `
     <div class="circle-container">
       <svg class="circle-svg" viewBox="0 0 85 85">
         <circle class="circle-bg" cx="42.5" cy="42.5" r="35"/>
-        <circle class="circle-bar" cx="42.5" cy="42.5" r="35" 
-          style="stroke:${COLORES[label]}; stroke-dasharray: ${dash} 220;"/>
+        <circle class="circle-bar" cx="42.5" cy="42.5" r="35" style="stroke:${COLORES[key]}; stroke-dasharray: ${dash} 220;"/>
       </svg>
       <div class="circle-text">
         <div class="circle-header">${Math.round(actual)}</div>
-        <div class="circle-label">${label}</div>
+        <div class="circle-label">${ICONOS[key]} ${key}</div>
       </div>
     </div>`;
 }
@@ -272,11 +279,12 @@ function cerrarDia() {
   const totales = obtenerTotales(hoy);
   const metas = perfiles[usuarioActual].METAS;
   
-  // Guardamos con fecha estricta (ISO) para el calendario y fecha corta para la vista
   totales.fechaISO = obtenerFechaLocal(); 
-  totales.fechaCorta = new Date().toLocaleDateString('es-ES', {day:'2-digit', month:'2-digit'});
+  // Crear fecha corta con formato: L 17/3
+  const dateObj = new Date(totales.fechaISO + 'T12:00:00');
+  const letrasDia = ["D", "L", "M", "Mi", "J", "V", "S"];
+  totales.fechaCorta = `${letrasDia[dateObj.getDay()]} ${dateObj.getDate()}/${dateObj.getMonth()+1}`;
   
-  // Evitar duplicados del mismo día
   perfiles[usuarioActual].historial = perfiles[usuarioActual].historial.filter(h => h.fechaISO !== totales.fechaISO);
   perfiles[usuarioActual].historial.unshift(totales);
   perfiles[usuarioActual].hoy = [];
@@ -287,81 +295,83 @@ function cerrarDia() {
   } else {
       alert("Día guardado en el historial ✅.");
   }
-  
   guardarYActualizar();
 }
 
 function renderReporteSemanal() {
   const rango = getRangoSemana();
-  const historialSemana = perfiles[usuarioActual].historial.filter(h => h.fechaISO >= rango.inicio && h.fechaISO <= rango.fin);
+  const fInicio = new Date(rango.inicio + 'T12:00:00');
+  const fFin = new Date(rango.fin + 'T12:00:00');
+  document.getElementById('rangoSemanaStr').innerText = `Lunes ${fInicio.getDate()}/${fInicio.getMonth()+1} al Domingo ${fFin.getDate()}/${fFin.getMonth()+1}`;
   
+  const historialSemana = perfiles[usuarioActual].historial.filter(h => h.fechaISO >= rango.inicio && h.fechaISO <= rango.fin);
   const container = document.getElementById('circulosSemanal');
   const msg = document.getElementById('msgSemana');
   
   if(historialSemana.length === 0) {
       container.innerHTML = "";
-      msg.innerText = "Aún no hay días guardados en esta semana (Lunes a Domingo).";
+      msg.innerText = "Aún no hay registros en esta semana.";
       return;
   }
   
-  msg.innerText = `Promedio basado en ${historialSemana.length} día(s) registrado(s) esta semana.`;
+  const metasM = perfiles[usuarioActual].METAS;
+  const metasSemanales = { kcal: metasM.kcal*7, prot: metasM.prot*7, carbs: metasM.carbs*7, grasas: metasM.grasas*7, fibra: metasM.fibra*7, agua: metasM.agua*7 };
   const sumas = obtenerTotales(historialSemana);
-  const promedios = {};
-  for(let key in sumas) promedios[key] = sumas[key] / historialSemana.length;
   
-  const metas = perfiles[usuarioActual].METAS;
+  msg.innerText = `Mostrando Total Acumulado (${historialSemana.length} días) vs Meta Total de 7 Días.`;
   container.innerHTML = '';
-  for (let key in metas) container.innerHTML += renderCircle(key, promedios[key], metas[key]);
+  for (let key in metasSemanales) container.innerHTML += renderCircle(key, sumas[key], metasSemanales[key]);
 }
 
 function renderReporteMensual() {
-  const mesActual = getMesActualStr(); // Ej: "2026-03"
-  const historialMes = perfiles[usuarioActual].historial.filter(h => h.fechaISO && h.fechaISO.startsWith(mesActual));
+  const hoy = new Date();
+  const mesActualStr = `${hoy.getFullYear()}-${(hoy.getMonth() + 1).toString().padStart(2, '0')}`;
+  const nombreMeses = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
+  document.getElementById('rangoMesStr').innerText = `Mes de ${nombreMeses[hoy.getMonth()]}`;
   
+  const historialMes = perfiles[usuarioActual].historial.filter(h => h.fechaISO && h.fechaISO.startsWith(mesActualStr));
   const container = document.getElementById('circulosMensual');
   const msg = document.getElementById('msgMes');
   
   if(historialMes.length === 0) {
       container.innerHTML = "";
-      msg.innerText = "Aún no hay días guardados en este mes calendario.";
+      msg.innerText = "Aún no hay registros este mes.";
       return;
   }
   
-  msg.innerText = `Promedio basado en ${historialMes.length} día(s) registrado(s) este mes.`;
-  const sumas = obtenerTotales(historialMes);
-  const promedios = {};
-  for(let key in sumas) promedios[key] = sumas[key] / historialMes.length;
+  const diasEnMes = new Date(hoy.getFullYear(), hoy.getMonth() + 1, 0).getDate();
+  const metasM = perfiles[usuarioActual].METAS;
+  const metasMensuales = { kcal: metasM.kcal*diasEnMes, prot: metasM.prot*diasEnMes, carbs: metasM.carbs*diasEnMes, grasas: metasM.grasas*diasEnMes, fibra: metasM.fibra*diasEnMes, agua: metasM.agua*diasEnMes };
   
-  const metas = perfiles[usuarioActual].METAS;
+  const sumas = obtenerTotales(historialMes);
+  msg.innerText = `Mostrando Total Acumulado vs Meta de Todo el Mes (${diasEnMes} días).`;
+  
   container.innerHTML = '';
-  for (let key in metas) container.innerHTML += renderCircle(key, promedios[key], metas[key]);
+  for (let key in metasMensuales) container.innerHTML += renderCircle(key, sumas[key], metasMensuales[key]);
 }
 
 function renderHistorial() {
   const m = perfiles[usuarioActual].METAS;
   document.getElementById('historialMetas').innerHTML = `
-    <div><span>🔥</span>${m.kcal}</div>
-    <div><span>💪</span>${m.prot}</div>
-    <div><span>🍞</span>${m.carbs}</div>
-    <div><span>🥑</span>${m.grasas}</div>
-    <div><span>🌿</span>${m.fibra}</div>
-    <div><span>💧</span>${m.agua}</div>
+    <div><span>🔥</span>${m.kcal}</div><div><span>💪</span>${m.prot}</div><div><span>🍞</span>${m.carbs}</div>
+    <div><span>🥑</span>${m.grasas}</div><div><span>🌿</span>${m.fibra}</div><div><span>💧</span>${m.agua}</div>
   `;
 
   const tabla = document.getElementById('tablaHistorial');
   tabla.innerHTML = perfiles[usuarioActual].historial.map(h => `
-    <tr><td>${h.fechaCorta}</td><td>${h.kcal}</td><td>${h.prot}</td><td>${h.carbs}</td><td>${h.grasas}</td><td>${h.fibra}</td><td>${h.agua}</td></tr>
+    <tr>
+      <td>${h.fechaCorta}</td>
+      <td style="color:#0a84ff; font-weight:bold;">Logrado:</td>
+      <td>🔥${h.kcal}</td><td>💪${h.prot}</td><td>🍞${h.carbs}</td><td>🥑${h.grasas}</td><td>🌿${h.fibra}</td><td>💧${h.agua}</td>
+    </tr>
   `).join('');
 }
 
 function cargarMetasInputs() {
   const m = perfiles[usuarioActual].METAS;
-  document.getElementById('mKcal').value = m.kcal;
-  document.getElementById('mProt').value = m.prot;
-  document.getElementById('mCarbs').value = m.carbs;
-  document.getElementById('mGrasas').value = m.grasas;
-  document.getElementById('mFibra').value = m.fibra;
-  document.getElementById('mAgua').value = m.agua;
+  document.getElementById('mKcal').value = m.kcal; document.getElementById('mProt').value = m.prot;
+  document.getElementById('mCarbs').value = m.carbs; document.getElementById('mGrasas').value = m.grasas;
+  document.getElementById('mFibra').value = m.fibra; document.getElementById('mAgua').value = m.agua;
 }
 
 function guardarMetas() {
