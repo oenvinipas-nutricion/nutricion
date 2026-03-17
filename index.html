@@ -9,45 +9,53 @@
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 <style>
   body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif; padding:10px; background:#000; color:#eee; margin-bottom:90px; -webkit-tap-highlight-color: transparent; }
-  .container{background:#1c1c1e; padding:20px; border-radius:25px; max-width:420px; margin:auto; box-shadow:0 10px 25px rgba(0,0,0,0.5);}
-  h2,h3{text-align:center;color:#fff;margin-bottom:5px;}
-  .subtitulo{text-align:center; color:#0a84ff; font-size:0.85em; margin-bottom:15px; font-weight:bold;}
+  .container{background:#000; padding:10px; max-width:420px; margin:auto;}
+  h2,h3{text-align:center;color:#fff;margin-bottom:5px; font-weight:600;}
+  .subtitulo{text-align:center; color:#0a84ff; font-size:0.85em; margin-bottom:20px; font-weight:bold;}
+  
   .page{display:none;} .active-page{display:block;}
-  .nav-bar{position:fixed;bottom:0;left:0;right:0;background:rgba(28,28,30,0.95);backdrop-filter:blur(15px);display:flex;justify-content:space-around;padding:12px 5px 30px 5px;border-top:0.5px solid #38383a;z-index:1000;}
+  .nav-bar{position:fixed;bottom:0;left:0;right:0;background:rgba(15,15,15,0.95);backdrop-filter:blur(15px);display:flex;justify-content:space-around;padding:12px 5px 30px 5px;border-top:0.5px solid #333;z-index:1000;}
   .nav-btn{background:none;border:none;color:#8e8e93;cursor:pointer;display:flex;flex-direction:column;align-items:center;font-size:0.7em;flex:1;}
   .nav-btn.active{color:#0a84ff;font-weight:bold;}
   .nav-icon{font-size:1.6em;margin-bottom:4px;}
-  .grid-circles{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:20px 0;text-align:center;}
-  .circle-container{position:relative;width:85px;height:85px;margin:0 auto;}
+  
+  /* Círculos Rediseñados */
+  .grid-circles{display:grid;grid-template-columns:repeat(3,1fr);gap:20px 10px;margin:30px 0;text-align:center;}
+  .circle-wrapper{display:flex; flex-direction:column; align-items:center;}
+  .circle-top-icon{font-size:1.4em; margin-bottom:5px;}
+  .circle-container{position:relative;width:75px;height:75px;}
   .circle-svg{transform:rotate(-90deg);width:100%;height:100%;}
-  .circle-bg{fill:none;stroke:#2c2c2e;stroke-width:6;}
-  .circle-bar{fill:none;stroke-width:6;stroke-linecap:round;transition:stroke-dasharray 0.8s ease;}
-  .circle-text{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:0.8em;font-weight:bold;}
-  .circle-header{font-size:1.1em;margin-bottom:2px;}
-  .circle-label{font-size:0.6em;color:#aaa;font-weight:bold;text-transform:uppercase;}
+  .circle-bg{fill:none;stroke:#1c1c1e;stroke-width:5;}
+  .circle-bar{fill:none;stroke-width:5;stroke-linecap:round;transition:stroke-dasharray 0.8s ease;}
+  .circle-text{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:0.95em;font-weight:bold;}
+  .circle-label-bottom{font-size:0.6em;color:#aaa;font-weight:bold;text-transform:uppercase;margin-top:8px;}
+  .circle-fraction{font-size:0.65em;color:#666; margin-top:2px;}
   
-  .scroll-area{max-height:350px;overflow-y:auto;border:1px solid #38383a;border-radius:15px;margin-top:10px; position:relative;}
-  .history-table{width:100%;border-collapse:collapse;font-size:0.75em;text-align:center;color:#ccc;}
-  .history-table th{position:sticky; top:0; background:#2c2c2e; z-index:10; padding:12px 2px; box-shadow:0 2px 4px rgba(0,0,0,0.3);}
-  .history-table td{border-bottom:1px solid #38383a;padding:12px 2px;}
-  .metas-banner{display:flex; justify-content:space-between; background:#3a3a3c; padding:12px; border-radius:12px; margin-bottom:15px; font-size:0.75em; text-align:center; font-weight:bold; color:#fff;}
-  .metas-banner div span{display:block; font-size:1.4em; margin-bottom:3px;}
+  /* Historial Rediseñado */
+  .historial-card{background:#111; border:1px solid #222; border-radius:20px; padding:15px; margin-top:10px;}
+  .historial-card table{width:100%; border-collapse:collapse; font-size:0.75em; text-align:center;}
+  .historial-card th{padding:10px 2px; color:#aaa; font-weight:normal; border-bottom:1px solid #222;}
+  .historial-card td{padding:12px 2px; border-bottom:1px solid #222; color:#eee;}
+  .meta-blue{color:#0a84ff; font-weight:bold; font-size:0.9em; display:block; margin-top:4px;}
+  .scroll-area{max-height:400px;overflow-y:auto;}
   
-  input, select{background:#2c2c2e;border:1px solid #3a3a3c;color:#fff;padding:14px;border-radius:12px;width:100%;box-sizing:border-box;margin-bottom:12px;font-size:16px;}
-  .btn-blue{background:#007aff;color:white;width:100%;padding:16px;border:none;border-radius:14px;font-weight:bold;cursor:pointer; margin-bottom: 10px;}
-  .btn-green{background:#34c759;color:white;width:100%;padding:16px;border:none;border-radius:14px;font-weight:bold;cursor:pointer;margin-top:15px;}
-  .btn-white{background:#fff;color:#000;width:100%;padding:16px;border:none;border-radius:14px;font-weight:bold;cursor:pointer;margin-top:15px;}
-  .log-item{display:flex;justify-content:space-between;background:#2c2c2e;padding:10px 15px;border-radius:12px;margin-bottom:6px;font-size:0.85em;border-left:4px solid #007aff;}
+  /* Formularios */
+  input, select{background:#111;border:1px solid #333;color:#fff;padding:15px;border-radius:12px;width:100%;box-sizing:border-box;margin-bottom:12px;font-size:16px;}
+  .input-grid{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+  .btn-blue{background:#1c3d99;color:white;width:100%;padding:16px;border:none;border-radius:12px;font-weight:bold;cursor:pointer; margin-bottom: 10px;}
+  .btn-green{background:#34c759;color:white;width:100%;padding:16px;border:none;border-radius:12px;font-weight:bold;cursor:pointer;margin-top:15px;}
+  .btn-white{background:#fff;color:#000;width:100%;padding:16px;border:none;border-radius:12px;font-weight:bold;cursor:pointer;margin-top:15px;}
+  
+  .log-item{display:flex;justify-content:space-between;background:#111;padding:12px 15px;border-radius:12px;margin-bottom:8px;font-size:0.85em; border:1px solid #222;}
   .delete-btn{color:#ff453a; font-weight:bold; margin-left:10px;}
   
   @media print {
-    .nav-bar, button, input, select, .scroll-area, .log-item, .metas-banner { display: none !important; }
+    .nav-bar, button, input, select, .log-item { display: none !important; }
     .active-page { display: block !important; width: 100%; }
     body { background: white; color: black; }
-    .container { box-shadow: none; background: white; }
-    h2, h3, .circle-header, .circle-label { color: black; }
     .circle-bg { stroke: #eee; }
-    .subtitulo { color: #555; }
+    .historial-card { background: white; border:none; }
+    .historial-card td, .historial-card th { border-bottom: 1px solid #ccc; color: black; }
   }
 </style>
 </head>
@@ -56,15 +64,19 @@
 <div class="container">
   <div id="page-perfil" class="page active-page">
     <h2>Seleccionar Usuario</h2>
-    <button class="btn-blue" onclick="seleccionarPerfil('Viviana')">👩 Viviana</button>
-    <button class="btn-blue" onclick="seleccionarPerfil('Enrique')">👨 Enrique</button>
+    <div style="margin-top:30px;">
+      <button class="btn-blue" style="background:#0a84ff;" onclick="seleccionarPerfil('Viviana')">👩 Viviana</button>
+      <button class="btn-blue" style="background:#0a84ff;" onclick="seleccionarPerfil('Enrique')">👨 Enrique</button>
+    </div>
   </div>
 
   <div id="page-hoy" class="page">
-    <h2>Hoy - <span id="perfilActual"></span></h2>
+    <h2>Registro Diario</h2>
     <p class="subtitulo" id="fechaHoy"></p>
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
-      <select id="tipoComida" style="grid-column:span 2;"></select>
+    
+    <select id="tipoComida"></select>
+    
+    <div class="input-grid">
       <input type="number" id="kcal" placeholder="🔥 KCal">
       <input type="number" id="prot" placeholder="💪 Prot">
       <input type="number" id="carbs" placeholder="🍞 Carb">
@@ -72,52 +84,56 @@
       <input type="number" id="fibra" placeholder="🌿 Fibr">
       <input type="number" id="agua" placeholder="💧 Agua (ml)">
     </div>
+    
     <button class="btn-blue" id="btnRegistrar" onclick="registrarComida()">+ REGISTRAR</button>
+    
     <div class="grid-circles" id="circulosHoy"></div>
     <div id="listaComidasHoy"></div>
     <button id="btnFinalizar" class="btn-green" onclick="cerrarDia()">💾 FINALIZAR DÍA</button>
   </div>
 
   <div id="page-semanal" class="page">
-    <h3>📊 Reporte Semanal</h3>
-    <p class="subtitulo" id="rangoSemanaStr"></p>
+    <h2>Reporte Semanal</h2>
+    <p class="subtitulo" id="rangoSemanaTexto"></p>
     <div class="grid-circles" id="circulosSemanal"></div>
     <p id="msgSemana" style="text-align:center; font-size:0.8em; color:#8e8e93;"></p>
     <button class="btn-white" onclick="window.print()">📄 EXPORTAR PDF SEMANAL</button>
   </div>
 
   <div id="page-mensual" class="page">
-    <h3>📆 Reporte Mensual</h3>
-    <p class="subtitulo" id="rangoMesStr"></p>
+    <h2>Reporte Mensual</h2>
+    <p class="subtitulo" id="rangoMesTexto"></p>
     <div class="grid-circles" id="circulosMensual"></div>
     <p id="msgMes" style="text-align:center; font-size:0.8em; color:#8e8e93;"></p>
     <button class="btn-white" onclick="window.print()">📄 EXPORTAR PDF MENSUAL</button>
   </div>
 
   <div id="page-historial" class="page">
-    <h3>📚 Historial Diario</h3>
-    <div class="metas-banner" id="historialMetas"></div>
-    <div class="scroll-area">
-      <table class="history-table">
-        <thead>
-          <tr><th>Fecha</th><th>Meta</th><th>KCal</th><th>Prot</th><th>Carb</th><th>Gras</th><th>Fibr</th><th>Agua</th></tr>
-        </thead>
-        <tbody id="tablaHistorial"></tbody>
-      </table>
+    <div class="historial-card">
+      <h3 style="margin-top:0;">📚 Historial Diario</h3>
+      <div class="scroll-area">
+        <table id="tablaCompleta">
+          <thead>
+            <tr id="historialHeader">
+              </tr>
+          </thead>
+          <tbody id="tablaHistorial"></tbody>
+        </table>
+      </div>
     </div>
   </div>
 
   <div id="page-config" class="page">
-    <h3>⚙️ Metas Diarias</h3>
-    <p style="text-align:center; color:#8e8e93;">Configura para: <b id="perfilConfigLabel"></b></p>
-    <label>🔥 KCal:</label><input type="number" id="mKcal">
-    <label>💪 Proteína (g):</label><input type="number" id="mProt">
-    <label>🍞 Carbos (g):</label><input type="number" id="mCarbs">
-    <label>🥑 Grasas (g):</label><input type="number" id="mGrasas">
-    <label>🌿 Fibra (g):</label><input type="number" id="mFibra">
-    <label>💧 Agua (ml):</label><input type="number" id="mAgua">
-    <button class="btn-blue" onclick="guardarMetas()">💾 GUARDAR METAS</button>
-    <button class="btn-blue" style="background:#ff453a;" onclick="cambiarPerfil()">🔄 CAMBIAR USUARIO</button>
+    <h2>Metas Diarias</h2>
+    <p class="subtitulo">Configura para: <b id="perfilConfigLabel" style="color:#fff;"></b></p>
+    <label style="color:#aaa; font-size:0.8em;">🔥 KCal:</label><input type="number" id="mKcal">
+    <label style="color:#aaa; font-size:0.8em;">💪 Proteína (g):</label><input type="number" id="mProt">
+    <label style="color:#aaa; font-size:0.8em;">🍞 Carbos (g):</label><input type="number" id="mCarbs">
+    <label style="color:#aaa; font-size:0.8em;">🥑 Grasas (g):</label><input type="number" id="mGrasas">
+    <label style="color:#aaa; font-size:0.8em;">🌿 Fibra (g):</label><input type="number" id="mFibra">
+    <label style="color:#aaa; font-size:0.8em;">💧 Agua (ml):</label><input type="number" id="mAgua">
+    <button class="btn-green" onclick="guardarMetas()">💾 GUARDAR METAS</button>
+    <button class="btn-blue" style="background:#ff453a; margin-top:20px;" onclick="cambiarPerfil()">🔄 CAMBIAR USUARIO</button>
   </div>
 </div>
 
@@ -135,13 +151,18 @@ let perfiles = {
   Enrique: { METAS: { kcal: 2000, prot: 120, carbs: 220, grasas: 60, fibra: 40, agua: 2500 }, hoy: [], historial: [] }
 };
 let usuarioActual = null;
-const TODAS_LAS_COMIDAS = ["🍳 Desayuno", "🍎 Colación AM", "🍱 Almuerzo", "🥪 Colación PM", "🍽️ Cena", "💧 Más Agua"];
+const COMIDAS_BASE = ["🍳 Desayuno", "🍎 Colación AM", "🍱 Almuerzo", "🥪 Colación PM", "🍽️ Cena", "💧 Solo Agua"];
 const COLORES = { kcal: '#ff453a', prot: '#0a84ff', carbs: '#ff9f0a', grasas: '#32d74b', fibra: '#bf5af2', agua: '#00bfff' };
 const ICONOS = { kcal: '🔥', prot: '💪', carbs: '🍞', grasas: '🥑', fibra: '🌿', agua: '💧' };
 
 function obtenerFechaLocal() {
     const hoy = new Date();
     return new Date(hoy.getTime() - (hoy.getTimezoneOffset() * 60000)).toISOString().split('T')[0];
+}
+
+function formatearFechaCorta(fechaObj) {
+    const diasLetras = ['D', 'L', 'M', 'M', 'J', 'V', 'S'];
+    return `${diasLetras[fechaObj.getDay()]} ${fechaObj.getDate()}/${fechaObj.getMonth()+1}`;
 }
 
 function getRangoSemana() {
@@ -153,24 +174,47 @@ function getRangoSemana() {
     domingo.setDate(lunes.getDate() + 6);
     return {
         inicio: new Date(lunes.getTime() - (lunes.getTimezoneOffset() * 60000)).toISOString().split('T')[0],
-        fin: new Date(domingo.getTime() - (domingo.getTimezoneOffset() * 60000)).toISOString().split('T')[0]
+        fin: new Date(domingo.getTime() - (domingo.getTimezoneOffset() * 60000)).toISOString().split('T')[0],
+        texto: `${lunes.getDate()}/${lunes.getMonth()+1} al ${domingo.getDate()}/${domingo.getMonth()+1}`
     };
 }
 
 function cargarTodo() {
   let datosGuardados = localStorage.getItem('nutriDataV6');
   if (datosGuardados) perfiles = JSON.parse(datosGuardados);
-  document.getElementById('fechaHoy').innerText = new Date().toLocaleDateString('es-ES', { weekday:'long', day:'numeric', month:'long' }).toUpperCase();
 }
 
 function seleccionarPerfil(nombre) {
   usuarioActual = nombre;
-  document.getElementById('perfilActual').innerText = nombre;
   document.getElementById('perfilConfigLabel').innerText = nombre;
+  document.getElementById('fechaHoy').innerText = nombre + " | " + new Date().toLocaleDateString('es-ES', { weekday:'long', day:'numeric', month:'long' }).toUpperCase();
   document.getElementById('page-perfil').classList.remove('active-page');
   document.getElementById('page-hoy').classList.add('active-page');
   document.getElementById('main-nav').style.display = 'flex';
+  actualizarDropdown();
   actualizarUI();
+}
+
+function actualizarDropdown() {
+    const comidasRegistradas = perfiles[usuarioActual].hoy.map(c => c.tipo);
+    const sel = document.getElementById('tipoComida');
+    sel.innerHTML = '';
+    let agregadas = 0;
+    COMIDAS_BASE.forEach(c => {
+        if (!comidasRegistradas.includes(c) || c === "💧 Solo Agua") {
+            sel.innerHTML += `<option value="${c}">${c}</option>`;
+            agregadas++;
+        }
+    });
+    const btn = document.getElementById('btnRegistrar');
+    if (agregadas === 0) {
+        sel.innerHTML = `<option value="">Todo registrado</option>`;
+        btn.disabled = true;
+        btn.style.opacity = "0.5";
+    } else {
+        btn.disabled = false;
+        btn.style.opacity = "1";
+    }
 }
 
 function verPagina(id, btn) {
@@ -179,30 +223,10 @@ function verPagina(id, btn) {
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   
-  if(id === 'hoy') actualizarUI();
   if(id === 'historial') renderHistorial();
   if(id === 'config') cargarMetasInputs();
   if(id === 'semanal') renderReporteSemanal();
   if(id === 'mensual') renderReporteMensual();
-}
-
-function actualizarSelectComidas() {
-  const hoy = perfiles[usuarioActual].hoy;
-  const registradas = hoy.map(c => c.tipo);
-  const sel = document.getElementById('tipoComida');
-  sel.innerHTML = '';
-  // Filtramos las comidas ya registradas (excepto el agua extra que siempre se puede agregar)
-  const disponibles = TODAS_LAS_COMIDAS.filter(c => !registradas.includes(c) || c === "💧 Más Agua");
-  
-  if(disponibles.length === 0) {
-      sel.innerHTML = `<option value="">Todo registrado ✅</option>`;
-      document.getElementById('btnRegistrar').disabled = true;
-      document.getElementById('btnRegistrar').style.opacity = '0.5';
-  } else {
-      disponibles.forEach(c => sel.innerHTML += `<option value="${c}">${c}</option>`);
-      document.getElementById('btnRegistrar').disabled = false;
-      document.getElementById('btnRegistrar').style.opacity = '1';
-  }
 }
 
 function registrarComida() {
@@ -211,18 +235,23 @@ function registrarComida() {
   const nueva = {
     id: Date.now(),
     tipo: sel.value,
-    kcal: +document.getElementById('kcal').value || 0, prot: +document.getElementById('prot').value || 0,
-    carbs: +document.getElementById('carbs').value || 0, grasas: +document.getElementById('grasas').value || 0,
-    fibra: +document.getElementById('fibra').value || 0, agua: +document.getElementById('agua').value || 0
+    kcal: +document.getElementById('kcal').value || 0,
+    prot: +document.getElementById('prot').value || 0,
+    carbs: +document.getElementById('carbs').value || 0,
+    grasas: +document.getElementById('grasas').value || 0,
+    fibra: +document.getElementById('fibra').value || 0,
+    agua: +document.getElementById('agua').value || 0
   };
   perfiles[usuarioActual].hoy.push(nueva);
   ['kcal','prot','carbs','grasas','fibra','agua'].forEach(id => document.getElementById(id).value = '');
   guardarYActualizar();
+  actualizarDropdown();
 }
 
 function borrarComida(id) {
   perfiles[usuarioActual].hoy = perfiles[usuarioActual].hoy.filter(c => c.id !== id);
   guardarYActualizar();
+  actualizarDropdown();
 }
 
 function guardarYActualizar() {
@@ -249,27 +278,28 @@ function actualizarUI() {
   const lista = document.getElementById('listaComidasHoy');
   lista.innerHTML = hoy.map(c => `
     <div class="log-item">
-      <span><b>${c.tipo}</b>: 🔥${c.kcal} | 💪${c.prot} | 💧${c.agua}</span>
+      <span><b>${c.tipo}</b>: ${c.kcal}k | ${c.prot}P | ${c.agua}ml 💧</span>
       <span class="delete-btn" onclick="borrarComida(${c.id})">✕</span>
     </div>
   `).join('');
-  
-  actualizarSelectComidas();
 }
 
-function renderCircle(key, actual, meta) {
-  const pct = Math.min((actual / meta) * 100, 100) || 0;
-  const dash = pct * 2.2; 
+function renderCircle(label, actual, meta) {
+  const pct = meta > 0 ? Math.min((actual / meta) * 100, 100) : 0;
+  const displayPct = Math.round(pct) + '%';
+  const dash = pct * 2.35; 
   return `
-    <div class="circle-container">
-      <svg class="circle-svg" viewBox="0 0 85 85">
-        <circle class="circle-bg" cx="42.5" cy="42.5" r="35"/>
-        <circle class="circle-bar" cx="42.5" cy="42.5" r="35" style="stroke:${COLORES[key]}; stroke-dasharray: ${dash} 220;"/>
-      </svg>
-      <div class="circle-text">
-        <div class="circle-header">${Math.round(actual)}</div>
-        <div class="circle-label">${ICONOS[key]} ${key}</div>
+    <div class="circle-wrapper">
+      <div class="circle-top-icon">${ICONOS[label]}</div>
+      <div class="circle-container">
+        <svg class="circle-svg" viewBox="0 0 85 85">
+          <circle class="circle-bg" cx="42.5" cy="42.5" r="38"/>
+          <circle class="circle-bar" cx="42.5" cy="42.5" r="38" style="stroke:${COLORES[label]}; stroke-dasharray: ${dash} 240;"/>
+        </svg>
+        <div class="circle-text" style="color:${COLORES[label]}">${displayPct}</div>
       </div>
+      <div class="circle-label-bottom">${label}</div>
+      <div class="circle-fraction">${Math.round(actual)}/${meta}</div>
     </div>`;
 }
 
@@ -280,98 +310,91 @@ function cerrarDia() {
   const metas = perfiles[usuarioActual].METAS;
   
   totales.fechaISO = obtenerFechaLocal(); 
-  // Crear fecha corta con formato: L 17/3
-  const dateObj = new Date(totales.fechaISO + 'T12:00:00');
-  const letrasDia = ["D", "L", "M", "Mi", "J", "V", "S"];
-  totales.fechaCorta = `${letrasDia[dateObj.getDay()]} ${dateObj.getDate()}/${dateObj.getMonth()+1}`;
+  totales.fechaCorta = formatearFechaCorta(new Date());
   
   perfiles[usuarioActual].historial = perfiles[usuarioActual].historial.filter(h => h.fechaISO !== totales.fechaISO);
   perfiles[usuarioActual].historial.unshift(totales);
   perfiles[usuarioActual].hoy = [];
   
-  if(totales.prot >= (metas.prot * 0.9) || totales.agua >= (metas.agua * 0.9)) {
-      confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 } });
-      setTimeout(() => alert("¡Excelente trabajo! Día guardado. 🎉"), 500);
-  } else {
-      alert("Día guardado en el historial ✅.");
-  }
+  confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+  alert("Día guardado en el historial ✅");
+  
   guardarYActualizar();
+  actualizarDropdown();
 }
 
 function renderReporteSemanal() {
   const rango = getRangoSemana();
-  const fInicio = new Date(rango.inicio + 'T12:00:00');
-  const fFin = new Date(rango.fin + 'T12:00:00');
-  document.getElementById('rangoSemanaStr').innerText = `Lunes ${fInicio.getDate()}/${fInicio.getMonth()+1} al Domingo ${fFin.getDate()}/${fFin.getMonth()+1}`;
+  document.getElementById('rangoSemanaTexto').innerText = `Semana del ${rango.texto}`;
   
   const historialSemana = perfiles[usuarioActual].historial.filter(h => h.fechaISO >= rango.inicio && h.fechaISO <= rango.fin);
   const container = document.getElementById('circulosSemanal');
   const msg = document.getElementById('msgSemana');
   
-  if(historialSemana.length === 0) {
-      container.innerHTML = "";
-      msg.innerText = "Aún no hay registros en esta semana.";
-      return;
-  }
+  const metasDiarias = perfiles[usuarioActual].METAS;
+  const metasSemanales = {};
+  for (let key in metasDiarias) metasSemanales[key] = metasDiarias[key] * 7;
   
-  const metasM = perfiles[usuarioActual].METAS;
-  const metasSemanales = { kcal: metasM.kcal*7, prot: metasM.prot*7, carbs: metasM.carbs*7, grasas: metasM.grasas*7, fibra: metasM.fibra*7, agua: metasM.agua*7 };
   const sumas = obtenerTotales(historialSemana);
   
-  msg.innerText = `Mostrando Total Acumulado (${historialSemana.length} días) vs Meta Total de 7 Días.`;
   container.innerHTML = '';
   for (let key in metasSemanales) container.innerHTML += renderCircle(key, sumas[key], metasSemanales[key]);
+  
+  msg.innerText = `Total acumulado de ${historialSemana.length} día(s) vs Meta de 7 días.`;
 }
 
 function renderReporteMensual() {
   const hoy = new Date();
   const mesActualStr = `${hoy.getFullYear()}-${(hoy.getMonth() + 1).toString().padStart(2, '0')}`;
-  const nombreMeses = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
-  document.getElementById('rangoMesStr').innerText = `Mes de ${nombreMeses[hoy.getMonth()]}`;
+  const diasEnMes = new Date(hoy.getFullYear(), hoy.getMonth() + 1, 0).getDate();
+  
+  document.getElementById('rangoMesTexto').innerText = `Mes de ${hoy.toLocaleDateString('es-ES',{month:'long'})} (${diasEnMes} días)`;
   
   const historialMes = perfiles[usuarioActual].historial.filter(h => h.fechaISO && h.fechaISO.startsWith(mesActualStr));
   const container = document.getElementById('circulosMensual');
   const msg = document.getElementById('msgMes');
   
-  if(historialMes.length === 0) {
-      container.innerHTML = "";
-      msg.innerText = "Aún no hay registros este mes.";
-      return;
-  }
-  
-  const diasEnMes = new Date(hoy.getFullYear(), hoy.getMonth() + 1, 0).getDate();
-  const metasM = perfiles[usuarioActual].METAS;
-  const metasMensuales = { kcal: metasM.kcal*diasEnMes, prot: metasM.prot*diasEnMes, carbs: metasM.carbs*diasEnMes, grasas: metasM.grasas*diasEnMes, fibra: metasM.fibra*diasEnMes, agua: metasM.agua*diasEnMes };
+  const metasDiarias = perfiles[usuarioActual].METAS;
+  const metasMensuales = {};
+  for (let key in metasDiarias) metasMensuales[key] = metasDiarias[key] * diasEnMes;
   
   const sumas = obtenerTotales(historialMes);
-  msg.innerText = `Mostrando Total Acumulado vs Meta de Todo el Mes (${diasEnMes} días).`;
   
   container.innerHTML = '';
   for (let key in metasMensuales) container.innerHTML += renderCircle(key, sumas[key], metasMensuales[key]);
+  
+  msg.innerText = `Total acumulado de ${historialMes.length} día(s) vs Meta del mes completo.`;
 }
 
 function renderHistorial() {
   const m = perfiles[usuarioActual].METAS;
-  document.getElementById('historialMetas').innerHTML = `
-    <div><span>🔥</span>${m.kcal}</div><div><span>💪</span>${m.prot}</div><div><span>🍞</span>${m.carbs}</div>
-    <div><span>🥑</span>${m.grasas}</div><div><span>🌿</span>${m.fibra}</div><div><span>💧</span>${m.agua}</div>
+  
+  // Generar Encabezado con Metas
+  document.getElementById('historialHeader').innerHTML = `
+    <th style="text-align:left;">Fecha</th>
+    <th>🔥<span class="meta-blue">${m.kcal}</span></th>
+    <th>💪<span class="meta-blue">${m.prot}</span></th>
+    <th>🍞<span class="meta-blue">${m.carbs}</span></th>
+    <th>🥑<span class="meta-blue">${m.grasas}</span></th>
+    <th>🌿<span class="meta-blue">${m.fibra}</span></th>
+    <th>💧<span class="meta-blue">${m.agua}</span></th>
   `;
 
+  // Llenar Tabla
   const tabla = document.getElementById('tablaHistorial');
   tabla.innerHTML = perfiles[usuarioActual].historial.map(h => `
-    <tr>
-      <td>${h.fechaCorta}</td>
-      <td style="color:#0a84ff; font-weight:bold;">Logrado:</td>
-      <td>🔥${h.kcal}</td><td>💪${h.prot}</td><td>🍞${h.carbs}</td><td>🥑${h.grasas}</td><td>🌿${h.fibra}</td><td>💧${h.agua}</td>
-    </tr>
+    <tr><td style="text-align:left; font-weight:bold;">${h.fechaCorta}</td><td>${h.kcal}</td><td>${h.prot}</td><td>${h.carbs}</td><td>${h.grasas}</td><td>${h.fibra}</td><td>${h.agua}</td></tr>
   `).join('');
 }
 
 function cargarMetasInputs() {
   const m = perfiles[usuarioActual].METAS;
-  document.getElementById('mKcal').value = m.kcal; document.getElementById('mProt').value = m.prot;
-  document.getElementById('mCarbs').value = m.carbs; document.getElementById('mGrasas').value = m.grasas;
-  document.getElementById('mFibra').value = m.fibra; document.getElementById('mAgua').value = m.agua;
+  document.getElementById('mKcal').value = m.kcal;
+  document.getElementById('mProt').value = m.prot;
+  document.getElementById('mCarbs').value = m.carbs;
+  document.getElementById('mGrasas').value = m.grasas;
+  document.getElementById('mFibra').value = m.fibra;
+  document.getElementById('mAgua').value = m.agua;
 }
 
 function guardarMetas() {
