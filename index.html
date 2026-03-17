@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Nutrición: Control Total v8</title>
+<title>Nutrición: Control Total v9</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -314,39 +314,42 @@ function cerrarDia() {
   const totales = obtenerTotales(hoy);
   const metas = perfiles[usuarioActual].METAS;
   
-  // Evaluador Inteligente v8 con Excesos
+  // Evaluador Inteligente v9 con Porcentajes Exactos
   let logrados = [];
   let excedidos = [];
   let noLogrados = [];
   
   for(let key in metas) {
       if(metas[key] > 0) {
-          let porcentaje = totales[key] / metas[key];
+          let pctExacto = (totales[key] / metas[key]) * 100;
+          let pctRedondeado = Math.round(pctExacto);
           
-          if(porcentaje > 1.10) { 
-              excedidos.push(ICONOS[key] + " " + NOMBRES[key]);
-          } else if(porcentaje >= 0.90) { 
-              logrados.push(ICONOS[key] + " " + NOMBRES[key]);
+          if(pctExacto > 110) { 
+              let extra = pctRedondeado - 100;
+              excedidos.push(`${ICONOS[key]} ${NOMBRES[key]} (+${extra}% extra)`);
+          } else if(pctExacto >= 90) { 
+              logrados.push(`${ICONOS[key]} ${NOMBRES[key]} (${pctRedondeado}%)`);
           } else {
-              noLogrados.push(ICONOS[key] + " " + NOMBRES[key]);
+              let falta = 100 - pctRedondeado;
+              noLogrados.push(`${ICONOS[key]} ${NOMBRES[key]} (faltó ${falta}%)`);
           }
       }
   }
   
-  let mensajeResumen = "📊 RESUMEN DE HOY\n\n";
+  let mensajeResumen = "📊 RESUMEN EXACTO DE HOY\n\n";
   
   if(logrados.length > 0) {
-      mensajeResumen += "✅ ¡En el punto ideal (90-110%)!:\n" + logrados.join(", ") + "\n\n";
+      mensajeResumen += "✅ En el punto ideal:\n  • " + logrados.join("\n  • ") + "\n\n";
   }
   if(excedidos.length > 0) {
-      mensajeResumen += "⚠️ ¡Cuidado! Te pasaste más del 10% en:\n" + excedidos.join(", ") + "\n\n";
+      mensajeResumen += "⚠️ ¡Cuidado! Te excediste en:\n  • " + excedidos.join("\n  • ") + "\n\n";
   }
   if(noLogrados.length > 0) {
-      mensajeResumen += "📉 Te faltó un poco para alcanzar:\n" + noLogrados.join(", ") + "\n\n";
+      mensajeResumen += "📉 Te faltó para el 100% en:\n  • " + noLogrados.join("\n  • ") + "\n\n";
   }
   
   if(excedidos.length === 0 && noLogrados.length === 0) {
-      mensajeResumen += "🏆 ¡PERFECTO! Cumpliste todas tus metas exactas.";
+      mensajeResumen += "🏆 ¡PERFECTO! Cumpliste todas tus metas con precisión.";
       confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 } });
   } else if (logrados.length > 0) {
       confetti({ particleCount: 50, spread: 60, origin: { y: 0.6 } });
