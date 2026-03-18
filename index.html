@@ -68,7 +68,7 @@
 </head>
 <body onload="cargarTodo()">
 
-<audio id="sonidoAplausos" preload="auto" src="https://assets.mixkit.co/sfx/preview/mixkit-small-crowd-ovation-437.mp3"></audio>
+<audio id="sonidoAplausos" preload="auto" src="https://actions.google.com/sounds/v1/crowds/light_applause.ogg"></audio>
 
 <div class="container">
   <div id="page-perfil" class="page active-page">
@@ -157,6 +157,26 @@
 </div>
 
 <script>
+// --- TRUCO PARA DESBLOQUEAR EL AUDIO EN EL TELÉFONO ---
+let audioDesbloqueado = false;
+function desbloquearAudio() {
+    if(audioDesbloqueado) return;
+    let audio = document.getElementById('sonidoAplausos');
+    audio.volume = 0; // Lo ponemos en silencio
+    audio.play().then(() => {
+        audio.pause();
+        audio.currentTime = 0;
+        audio.volume = 1; // Le devolvemos el volumen
+        audioDesbloqueado = true; // Ya quedó desbloqueado para cuando lo necesitemos
+        document.removeEventListener('click', desbloquearAudio);
+        document.removeEventListener('touchstart', desbloquearAudio);
+    }).catch(e => console.log("Esperando interacción para audio..."));
+}
+// Escucha el primer toque en la pantalla
+document.addEventListener('click', desbloquearAudio);
+document.addEventListener('touchstart', desbloquearAudio);
+// --------------------------------------------------------
+
 let perfiles = {};
 let usuarioActual = null;
 const COMIDAS_BASE = ["🍳 Desayuno", "🍎 Colación AM", "🍱 Almuerzo", "🥪 Colación PM", "🍽️ Cena", "💧 Solo Agua"];
@@ -164,17 +184,12 @@ const COLORES = { kcal: '#ff453a', prot: '#0a84ff', carbs: '#ff9f0a', grasas: '#
 const ICONOS = { kcal: '🔥', prot: '💪', carbs: '🍞', grasas: '🥑', fibra: '🌿', agua: '💧' };
 const NOMBRES = { kcal: 'Calorías', prot: 'Proteína', carbs: 'Carbohidratos', grasas: 'Grasas', fibra: 'Fibra', agua: 'Agua' };
 
-// Función mejorada para el sonido
 function reproducirAplausos() {
     let audio = document.getElementById('sonidoAplausos');
-    audio.currentTime = 0; // Reinicia el audio por si ya sonó antes
-    let playPromise = audio.play();
-    
-    if (playPromise !== undefined) {
-        playPromise.catch(error => {
-            console.log("El navegador bloqueó el audio.", error);
-        });
-    }
+    audio.currentTime = 0; 
+    audio.play().catch(function(error) {
+        console.log("No se pudo reproducir el sonido.", error);
+    });
 }
 
 function obtenerFechaLocal() {
@@ -424,7 +439,7 @@ function cerrarDia() {
       reproducirAplausos(); 
   }
   
-  // Retrasamos el cuadro de alerta casi 1 segundo (800ms) para que deje sonar el audio
+  // Retrasamos el cuadro de alerta 800ms
   setTimeout(function() {
       alert(mensajeResumen);
       
