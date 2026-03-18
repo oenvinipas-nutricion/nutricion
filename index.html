@@ -2,8 +2,8 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Nutrición: Control Total v10</title>
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+<title>Nutrición: Control Total v15</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
@@ -19,35 +19,35 @@
   .nav-btn.active{color:#0a84ff;font-weight:bold;}
   .nav-icon{font-size:1.6em;margin-bottom:4px;}
   
-  /* Círculos Rediseñados */
-  .grid-circles{display:grid;grid-template-columns:repeat(3,1fr);gap:20px 10px;margin:30px 0;text-align:center;}
+  /* Círculos Rediseñados - TAMAÑO XL */
+  .grid-circles{display:grid;grid-template-columns:repeat(3,1fr);gap:25px 5px;margin:30px 0;text-align:center;}
   .circle-wrapper{display:flex; flex-direction:column; align-items:center;}
-  .circle-top-icon{font-size:1.4em; margin-bottom:5px;}
-  .circle-container{position:relative;width:75px;height:75px;}
+  .circle-top-icon{font-size:1.8em; margin-bottom:5px;} /* Ícono más grande */
+  .circle-container{position:relative;width:90px;height:90px;} /* Círculo más grande */
   .circle-svg{transform:rotate(-90deg);width:100%;height:100%;}
-  .circle-bg{fill:none;stroke:#1c1c1e;stroke-width:5;}
-  .circle-bar{fill:none;stroke-width:5;stroke-linecap:round;transition:stroke-dasharray 0.8s ease;}
-  .circle-text{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:0.95em;font-weight:bold;}
-  .circle-label-bottom{font-size:0.6em;color:#aaa;font-weight:bold;text-transform:uppercase;margin-top:8px;}
-  .circle-fraction{font-size:0.65em;color:#666; margin-top:2px;}
+  .circle-bg{fill:none;stroke:#1c1c1e;stroke-width:6;} /* Línea más gruesa */
+  .circle-bar{fill:none;stroke-width:6;stroke-linecap:round;transition:stroke-dasharray 0.8s ease;}
+  .circle-text{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:1.2em;font-weight:bold;} /* Porcentaje más grande */
+  .circle-label-bottom{font-size:0.75em;color:#aaa;font-weight:bold;text-transform:uppercase;margin-top:10px;} /* Letra más grande */
+  .circle-fraction{font-size:0.85em;color:#8e8e93; margin-top:4px; font-weight:bold;} /* Resta más grande y negrita */
   
-  /* Historial Rediseñado */
+  /* Historial */
   .historial-card{background:#111; border:1px solid #222; border-radius:20px; padding:15px; margin-top:10px;}
-  .historial-card table{width:100%; border-collapse:collapse; font-size:0.75em; text-align:center;}
+  .historial-card table{width:100%; border-collapse:collapse; font-size:0.85em; text-align:center;} /* Letra del historial un poco más grande */
   .historial-card th{padding:10px 2px; color:#aaa; font-weight:normal; border-bottom:1px solid #222;}
   .historial-card td{padding:12px 2px; border-bottom:1px solid #222; color:#eee;}
-  .meta-blue{color:#0a84ff; font-weight:bold; font-size:0.9em; display:block; margin-top:4px;}
+  .meta-blue{color:#0a84ff; font-weight:bold; font-size:0.95em; display:block; margin-top:4px;}
   .scroll-area{max-height:400px;overflow-y:auto;}
   
   /* Formularios */
   input, select{background:#111;border:1px solid #333;color:#fff;padding:15px;border-radius:12px;width:100%;box-sizing:border-box;margin-bottom:12px;font-size:16px;}
   .input-grid{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
-  .btn-blue{background:#1c3d99;color:white;width:100%;padding:16px;border:none;border-radius:12px;font-weight:bold;cursor:pointer; margin-bottom: 10px;}
-  .btn-green{background:#34c759;color:white;width:100%;padding:16px;border:none;border-radius:12px;font-weight:bold;cursor:pointer;margin-top:15px;}
-  .btn-white{background:#fff;color:#000;width:100%;padding:16px;border:none;border-radius:12px;font-weight:bold;cursor:pointer;margin-top:15px;}
+  .btn-blue{background:#1c3d99;color:white;width:100%;padding:16px;border:none;border-radius:12px;font-weight:bold;cursor:pointer; margin-bottom: 10px; font-size:1.1em;}
+  .btn-green{background:#34c759;color:white;width:100%;padding:16px;border:none;border-radius:12px;font-weight:bold;cursor:pointer;margin-top:15px; font-size:1.1em;}
+  .btn-white{background:#fff;color:#000;width:100%;padding:16px;border:none;border-radius:12px;font-weight:bold;cursor:pointer;margin-top:15px; font-size:1.1em;}
   
-  .log-item{display:flex;justify-content:space-between;background:#111;padding:12px 15px;border-radius:12px;margin-bottom:8px;font-size:0.85em; border:1px solid #222;}
-  .delete-btn{color:#ff453a; font-weight:bold; margin-left:10px;}
+  .log-item{display:flex;justify-content:space-between;background:#111;padding:15px;border-radius:12px;margin-bottom:8px;font-size:0.95em; border:1px solid #222;} /* Letra registro más grande */
+  .delete-btn{color:#ff453a; font-weight:bold; margin-left:10px; font-size: 1.2em;}
   
   @media print {
     .nav-bar, button, input, select, .log-item { display: none !important; }
@@ -63,10 +63,11 @@
 
 <div class="container">
   <div id="page-perfil" class="page active-page">
-    <h2>Seleccionar Usuario</h2>
+    <h2>Bienvenido a Control Total</h2>
+    <p style="text-align:center; color:#8e8e93; font-size:0.9em;">Ingresa tu nombre para comenzar:</p>
     <div style="margin-top:30px;">
-      <button class="btn-blue" style="background:#0a84ff;" onclick="seleccionarPerfil('Viviana')">👩 Viviana</button>
-      <button class="btn-blue" style="background:#0a84ff;" onclick="seleccionarPerfil('Enrique')">👨 Enrique</button>
+      <input type="text" id="inputNombre" placeholder="Ej. Carlos" style="text-align:center; font-size:1.2em; font-weight:bold;">
+      <button class="btn-blue" style="background:#0a84ff; margin-top:10px;" onclick="ingresarUsuario()">🚀 Entrar a mi perfil</button>
     </div>
   </div>
 
@@ -96,7 +97,7 @@
     <h2>Reporte Semanal</h2>
     <p class="subtitulo" id="rangoSemanaTexto"></p>
     <div class="grid-circles" id="circulosSemanal"></div>
-    <p id="msgSemana" style="text-align:center; font-size:0.8em; color:#8e8e93;"></p>
+    <p id="msgSemana" style="text-align:center; font-size:0.9em; color:#8e8e93;"></p>
     <button class="btn-white" onclick="window.print()">📄 EXPORTAR PDF SEMANAL</button>
   </div>
 
@@ -104,7 +105,7 @@
     <h2>Reporte Mensual</h2>
     <p class="subtitulo" id="rangoMesTexto"></p>
     <div class="grid-circles" id="circulosMensual"></div>
-    <p id="msgMes" style="text-align:center; font-size:0.8em; color:#8e8e93;"></p>
+    <p id="msgMes" style="text-align:center; font-size:0.9em; color:#8e8e93;"></p>
     <button class="btn-white" onclick="window.print()">📄 EXPORTAR PDF MENSUAL</button>
   </div>
 
@@ -126,14 +127,15 @@
   <div id="page-config" class="page">
     <h2>Metas Diarias</h2>
     <p class="subtitulo">Configura para: <b id="perfilConfigLabel" style="color:#fff;"></b></p>
-    <label style="color:#aaa; font-size:0.8em;">🔥 KCal:</label><input type="number" id="mKcal">
-    <label style="color:#aaa; font-size:0.8em;">💪 Proteína (g):</label><input type="number" id="mProt">
-    <label style="color:#aaa; font-size:0.8em;">🍞 Carbos (g):</label><input type="number" id="mCarbs">
-    <label style="color:#aaa; font-size:0.8em;">🥑 Grasas (g):</label><input type="number" id="mGrasas">
-    <label style="color:#aaa; font-size:0.8em;">🌿 Fibra (g):</label><input type="number" id="mFibra">
-    <label style="color:#aaa; font-size:0.8em;">💧 Agua (ml):</label><input type="number" id="mAgua">
+    <label style="color:#aaa; font-size:0.9em;">🔥 KCal:</label><input type="number" id="mKcal">
+    <label style="color:#aaa; font-size:0.9em;">💪 Proteína (g):</label><input type="number" id="mProt">
+    <label style="color:#aaa; font-size:0.9em;">🍞 Carbos (g):</label><input type="number" id="mCarbs">
+    <label style="color:#aaa; font-size:0.9em;">🥑 Grasas (g):</label><input type="number" id="mGrasas">
+    <label style="color:#aaa; font-size:0.9em;">🌿 Fibra (g):</label><input type="number" id="mFibra">
+    <label style="color:#aaa; font-size:0.9em;">💧 Agua (ml):</label><input type="number" id="mAgua">
     <button class="btn-green" onclick="guardarMetas()">💾 GUARDAR METAS</button>
-    <button class="btn-blue" style="background:#ff453a; margin-top:20px;" onclick="cambiarPerfil()">🔄 CAMBIAR USUARIO</button>
+    
+    <button class="btn-blue" style="background:#333; margin-top:30px; font-size:0.9em;" onclick="cambiarPerfil()">Cerrar Sesión / Cambiar Usuario</button>
   </div>
 </div>
 
@@ -146,10 +148,7 @@
 </div>
 
 <script>
-let perfiles = {
-  Viviana: { METAS: { kcal: 1500, prot: 90, carbs: 168, grasas: 50, fibra: 75, agua: 2000 }, hoy: [], historial: [] },
-  Enrique: { METAS: { kcal: 2000, prot: 120, carbs: 220, grasas: 60, fibra: 40, agua: 2500 }, hoy: [], historial: [] }
-};
+let perfiles = {};
 let usuarioActual = null;
 const COMIDAS_BASE = ["🍳 Desayuno", "🍎 Colación AM", "🍱 Almuerzo", "🥪 Colación PM", "🍽️ Cena", "💧 Solo Agua"];
 const COLORES = { kcal: '#ff453a', prot: '#0a84ff', carbs: '#ff9f0a', grasas: '#32d74b', fibra: '#bf5af2', agua: '#00bfff' };
@@ -181,17 +180,43 @@ function getRangoSemana() {
 }
 
 function cargarTodo() {
-  let datosGuardados = localStorage.getItem('nutriDataV6');
+  let datosGuardados = localStorage.getItem('nutriDataV6'); 
   if (datosGuardados) perfiles = JSON.parse(datosGuardados);
+  
+  let usuarioGuardado = localStorage.getItem('nutriUsuarioActivo');
+  if (usuarioGuardado && perfiles[usuarioGuardado]) {
+      seleccionarPerfil(usuarioGuardado);
+  }
+}
+
+function ingresarUsuario() {
+  let input = document.getElementById('inputNombre').value.trim();
+  if(!input) { alert("Por favor, ingresa tu nombre para comenzar."); return; }
+  
+  let nombreFormateado = input.charAt(0).toUpperCase() + input.slice(1).toLowerCase();
+  
+  if(!perfiles[nombreFormateado]) {
+      perfiles[nombreFormateado] = { 
+          METAS: { kcal: 2000, prot: 100, carbs: 200, grasas: 60, fibra: 30, agua: 2000 }, 
+          hoy: [], 
+          historial: [] 
+      };
+      guardarYActualizar(); 
+  }
+  seleccionarPerfil(nombreFormateado);
 }
 
 function seleccionarPerfil(nombre) {
   usuarioActual = nombre;
+  localStorage.setItem('nutriUsuarioActivo', nombre);
+  
   document.getElementById('perfilConfigLabel').innerText = nombre;
-  document.getElementById('fechaHoy').innerText = nombre + " | " + new Date().toLocaleDateString('es-ES', { weekday:'long', day:'numeric', month:'long' }).toUpperCase();
+  document.getElementById('fechaHoy').innerText = "¡Hola, " + nombre + "!\n" + new Date().toLocaleDateString('es-ES', { weekday:'long', day:'numeric', month:'long' }).toUpperCase();
+  
   document.getElementById('page-perfil').classList.remove('active-page');
   document.getElementById('page-hoy').classList.add('active-page');
   document.getElementById('main-nav').style.display = 'flex';
+  
   actualizarDropdown();
   actualizarUI();
 }
@@ -289,6 +314,19 @@ function renderCircle(label, actual, meta) {
   const pct = meta > 0 ? Math.min((actual / meta) * 100, 100) : 0;
   const displayPct = Math.round(pct) + '%';
   const dash = pct * 2.35; 
+  
+  let restante = meta - actual;
+  let textoAbajo = "";
+  if (meta === 0) {
+      textoAbajo = "-";
+  } else if (restante > 0) {
+      textoAbajo = `Faltan ${Math.round(restante)}`;
+  } else if (restante < 0) {
+      textoAbajo = `<span style="color:#ff453a;">+${Math.abs(Math.round(restante))} extra</span>`;
+  } else {
+      textoAbajo = `<span style="color:#32d74b;">¡Completo!</span>`;
+  }
+
   return `
     <div class="circle-wrapper">
       <div class="circle-top-icon">${ICONOS[label]}</div>
@@ -300,7 +338,7 @@ function renderCircle(label, actual, meta) {
         <div class="circle-text" style="color:${COLORES[label]}">${displayPct}</div>
       </div>
       <div class="circle-label-bottom">${label}</div>
-      <div class="circle-fraction">${Math.round(actual)}/${meta}</div>
+      <div class="circle-fraction">${textoAbajo}</div>
     </div>`;
 }
 
@@ -314,7 +352,6 @@ function cerrarDia() {
   const totales = obtenerTotales(hoy);
   const metas = perfiles[usuarioActual].METAS;
   
-  // Evaluador Inteligente v10 con Frases Exactas ("te falta" / "te sobra")
   let logrados = [];
   let excedidos = [];
   let noLogrados = [];
@@ -323,7 +360,6 @@ function cerrarDia() {
       if(metas[key] > 0) {
           let pctExacto = (totales[key] / metas[key]) * 100;
           let diff = pctExacto - 100;
-          // Redondeamos a un decimal para mayor precisión sin saturar la pantalla
           let diffStr = Number(Math.abs(diff).toFixed(1)); 
           
           let textoItem = "";
@@ -461,6 +497,8 @@ function guardarMetas() {
 
 function cambiarPerfil() {
   usuarioActual = null;
+  localStorage.removeItem('nutriUsuarioActivo');
+  document.getElementById('inputNombre').value = '';
   document.getElementById('main-nav').style.display = 'none';
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
   document.getElementById('page-perfil').classList.add('active-page');
