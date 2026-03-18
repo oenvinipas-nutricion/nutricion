@@ -55,6 +55,11 @@
   
   .log-item{display:flex;justify-content:space-between;background:#111;padding:15px;border-radius:12px;margin-bottom:8px;font-size:0.95em; border:1px solid #222;} 
   .delete-btn{color:#ff453a; font-weight:bold; margin-left:10px; font-size: 1.2em;}
+
+  /* NUEVA VENTANA DE RESUMEN (MODAL) */
+  .modal-overlay { display:none; position:fixed; z-index:2000; left:0; top:0; width:100%; height:100%; background-color:rgba(0,0,0,0.85); backdrop-filter:blur(5px); }
+  .modal-content { background-color:#1c1c1e; margin: 30% auto; padding:25px; border:1px solid #333; width:80%; border-radius:20px; color:white; font-size: 1.05em; line-height: 1.5; box-shadow: 0 10px 30px rgba(0,0,0,0.5);}
+  .modal-titulo { text-align:center; font-size: 1.3em; font-weight:bold; color:#0a84ff; margin-bottom:15px; border-bottom: 1px solid #333; padding-bottom: 10px;}
   
   @media print {
     .nav-bar, button, input, select, .log-item { display: none !important; }
@@ -148,6 +153,14 @@
   </div>
 </div>
 
+<div id="miModalResumen" class="modal-overlay">
+  <div class="modal-content">
+    <div class="modal-titulo">📊 Resumen de Hoy</div>
+    <div id="modalTexto"></div>
+    <button class="btn-blue" onclick="cerrarModal()">Aceptar</button>
+  </div>
+</div>
+
 <div class="nav-bar" id="main-nav" style="display:none;">
   <button class="nav-btn active" onclick="verPagina('hoy', this)"><span class="nav-icon">📝</span>Hoy</button>
   <button class="nav-btn" onclick="verPagina('semanal', this)"><span class="nav-icon">📊</span>Semana</button>
@@ -157,25 +170,22 @@
 </div>
 
 <script>
-// --- TRUCO PARA DESBLOQUEAR EL AUDIO EN EL TELÉFONO ---
 let audioDesbloqueado = false;
 function desbloquearAudio() {
     if(audioDesbloqueado) return;
     let audio = document.getElementById('sonidoAplausos');
-    audio.volume = 0; // Lo ponemos en silencio
+    audio.volume = 0; 
     audio.play().then(() => {
         audio.pause();
         audio.currentTime = 0;
-        audio.volume = 1; // Le devolvemos el volumen
-        audioDesbloqueado = true; // Ya quedó desbloqueado para cuando lo necesitemos
+        audio.volume = 1; 
+        audioDesbloqueado = true; 
         document.removeEventListener('click', desbloquearAudio);
         document.removeEventListener('touchstart', desbloquearAudio);
     }).catch(e => console.log("Esperando interacción para audio..."));
 }
-// Escucha el primer toque en la pantalla
 document.addEventListener('click', desbloquearAudio);
 document.addEventListener('touchstart', desbloquearAudio);
-// --------------------------------------------------------
 
 let perfiles = {};
 let usuarioActual = null;
@@ -401,11 +411,11 @@ function cerrarDia() {
           
           let textoItem = "";
           if (diff > 0) {
-              textoItem = `${ICONOS[key]} ${NOMBRES[key]} (te sobra el ${diffStr}%)`;
+              textoItem = `${ICONOS[key]} ${NOMBRES[key]} <span style="color:#ff453a;">(te sobra el ${diffStr}%)</span>`;
           } else if (diff < 0) {
-              textoItem = `${ICONOS[key]} ${NOMBRES[key]} (te falta el ${diffStr}%)`;
+              textoItem = `${ICONOS[key]} ${NOMBRES[key]} <span style="color:#ff9f0a;">(te falta el ${diffStr}%)</span>`;
           } else {
-              textoItem = `${ICONOS[key]} ${NOMBRES[key]} (100% exacto)`;
+              textoItem = `${ICONOS[key]} ${NOMBRES[key]} <span style="color:#32d74b;">(100% exacto)</span>`;
           }
 
           if(pctExacto > 110) { 
@@ -418,20 +428,20 @@ function cerrarDia() {
       }
   }
   
-  let mensajeResumen = "📊 RESUMEN DE PRECISIÓN DE HOY\n\n";
+  let mensajeResumenHTML = "";
   
   if(logrados.length > 0) {
-      mensajeResumen += "✅ En la zona ideal (90-110%):\n  • " + logrados.join("\n  • ") + "\n\n";
+      mensajeResumenHTML += "<p><b>✅ En la zona ideal (90-110%):</b><br>• " + logrados.join("<br>• ") + "</p>";
   }
   if(excedidos.length > 0) {
-      mensajeResumen += "⚠️ Excediste tu límite (>110%):\n  • " + excedidos.join("\n  • ") + "\n\n";
+      mensajeResumenHTML += "<p><b>⚠️ Excediste tu límite (>110%):</b><br>• " + excedidos.join("<br>• ") + "</p>";
   }
   if(noLogrados.length > 0) {
-      mensajeResumen += "📉 Aún necesitas consumir (<90%):\n  • " + noLogrados.join("\n  • ") + "\n\n";
+      mensajeResumenHTML += "<p><b>📉 Aún necesitas consumir (<90%):</b><br>• " + noLogrados.join("<br>• ") + "</p>";
   }
   
   if(excedidos.length === 0 && noLogrados.length === 0) {
-      mensajeResumen += "🏆 ¡BRUTAL! Todo quedó en tu rango ideal.";
+      mensajeResumenHTML += "<p style='color:#32d74b; font-weight:bold; text-align:center;'>🏆 ¡BRUTAL! Todo quedó en tu rango ideal.</p>";
       confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 } });
       reproducirAplausos(); 
   } else if (logrados.length > 0) {
@@ -439,20 +449,25 @@ function cerrarDia() {
       reproducirAplausos(); 
   }
   
-  // Retrasamos el cuadro de alerta 800ms
-  setTimeout(function() {
-      alert(mensajeResumen);
-      
-      totales.fechaISO = obtenerFechaLocal(); 
-      totales.fechaCorta = formatearFechaCorta(new Date());
-      
-      perfiles[usuarioActual].historial = perfiles[usuarioActual].historial.filter(h => h.fechaISO !== totales.fechaISO);
-      perfiles[usuarioActual].historial.unshift(totales);
-      perfiles[usuarioActual].hoy = [];
-      
-      guardarYActualizar();
-      actualizarDropdown();
-  }, 800);
+  // Guardamos los datos en el historial antes de mostrar el popup
+  totales.fechaISO = obtenerFechaLocal(); 
+  totales.fechaCorta = formatearFechaCorta(new Date());
+  
+  perfiles[usuarioActual].historial = perfiles[usuarioActual].historial.filter(h => h.fechaISO !== totales.fechaISO);
+  perfiles[usuarioActual].historial.unshift(totales);
+  perfiles[usuarioActual].hoy = [];
+  
+  guardarYActualizar();
+  actualizarDropdown();
+  
+  // Mostramos nuestra nueva ventana elegante (sin bloquear el audio)
+  document.getElementById('modalTexto').innerHTML = mensajeResumenHTML;
+  document.getElementById('miModalResumen').style.display = 'block';
+}
+
+// Función para cerrar la ventana modal
+function cerrarModal() {
+    document.getElementById('miModalResumen').style.display = 'none';
 }
 
 function renderReporteSemanal() {
