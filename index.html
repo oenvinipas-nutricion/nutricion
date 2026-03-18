@@ -56,7 +56,7 @@
   .log-item{display:flex;justify-content:space-between;background:#111;padding:15px;border-radius:12px;margin-bottom:8px;font-size:0.95em; border:1px solid #222;} 
   .delete-btn{color:#ff453a; font-weight:bold; margin-left:10px; font-size: 1.2em;}
 
-  /* NUEVA VENTANA DE RESUMEN (MODAL) */
+  /* VENTANA DE RESUMEN (MODAL) */
   .modal-overlay { display:none; position:fixed; z-index:2000; left:0; top:0; width:100%; height:100%; background-color:rgba(0,0,0,0.85); backdrop-filter:blur(5px); }
   .modal-content { background-color:#1c1c1e; margin: 30% auto; padding:25px; border:1px solid #333; width:80%; border-radius:20px; color:white; font-size: 1.05em; line-height: 1.5; box-shadow: 0 10px 30px rgba(0,0,0,0.5);}
   .modal-titulo { text-align:center; font-size: 1.3em; font-weight:bold; color:#0a84ff; margin-bottom:15px; border-bottom: 1px solid #333; padding-bottom: 10px;}
@@ -73,7 +73,7 @@
 </head>
 <body onload="cargarTodo()">
 
-<audio id="sonidoAplausos" preload="auto" src="https://actions.google.com/sounds/v1/crowds/light_applause.ogg"></audio>
+<audio id="sonidoAplausos" preload="auto" src="https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3" crossorigin="anonymous"></audio>
 
 <div class="container">
   <div id="page-perfil" class="page active-page">
@@ -171,18 +171,23 @@
 
 <script>
 let audioDesbloqueado = false;
+
+// Forzamos el desbloqueo del audio con CUALQUIER toque en la pantalla
 function desbloquearAudio() {
     if(audioDesbloqueado) return;
     let audio = document.getElementById('sonidoAplausos');
     audio.volume = 0; 
-    audio.play().then(() => {
-        audio.pause();
-        audio.currentTime = 0;
-        audio.volume = 1; 
-        audioDesbloqueado = true; 
-        document.removeEventListener('click', desbloquearAudio);
-        document.removeEventListener('touchstart', desbloquearAudio);
-    }).catch(e => console.log("Esperando interacción para audio..."));
+    let playPromise = audio.play();
+    if (playPromise !== undefined) {
+        playPromise.then(() => {
+            audio.pause();
+            audio.currentTime = 0;
+            audio.volume = 1; 
+            audioDesbloqueado = true; 
+        }).catch(e => console.log("Bloqueo de audio normal superado."));
+    }
+    document.removeEventListener('click', desbloquearAudio);
+    document.removeEventListener('touchstart', desbloquearAudio);
 }
 document.addEventListener('click', desbloquearAudio);
 document.addEventListener('touchstart', desbloquearAudio);
@@ -193,14 +198,6 @@ const COMIDAS_BASE = ["🍳 Desayuno", "🍎 Colación AM", "🍱 Almuerzo", "�
 const COLORES = { kcal: '#ff453a', prot: '#0a84ff', carbs: '#ff9f0a', grasas: '#32d74b', fibra: '#bf5af2', agua: '#00bfff' };
 const ICONOS = { kcal: '🔥', prot: '💪', carbs: '🍞', grasas: '🥑', fibra: '🌿', agua: '💧' };
 const NOMBRES = { kcal: 'Calorías', prot: 'Proteína', carbs: 'Carbohidratos', grasas: 'Grasas', fibra: 'Fibra', agua: 'Agua' };
-
-function reproducirAplausos() {
-    let audio = document.getElementById('sonidoAplausos');
-    audio.currentTime = 0; 
-    audio.play().catch(function(error) {
-        console.log("No se pudo reproducir el sonido.", error);
-    });
-}
 
 function obtenerFechaLocal() {
     const hoy = new Date();
@@ -429,9 +426,11 @@ function cerrarDia() {
   }
   
   let mensajeResumenHTML = "";
+  let mereceAplauso = false;
   
   if(logrados.length > 0) {
       mensajeResumenHTML += "<p><b>✅ En la zona ideal (90-110%):</b><br>• " + logrados.join("<br>• ") + "</p>";
+      mereceAplauso = true;
   }
   if(excedidos.length > 0) {
       mensajeResumenHTML += "<p><b>⚠️ Excediste tu límite (>110%):</b><br>• " + excedidos.join("<br>• ") + "</p>";
@@ -441,15 +440,20 @@ function cerrarDia() {
   }
   
   if(excedidos.length === 0 && noLogrados.length === 0) {
-      mensajeResumenHTML += "<p style='color:#32d74b; font-weight:bold; text-align:center;'>🏆 ¡BRUTAL! Todo quedó en tu rango ideal.</p>";
-      confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 } });
-      reproducirAplausos(); 
-  } else if (logrados.length > 0) {
-      confetti({ particleCount: 50, spread: 60, origin: { y: 0.6 } });
-      reproducirAplausos(); 
+      mensajeResumenHTML += "<p style='color:#32d74b; font-weight:bold; text-align:center; font-size:1.2em;'>🏆 ¡BRUTAL! Todo quedó en tu rango ideal.</p>";
+      confetti({ particleCount: 200, spread: 100, origin: { y: 0.6 } });
+      mereceAplauso = true;
+  } else if (mereceAplauso) {
+      confetti({ particleCount: 80, spread: 70, origin: { y: 0.6 } });
+  }
+
+  // REPRODUCIMOS EL AUDIO DIRECTAMENTE AL HACER CLIC
+  if (mereceAplauso) {
+      let audio = document.getElementById('sonidoAplausos');
+      audio.currentTime = 0; 
+      audio.play().catch(e => console.log("Bloqueo del navegador", e));
   }
   
-  // Guardamos los datos en el historial antes de mostrar el popup
   totales.fechaISO = obtenerFechaLocal(); 
   totales.fechaCorta = formatearFechaCorta(new Date());
   
@@ -460,12 +464,10 @@ function cerrarDia() {
   guardarYActualizar();
   actualizarDropdown();
   
-  // Mostramos nuestra nueva ventana elegante (sin bloquear el audio)
   document.getElementById('modalTexto').innerHTML = mensajeResumenHTML;
   document.getElementById('miModalResumen').style.display = 'block';
 }
 
-// Función para cerrar la ventana modal
 function cerrarModal() {
     document.getElementById('miModalResumen').style.display = 'none';
 }
