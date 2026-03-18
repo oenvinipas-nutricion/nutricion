@@ -2,10 +2,17 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Nutrición: Control Total v16</title>
+<title>Control Total</title>
+
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#000000">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Control Total">
+
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23111111'/><text x='50%' y='50%' font-size='60' dominant-baseline='central' text-anchor='middle'>🥑</text></svg>">
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23111111'/><text x='50%' y='50%' font-size='60' dominant-baseline='central' text-anchor='middle'>🥑</text></svg>">
+
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 <style>
   body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif; padding:10px; background:#000; color:#eee; margin-bottom:90px; -webkit-tap-highlight-color: transparent; }
@@ -155,7 +162,6 @@ const COLORES = { kcal: '#ff453a', prot: '#0a84ff', carbs: '#ff9f0a', grasas: '#
 const ICONOS = { kcal: '🔥', prot: '💪', carbs: '🍞', grasas: '🥑', fibra: '🌿', agua: '💧' };
 const NOMBRES = { kcal: 'Calorías', prot: 'Proteína', carbs: 'Carbohidratos', grasas: 'Grasas', fibra: 'Fibra', agua: 'Agua' };
 
-// --- FUNCIÓN DE SONIDO DE APLAUSOS ---
 function reproducirAplausos() {
     let audio = new Audio('https://www.soundjay.com/human/sounds/applause-01.mp3');
     audio.play().catch(function(error) {
@@ -404,13 +410,12 @@ function cerrarDia() {
   if(excedidos.length === 0 && noLogrados.length === 0) {
       mensajeResumen += "🏆 ¡BRUTAL! Todo quedó en tu rango ideal.";
       confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 } });
-      reproducirAplausos(); // Aplauso grande
+      reproducirAplausos(); 
   } else if (logrados.length > 0) {
       confetti({ particleCount: 50, spread: 60, origin: { y: 0.6 } });
-      reproducirAplausos(); // Aplauso de motivación
+      reproducirAplausos(); 
   }
   
-  // Pequeña pausa para que el sonido empiece antes de que el "alert" bloquee la pantalla
   setTimeout(function() {
       alert(mensajeResumen);
       
