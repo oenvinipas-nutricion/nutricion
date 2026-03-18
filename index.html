@@ -68,6 +68,8 @@
 </head>
 <body onload="cargarTodo()">
 
+<audio id="sonidoAplausos" preload="auto" src="https://assets.mixkit.co/sfx/preview/mixkit-small-crowd-ovation-437.mp3"></audio>
+
 <div class="container">
   <div id="page-perfil" class="page active-page">
     <h2>Bienvenido a Control Total</h2>
@@ -162,11 +164,17 @@ const COLORES = { kcal: '#ff453a', prot: '#0a84ff', carbs: '#ff9f0a', grasas: '#
 const ICONOS = { kcal: '🔥', prot: '💪', carbs: '🍞', grasas: '🥑', fibra: '🌿', agua: '💧' };
 const NOMBRES = { kcal: 'Calorías', prot: 'Proteína', carbs: 'Carbohidratos', grasas: 'Grasas', fibra: 'Fibra', agua: 'Agua' };
 
+// Función mejorada para el sonido
 function reproducirAplausos() {
-    let audio = new Audio('https://www.soundjay.com/human/sounds/applause-01.mp3');
-    audio.play().catch(function(error) {
-        console.log("El navegador bloqueó el audio automático.", error);
-    });
+    let audio = document.getElementById('sonidoAplausos');
+    audio.currentTime = 0; // Reinicia el audio por si ya sonó antes
+    let playPromise = audio.play();
+    
+    if (playPromise !== undefined) {
+        playPromise.catch(error => {
+            console.log("El navegador bloqueó el audio.", error);
+        });
+    }
 }
 
 function obtenerFechaLocal() {
@@ -416,6 +424,7 @@ function cerrarDia() {
       reproducirAplausos(); 
   }
   
+  // Retrasamos el cuadro de alerta casi 1 segundo (800ms) para que deje sonar el audio
   setTimeout(function() {
       alert(mensajeResumen);
       
@@ -428,7 +437,7 @@ function cerrarDia() {
       
       guardarYActualizar();
       actualizarDropdown();
-  }, 100);
+  }, 800);
 }
 
 function renderReporteSemanal() {
