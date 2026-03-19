@@ -7,47 +7,44 @@
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 <style>
   body { font-family:-apple-system,BlinkMacSystemFont,sans-serif; padding:10px; background:#000; color:#eee; margin-bottom:90px; -webkit-tap-highlight-color: transparent; }
-  .container{max-width:420px; margin:auto; position: relative;}
-  
-  /* --- CESTA ESTILO IPHONE --- */
-  .cesta-header { position: absolute; top: 0; right: 10px; display: flex; align-items: center; background: #1c1c1e; padding: 5px 12px; border-radius: 20px; border: 1px solid #333; }
-  .cesta-icon { font-size: 1.2em; margin-right: 5px; }
-  .cesta-count { background: #ff453a; color: white; font-size: 0.75em; font-weight: bold; min-width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; border-radius: 50%; }
-
-  h2{text-align:center;color:#fff; margin-top: 10px;}
+  .container{max-width:420px; margin:auto;}
+  h2,h3{text-align:center;color:#fff;}
   .subtitulo{text-align:center; color:#0a84ff; font-size:0.85em; margin-bottom:20px; font-weight:bold;}
   .page{display:none;} .active-page{display:block;}
   .nav-bar{position:fixed;bottom:0;left:0;right:0;background:rgba(15,15,15,0.95);backdrop-filter:blur(15px);display:flex;padding:12px 5px 30px 5px;border-top:0.5px solid #333;z-index:1000;}
   .nav-btn{background:none;border:none;color:#8e8e93;display:flex;flex-direction:column;align-items:center;font-size:0.7em;flex:1;}
   .nav-btn.active{color:#0a84ff;font-weight:bold;}
   
-  .panel-card { background: linear-gradient(145deg, #161618 0%, #0f0f11 100%); border: 1px solid #2c2c2e; border-radius: 20px; padding: 20px 15px; margin-bottom: 25px; box-shadow: 0 8px 30px rgba(0,0,0,0.6); }
+  .panel-card { background: linear-gradient(145deg, #161618 0%, #0f0f11 100%); border: 1px solid #2c2c2e; border-radius: 20px; padding: 20px 15px; margin-bottom: 25px; box-shadow: 0 8px 30px rgba(0,0,0,0.6); position: relative;}
   .panel-header { font-size: 0.85em; font-weight: 800; text-align: center; margin-bottom: 18px; text-transform: uppercase; letter-spacing: 1.5px; }
   
-  /* CAJAS DE INGRESO INTELIGENTES */
+  /* SUGERENCIA DISEÑO ORIGINAL */
+  .guia-grid-fija { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .guia-item { background: linear-gradient(180deg, #1c1c1e, #111); border: 1px solid #333; border-radius: 12px; padding: 12px 2px; text-align: center; }
+  .guia-val { font-size: 1.1em; font-weight: bold; display: block; margin-top: 5px; }
+  .guia-lab { font-size: 0.65em; color: #aaa; text-transform: uppercase; font-weight:bold;}
+
+  /* INPUTS ESTILO REGISTRO */
   .input-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
   .input-box { background: #111; border: 1px solid #333; border-radius: 12px; display: flex; align-items: center; justify-content: center; height: 50px; }
-  .input-box:focus-within { border-color: #0a84ff; }
-  .input-box input { background: transparent; border: none; color: #fff; font-size: 1.1em; font-weight: bold; text-align: center; width: 50px; outline: none; }
+  .input-box input { background: transparent; border: none; color: #fff; font-size: 1.1em; font-weight: bold; text-align: center; width: 55px; outline: none; }
   .input-box .icono { font-size: 1.1em; margin-right: 2px; }
   .input-box .unidad { font-size: 0.75em; color: #8e8e93; font-weight: bold; }
-  .input-box.disabled { opacity: 0.3; pointer-events: none; }
+  .input-box.disabled { opacity: 0.3; }
+
+  /* CESTA SUPERIOR EN MODAL */
+  .btn-cesta-borrar { position: absolute; top: 15px; right: 15px; background: #1c1c1e; border: 1px solid #ff453a; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-size: 1.2em; cursor: pointer; }
 
   select, .input-perfil { background:#111; border:1px solid #333; color:#fff; padding:15px; border-radius:12px; width:100%; margin-bottom:12px; font-size:16px; text-align-last:center; font-weight:bold; }
-  .btn-blue{background:linear-gradient(145deg, #1c3d99, #0a84ff);color:white;width:100%;padding:16px;border:none;border-radius:12px;font-weight:bold; font-size:1.1em; text-transform:uppercase; margin-bottom:10px;}
+  .btn-blue{background:linear-gradient(145deg, #1c3d99, #0a84ff);color:white;width:100%;padding:16px;border:none;border-radius:12px;font-weight:bold; font-size:1.1em; text-transform:uppercase;}
   .btn-green{background:linear-gradient(145deg, #248a3d, #32d74b);color:white;width:100%;padding:16px;border:none;border-radius:12px;font-weight:bold; font-size:1.1em; text-transform:uppercase;}
-  .btn-white{background:#fff;color:#000;width:100%;padding:16px;border:none;border-radius:12px;font-weight:bold;margin-top:10px;}
-  
-  .lista-horizontal-scroll { display: flex; overflow-x: auto; gap: 12px; padding-bottom: 10px; scrollbar-width: none; }
-  .log-card { background: #1c1c1e; border: 1px solid #333; border-radius: 15px; padding: 15px; min-width: 110px; text-align: center; flex: 0 0 auto; cursor:pointer;}
-  .modal-overlay { display:none; position:fixed; z-index:2000; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.85); backdrop-filter:blur(5px); }
-  .modal-content { background:#1c1c1e; margin: 15% auto; padding:25px; border:1px solid #333; width:85%; border-radius:20px; color:white; }
-  
-  /* EDICIÓN EN MODAL */
-  .edit-grid { display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:20px; }
-  .edit-item { background: #111; padding:5px 10px; border-radius:12px; border: 1px solid #333; display: flex; align-items: center; }
-  .edit-item input { background: transparent; border: none; color: #0a84ff; font-weight: bold; width: 100%; text-align: right; font-size: 1em; outline: none;}
+  .btn-white{background:#fff;color:#000;width:100%;padding:16px;border:none;border-radius:12px;font-weight:bold;}
 
+  .lista-horizontal-scroll { display: flex; overflow-x: auto; gap: 12px; padding-bottom: 10px; scrollbar-width: none; }
+  .log-card { background: #1c1c1e; border: 1px solid #333; border-radius: 15px; padding: 15px; min-width: 110px; text-align: center; flex: 0 0 auto; }
+  .modal-overlay { display:none; position:fixed; z-index:2000; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.9); backdrop-filter:blur(8px); }
+  .modal-content { background:#161618; margin: 10% auto; padding:25px; border:1px solid #333; width:85%; border-radius:25px; color:white; position: relative; }
+  
   .grid-circles{display:grid;grid-template-columns:repeat(3,1fr);gap:20px 5px; text-align:center;}
   .circle-container{position:relative;width:80px;height:80px;margin:auto;} 
   .circle-svg{transform:rotate(-90deg);width:100%;height:100%;}
@@ -60,24 +57,18 @@
 <audio id="sonidoAplausos" src="https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3" crossorigin="anonymous"></audio>
 
 <div class="container">
-  <div class="cesta-header" id="cestaVisual">
-    <span class="cesta-icon">🧺</span>
-    <span class="cesta-count" id="cestaContador">0</span>
-  </div>
-
   <div id="page-perfil" class="page active-page">
     <h2 style="margin-top:60px;">Control Total</h2>
     <input type="text" id="inputNombre" class="input-perfil" placeholder="Tu nombre">
-    <button class="btn-blue" onclick="ingresarUsuario()">🚀 Entrar</button>
+    <button class="btn-blue" style="width:100%" onclick="ingresarUsuario()">🚀 Entrar</button>
   </div>
 
   <div id="page-hoy" class="page">
-    <h2 id="saludoUsuario">Hola</h2>
     <p class="subtitulo" id="fechaHoy"></p>
     
     <div class="panel-card" id="guiaDinamica" style="display:none;">
       <div class="panel-header" style="color:#0a84ff;">💡 SUGERENCIA</div>
-      <div class="guia-grid-fija" id="guiaValores" style="display:grid; grid-template-columns: repeat(3,1fr); gap:5px;"></div>
+      <div class="guia-grid-fija" id="guiaValores"></div>
     </div>
 
     <div class="panel-card">
@@ -91,7 +82,7 @@
         <div class="input-box" id="box-fibra"><span class="icono">🌿</span><input type="number" id="fibra" onkeydown="saltarEnter(event,'agua')"><span class="unidad">g</span></div>
         <div class="input-box" id="box-agua"><span class="icono">💧</span><input type="number" id="agua" onkeydown="saltarEnter(event,'btnRegistrar')"><span class="unidad">ml</span></div>
       </div>
-      <button class="btn-blue" id="btnRegistrar" style="margin-top:15px; width:100%;" onclick="registrarComida()">GUARDAR</button>
+      <button class="btn-blue" id="btnRegistrar" style="margin-top:15px; width:100%" onclick="registrarComida()">GUARDAR</button>
     </div>
 
     <div class="panel-card" style="background: radial-gradient(circle at top, #1e1e24 0%, #111 80%);">
@@ -108,12 +99,11 @@
 
   <div id="modalDetalle" class="modal-overlay">
     <div class="modal-content">
-      <h3 id="detalleTitulo" style="color:#0a84ff; margin-bottom:15px;">Editar Comida</h3>
-      <div id="detalleContenido" class="edit-grid">
-        </div>
-      <button class="btn-green" style="width:100%; margin-bottom:10px;" id="btnActualizar">✅ ACTUALIZAR DATOS</button>
-      <button class="btn-blue" style="background:#ff453a; width:100%; margin-bottom:10px;" id="btnBorrarDetalle">🗑️ ELIMINAR REGISTRO</button>
-      <button class="btn-white" style="width:100%" onclick="cerrarDetalle()">↩️ VOLVER</button>
+      <div class="btn-cesta-borrar" id="btnBorrarDetalle" title="Borrar Registro">🧺</div>
+      <h3 id="detalleTitulo" style="color:#0a84ff; margin-bottom:20px; text-align:left;">Editar Comida</h3>
+      <div id="detalleContenido" class="input-grid"></div>
+      <button class="btn-green" style="width:100%; margin-top:20px;" id="btnActualizar">✅ ACTUALIZAR DATOS</button>
+      <button class="btn-white" style="width:100%; margin-top:10px;" onclick="cerrarDetalle()">↩️ VOLVER</button>
     </div>
   </div>
 
@@ -133,9 +123,7 @@
       </div>
       <button class="btn-green" style="width:100%;margin-top:15px;" onclick="guardarMetas()">💾 GUARDAR METAS</button>
     </div>
-    <button class="btn-blue" style="background:#333;margin-top:20px; width:100%;" onclick="cambiarPerfil()">Cerrar Sesión</button>
   </div>
-
 </div>
 
 <div class="nav-bar" id="main-nav" style="display:none;">
@@ -146,10 +134,13 @@
   <button class="nav-btn" onclick="verPagina('config', this)"><span>⚙️</span>Metas</button>
 </div>
 
+<div id="miModalResumen" class="modal-overlay"><div class="modal-content"><h3>📊 Resumen</h3><div id="modalTexto"></div><button class="btn-blue" style="width:100%" onclick="cerrarModal()">Aceptar</button></div></div>
+
 <script>
 let perfiles = {}, usuarioActual = null;
 const COLORES = { kcal:'#ff453a', prot:'#0a84ff', carbs:'#ff9f0a', grasas:'#32d74b', fibra:'#bf5af2', agua:'#00bfff' };
 const ICONOS = { kcal:'🔥', prot:'💪', carbs:'🍞', grasas:'🥑', fibra:'🌿', agua:'💧' };
+const NOMBRES = { kcal:'Calorías', prot:'Proteína', carbs:'Carbohidratos', grasas:'Grasas', fibra:'Fibra', agua:'Agua' };
 
 function cargarTodo(){
   let d = localStorage.getItem('nutriDataV6'); if(d) perfiles = JSON.parse(d);
@@ -163,7 +154,6 @@ function ingresarUsuario(){
 }
 function seleccionarPerfil(n){
   usuarioActual = n; localStorage.setItem('nutriUsuarioActivo', n);
-  document.getElementById('saludoUsuario').innerText = "¡Hola, " + n + "!";
   document.getElementById('page-perfil').classList.remove('active-page');
   document.getElementById('page-hoy').classList.add('active-page');
   document.getElementById('main-nav').style.display = 'flex';
@@ -199,47 +189,43 @@ function obtenerTotales(l){ return l.reduce((a,c)=>({kcal:a.kcal+c.kcal,prot:a.p
 function actualizarUI(){
   let p = perfiles[usuarioActual], t = obtenerTotales(p.hoy);
   document.getElementById('circulosHoy').innerHTML = Object.keys(p.METAS).map(k=> renderCircle(k, t[k], p.METAS[k])).join('');
-  
-  // CARRUSEL Y CESTA
-  document.getElementById('cestaContador').innerText = p.hoy.length;
   document.getElementById('listaComidasHoy').innerHTML = p.hoy.length ? `<div class="lista-horizontal-scroll">`+p.hoy.map(c=> `<div class="log-card" onclick="abrirDetalle(${c.id})"><div style="font-size:0.8em;color:#aaa">${c.tipo}</div><div style="font-weight:bold;color:${c.tipo.includes('Agua')?'#00bfff':'#ff453a'}">${c.tipo.includes('Agua')?c.agua+'ml':c.kcal+'kcal'}</div></div>`).join('')+`</div>` : `<p style="text-align:center;color:#666;font-size:0.8em;">Vacío</p>`;
-  
   actualizarGuia(p.hoy, p.METAS, t);
 }
 
 function renderCircle(k, a, m){
   let p = (m>0)? Math.min((a/m)*100,100) : 0, d = p*2.2, u = k==='agua'?'ml':k==='kcal'?'kcal':'g', r = m-a;
   let txt = (m==='' || m==0)?'-' : (r>0?`Faltan ${Math.round(r)}${u}` : `<span style="color:#ff453a;">+${Math.abs(Math.round(r))}${u}</span>`);
-  return `<div class="circle-wrapper"><div class="circle-container"><svg class="circle-svg" viewBox="0 0 80 80"><circle class="circle-bg" cx="40" cy="40" r="35"/><circle class="circle-bar" cx="40" cy="40" r="35" style="stroke:${COLORES[k]};stroke-dasharray:${d} 220"/></svg><div class="circle-text" style="color:${COLORES[k]}">${Math.round(p)}%</div></div><div style="font-size:0.65em; margin-top:5px; font-weight:bold; color:#aaa;">${ICONOS[k]} ${k.toUpperCase()}</div><div style="font-size:0.7em; color:#888;">${txt}</div></div>`;
+  return `<div class="circle-wrapper"><div class="circle-container"><svg class="circle-svg" viewBox="0 0 80 80"><circle class="circle-bg" cx="40" cy="40" r="35"/><circle class="circle-bar" cx="40" cy="40" r="35" style="stroke:${COLORES[k]};stroke-dasharray:${d} 220"/></svg><div class="circle-text" style="color:${COLORES[k]}">${Math.round(p)}%</div></div><div style="font-size:0.6em; margin-top:5px; font-weight:bold; color:#aaa;">${ICONOS[k]} ${k.toUpperCase()}</div><div style="font-size:0.7em; color:#888;">${txt}</div></div>`;
 }
 
 function abrirDetalle(id){
   let c = perfiles[usuarioActual].hoy.find(x=>x.id===id);
   document.getElementById('detalleTitulo').innerText = "Editar " + c.tipo;
-  
-  // Generar campos editables
   let html = "";
   for(let k in COLORES){
     let unit = k==='agua'?'ml':k==='kcal'?'kcal':'g';
-    html += `<div class="edit-item"><span>${ICONOS[k]}</span><input type="number" id="edit-${k}" value="${c[k]}"><span>${unit}</span></div>`;
+    html += `<div class="input-box"><span class="icono">${ICONOS[k]}</span><input type="number" id="edit-${k}" value="${c[k]}"><span class="unidad">${unit}</span></div>`;
   }
   document.getElementById('detalleContenido').innerHTML = html;
   
-  // Botón Actualizar
   document.getElementById('btnActualizar').onclick = () => {
-    for(let k in COLORES) c[k] = +document.getElementById('edit-'+k).value || 0;
-    cerrarDetalle(); guardarYActualizar();
+    if(confirm("¿Estás seguro de actualizar los datos de este registro?")){
+        for(let k in COLORES) c[k] = +document.getElementById('edit-'+k).value || 0;
+        cerrarDetalle(); guardarYActualizar();
+    }
   };
-  
   document.getElementById('btnBorrarDetalle').onclick = ()=>{ 
-    perfiles[usuarioActual].hoy = perfiles[usuarioActual].hoy.filter(x=>x.id!==id); 
-    cerrarDetalle(); guardarYActualizar(); actualizarDropdown(); 
+    if(confirm("¿Estás seguro de eliminar este registro por completo?")){
+        perfiles[usuarioActual].hoy = perfiles[usuarioActual].hoy.filter(x=>x.id!==id); 
+        cerrarDetalle(); guardarYActualizar(); actualizarDropdown(); 
+    }
   };
   document.getElementById('modalDetalle').style.display='block';
 }
 
 function actualizarGuia(h, m, t){
-  let pr = ["🍳 Desayuno", " Bento Almuerzo", "🍽️ Cena"].filter(c=> !h.map(x=>x.tipo).includes(c));
+  let pr = ["🍳 Desayuno", "🍱 Almuerzo", "🍽️ Cena"].filter(c=> !h.map(x=>x.tipo).includes(c));
   if(!pr.length){ document.getElementById('guiaDinamica').style.display='none'; return; }
   document.getElementById('guiaDinamica').style.display='block';
   document.getElementById('guiaValores').innerHTML = Object.keys(m).map(k=> {
