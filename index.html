@@ -26,16 +26,15 @@
   .nav-btn.active{color:#0a84ff;font-weight:bold;}
   .nav-icon{font-size:1.6em;margin-bottom:4px;}
   
-  /* --- NUEVO: GUÍA DINÁMICA (DESLIZABLE) --- */
+  /* --- GUÍA DINÁMICA FIJA --- */
   .guia-card { background: #111; border: 1px solid #333; border-radius: 15px; padding: 15px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
   .guia-titulo { font-size: 0.85em; color: #0a84ff; font-weight: bold; text-align: center; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px;}
-  .guia-grid-scroll { display: flex; overflow-x: auto; gap: 10px; padding-bottom: 5px; scrollbar-width: none; }
-  .guia-grid-scroll::-webkit-scrollbar { display: none; }
-  .guia-item { background: #1c1c1e; border: 1px solid #2c2c2e; border-radius: 12px; padding: 12px; min-width: 85px; text-align: center; flex: 1; }
+  .guia-grid-fija { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding-bottom: 5px; }
+  .guia-item { background: #1c1c1e; border: 1px solid #2c2c2e; border-radius: 12px; padding: 12px; text-align: center; }
   .guia-val { font-size: 1.2em; font-weight: bold; display: block; margin-top: 5px;}
   .guia-lab { font-size: 0.7em; color: #aaa; text-transform: uppercase; white-space: nowrap; font-weight:bold;}
 
-  /* Círculos Rediseñados - TAMAÑO XL */
+  /* Círculos Rediseñados */
   .grid-circles{display:grid;grid-template-columns:repeat(3,1fr);gap:25px 5px;margin:30px 0;text-align:center;}
   .circle-wrapper{display:flex; flex-direction:column; align-items:center;}
   .circle-top-icon{font-size:1.8em; margin-bottom:5px;} 
@@ -57,21 +56,29 @@
   
   /* Formularios */
   input, select{background:#111;border:1px solid #333;color:#fff;padding:15px;border-radius:12px;width:100%;box-sizing:border-box;margin-bottom:12px;font-size:16px;}
+  select { text-align: center; text-align-last: center; font-weight: bold; } /* Menú centrado */
   .input-grid{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
   .btn-blue{background:#1c3d99;color:white;width:100%;padding:16px;border:none;border-radius:12px;font-weight:bold;cursor:pointer; margin-bottom: 10px; font-size:1.1em;}
   .btn-green{background:#34c759;color:white;width:100%;padding:16px;border:none;border-radius:12px;font-weight:bold;cursor:pointer;margin-top:15px; font-size:1.1em;}
   .btn-white{background:#fff;color:#000;width:100%;padding:16px;border:none;border-radius:12px;font-weight:bold;cursor:pointer;margin-top:15px; font-size:1.1em;}
   
-  .log-item{display:flex;justify-content:space-between;background:#111;padding:15px;border-radius:12px;margin-bottom:8px;font-size:0.95em; border:1px solid #222;} 
-  .delete-btn{color:#ff453a; font-weight:bold; margin-left:10px; font-size: 1.2em;}
+  /* --- NUEVO: Tarjetas Compactas de Comidas --- */
+  .log-item-compact { display:flex; justify-content:space-between; align-items:center; background:#1c1c1e; padding:16px; border-radius:12px; margin-bottom:10px; font-size:1em; font-weight:bold; cursor:pointer; border:1px solid #333; transition: background 0.2s;}
+  .log-item-compact:active { background:#2c2c2e; }
+  .log-item-compact span:last-child { color: #ff453a; font-size: 0.95em; }
 
-  /* VENTANA DE RESUMEN (MODAL) */
+  /* VENTANAS MODALES */
   .modal-overlay { display:none; position:fixed; z-index:2000; left:0; top:0; width:100%; height:100%; background-color:rgba(0,0,0,0.85); backdrop-filter:blur(5px); }
   .modal-content { background-color:#1c1c1e; margin: 30% auto; padding:25px; border:1px solid #333; width:80%; border-radius:20px; color:white; font-size: 1.05em; line-height: 1.5; box-shadow: 0 10px 30px rgba(0,0,0,0.5);}
   .modal-titulo { text-align:center; font-size: 1.3em; font-weight:bold; color:#0a84ff; margin-bottom:15px; border-bottom: 1px solid #333; padding-bottom: 10px;}
   
+  /* Estilos para el Modal de Detalle de Comida */
+  .detalle-grid { display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:20px; text-align:left; font-size: 0.9em;}
+  .detalle-item { background: #111; padding:12px; border-radius:8px; border:1px solid #222;}
+  .detalle-item b { float: right; }
+
   @media print {
-    .nav-bar, button, input, select, .log-item { display: none !important; }
+    .nav-bar, button, input, select, .log-item-compact { display: none !important; }
     .active-page { display: block !important; width: 100%; }
     body { background: white; color: black; }
     .circle-bg { stroke: #eee; }
@@ -100,7 +107,7 @@
     
     <div class="guia-card" id="guiaDinamica" style="display:none;">
       <div class="guia-titulo" id="guiaTexto">💡 Sugerencia para próxima comida</div>
-      <div class="guia-grid-scroll" id="guiaValores">
+      <div class="guia-grid-fija" id="guiaValores">
         </div>
     </div>
     
@@ -115,10 +122,13 @@
       <input type="number" id="agua" placeholder="💧 Agua (ml)">
     </div>
     
-    <button class="btn-blue" id="btnRegistrar" onclick="registrarComida()">+ REGISTRAR</button>
+    <button class="btn-blue" id="btnRegistrar" onclick="registrarComida()">REGISTRAR</button>
     
     <div class="grid-circles" id="circulosHoy"></div>
+    
+    <h3 style="margin-top:20px; margin-bottom:10px; font-size:1.1em; color:#aaa; text-align:left;">Tus registros de hoy:</h3>
     <div id="listaComidasHoy"></div>
+    
     <button id="btnFinalizar" class="btn-green" onclick="cerrarDia()">💾 FINALIZAR DÍA Y EVALUAR</button>
   </div>
 
@@ -176,6 +186,16 @@
   </div>
 </div>
 
+<div id="modalDetalle" class="modal-overlay">
+  <div class="modal-content">
+    <div class="modal-titulo" id="detalleTitulo">Detalle</div>
+    <div id="detalleContenido" class="detalle-grid">
+      </div>
+    <button class="btn-blue" style="background:#ff453a; margin-bottom:10px;" id="btnBorrarDetalle">🗑️ Eliminar Registro</button>
+    <button class="btn-white" onclick="cerrarDetalle()">Volver</button>
+  </div>
+</div>
+
 <div class="nav-bar" id="main-nav" style="display:none;">
   <button class="nav-btn active" onclick="verPagina('hoy', this)"><span class="nav-icon">📝</span>Hoy</button>
   <button class="nav-btn" onclick="verPagina('semanal', this)"><span class="nav-icon">📊</span>Semana</button>
@@ -186,6 +206,7 @@
 
 <script>
 let audioDesbloqueado = false;
+
 function desbloquearAudio() {
   if(audioDesbloqueado) return;
   let audio = document.getElementById('sonidoAplausos');
@@ -202,10 +223,10 @@ function desbloquearAudio() {
       document.removeEventListener('click', desbloquearAudio);
       document.removeEventListener('touchstart', desbloquearAudio);
     }).catch(e => {
-      // Si falla, no hacemos nada. El próximo toque lo volverá a intentar.
     });
   }
 }
+
 document.addEventListener('click', desbloquearAudio);
 document.addEventListener('touchstart', desbloquearAudio);
 
@@ -342,6 +363,33 @@ function borrarComida(id) {
   actualizarDropdown();
 }
 
+// Funciones para el Modal de Detalles (Sugerencia 5)
+function abrirDetalle(id) {
+    const comida = perfiles[usuarioActual].hoy.find(c => c.id === id);
+    if(!comida) return;
+    
+    document.getElementById('detalleTitulo').innerText = comida.tipo;
+    document.getElementById('detalleContenido').innerHTML = `
+        <div class="detalle-item">🔥 Calorías: <b style="color:${COLORES.kcal}">${comida.kcal}</b></div>
+        <div class="detalle-item">💪 Proteína: <b style="color:${COLORES.prot}">${comida.prot} g</b></div>
+        <div class="detalle-item">🍞 Carbos: <b style="color:${COLORES.carbs}">${comida.carbs} g</b></div>
+        <div class="detalle-item">🥑 Grasas: <b style="color:${COLORES.grasas}">${comida.grasas} g</b></div>
+        <div class="detalle-item">🌿 Fibra: <b style="color:${COLORES.fibra}">${comida.fibra} g</b></div>
+        <div class="detalle-item">💧 Agua: <b style="color:${COLORES.agua}">${comida.agua} ml</b></div>
+    `;
+    
+    document.getElementById('btnBorrarDetalle').onclick = function() {
+        borrarComida(id);
+        cerrarDetalle();
+    };
+    
+    document.getElementById('modalDetalle').style.display = 'block';
+}
+
+function cerrarDetalle() {
+    document.getElementById('modalDetalle').style.display = 'none';
+}
+
 function guardarYActualizar() {
   localStorage.setItem('nutriDataV6', JSON.stringify(perfiles));
   actualizarUI();
@@ -354,7 +402,6 @@ function obtenerTotales(lista) {
   }), { kcal: 0, prot: 0, carbs: 0, grasas: 0, fibra: 0, agua: 0 });
 }
 
-// Lógica para la Guía Dinámica
 function actualizarGuiaDinamica(hoy, metas, totales) {
   const comidasHechas = hoy.map(c => c.tipo);
   let principalesRestantes = COMIDAS_PRINCIPALES.filter(c => !comidasHechas.includes(c));
@@ -363,7 +410,6 @@ function actualizarGuiaDinamica(hoy, metas, totales) {
   const guiaCont = document.getElementById('guiaValores');
   const guiaTit = document.getElementById('guiaTexto');
 
-  // Si ya hizo las 3 comidas, ocultamos la tarjeta
   if (principalesRestantes.length === 0) {
     guiaCard.style.display = 'none';
     return;
@@ -371,22 +417,22 @@ function actualizarGuiaDinamica(hoy, metas, totales) {
     guiaCard.style.display = 'block';
   }
 
-  const proxima = principalesRestantes[0]; // Desayuno, Almuerzo o Cena
+  const proxima = principalesRestantes[0]; 
   guiaTit.innerText = `💡 SUGERENCIA PARA: ${proxima.toUpperCase()}`;
 
   let html = "";
-  const claves = ['prot', 'carbs', 'grasas', 'kcal', 'fibra', 'agua'];
-  const factor = principalesRestantes.length; // Entre cuántas comidas dividimos el sobrante
+  const claves = ['kcal', 'prot', 'carbs', 'grasas', 'fibra', 'agua'];
+  const factor = principalesRestantes.length; 
 
   claves.forEach(k => {
     let restante = metas[k] - totales[k];
-    if (restante < 0) restante = 0; // Si se pasó, le sugerimos 0
+    if (restante < 0) restante = 0; 
     let sugerido = Math.round(restante / factor);
 
     html += `
       <div class="guia-item">
         <span class="guia-lab">${ICONOS[k]} ${NOMBRES[k]}</span>
-        <span class="guia-val" style="color:${COLORES[k]}">${sugerido}${k === 'agua' ? 'ml' : 'g'}</span>
+        <span class="guia-val" style="color:${COLORES[k]}">${sugerido}${k === 'agua' ? 'ml' : (k === 'kcal' ? 'kcal' : 'g')}</span>
       </div>
     `;
   });
@@ -399,21 +445,23 @@ function actualizarUI() {
   const metas = perfiles[usuarioActual].METAS;
   const totales = obtenerTotales(hoy);
 
-  // Actualizar Círculos XL
   const container = document.getElementById('circulosHoy');
   container.innerHTML = '';
   for (let key in metas) container.innerHTML += renderCircle(key, totales[key], metas[key]);
 
-  // Actualizar el Listado de comidas de hoy
+  // Renderizado Compacto de la Lista (Sugerencia 5)
   const lista = document.getElementById('listaComidasHoy');
-  lista.innerHTML = hoy.map(c => `
-    <div class="log-item">
-      <span><b>${c.tipo}</b>: ${c.kcal}k | ${c.prot}P | ${c.agua}ml 💧</span>
-      <span class="delete-btn" onclick="borrarComida(${c.id})">✕</span>
-    </div>
-  `).join('');
+  if(hoy.length === 0) {
+      lista.innerHTML = `<p style="text-align:center; color:#8e8e93; font-size:0.9em;">Aún no has registrado nada hoy.</p>`;
+  } else {
+      lista.innerHTML = hoy.map(c => `
+        <div class="log-item-compact" onclick="abrirDetalle(${c.id})">
+          <span>${c.tipo}</span>
+          <span>🔥 ${c.kcal} kcal</span>
+        </div>
+      `).join('');
+  }
 
-  // Actualizar LA GUÍA DINÁMICA DE ARRIBA
   actualizarGuiaDinamica(hoy, metas, totales);
 }
 
@@ -422,14 +470,17 @@ function renderCircle(label, actual, meta) {
   const displayPct = Math.round(pct) + '%';
   const dash = pct * 2.35; 
   
+  // Unidades Inteligentes (Sugerencia 4)
+  let unit = label === 'agua' ? 'ml' : (label === 'kcal' ? 'kcal' : 'g');
+  
   let restante = meta - actual;
   let textoAbajo = "";
   if (meta === 0) {
       textoAbajo = "-";
   } else if (restante > 0) {
-      textoAbajo = `Faltan ${Math.round(restante)}`;
+      textoAbajo = `Faltan ${Math.round(restante)} ${unit}`;
   } else if (restante < 0) {
-      textoAbajo = `<span style="color:#ff453a;">+${Math.abs(Math.round(restante))} extra</span>`;
+      textoAbajo = `<span style="color:#ff453a;">+${Math.abs(Math.round(restante))} ${unit} extra</span>`;
   } else {
       textoAbajo = `<span style="color:#32d74b;">¡Completo!</span>`;
   }
@@ -512,7 +563,7 @@ function cerrarDia() {
 
   if (mereceAplauso) {
       let audio = document.getElementById('sonidoAplausos');
-      audio.muted = false; // Nos aseguramos de que no esté silenciado
+      audio.muted = false; 
       audio.currentTime = 0; 
       audio.play().catch(e => console.log("Bloqueo del navegador", e));
   }
@@ -547,7 +598,6 @@ function renderReporteSemanal() {
   const metasSemanales = {};
   for (let key in metasDiarias) metasSemanales[key] = metasDiarias[key] * 7;
   
-  // Sumamos el historial + lo que llevas registrado hoy
   const sumas = obtenerTotales(historialSemana);
   const hoyTotales = obtenerTotales(perfiles[usuarioActual].hoy);
   for(let key in sumas) sumas[key] += hoyTotales[key];
@@ -573,7 +623,6 @@ function renderReporteMensual() {
   const metasMensuales = {};
   for (let key in metasDiarias) metasMensuales[key] = metasDiarias[key] * diasEnMes;
   
-  // Sumamos el historial + lo que llevas registrado hoy
   const sumas = obtenerTotales(historialMes);
   const hoyTotales = obtenerTotales(perfiles[usuarioActual].hoy);
   for(let key in sumas) sumas[key] += hoyTotales[key];
