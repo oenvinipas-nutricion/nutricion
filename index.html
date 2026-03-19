@@ -8,69 +8,73 @@
 <style>
   body { font-family:-apple-system,BlinkMacSystemFont,sans-serif; padding:10px; background:#000; color:#eee; margin-bottom:90px; -webkit-tap-highlight-color: transparent; }
   .container{max-width:420px; margin:auto;}
-  h2,h3{text-align:center;color:#fff; text-transform: uppercase;}
-  .subtitulo{text-align:center; color:#0a84ff; font-size:0.85em; margin-bottom:20px; font-weight:bold;}
+  h2,h3{text-align:center;color:#fff; text-transform: uppercase; letter-spacing: 1px;}
+  .subtitulo{text-align:center; color:#0a84ff; font-size:0.85em; margin-bottom:20px; font-weight:bold; text-transform: uppercase;}
+  
+  /* Navegación */
+  .page{display:none;} .active-page{display:block;}
+  .nav-bar{position:fixed;bottom:0;left:0;right:0;background:rgba(15,15,15,0.95);backdrop-filter:blur(15px);display:flex;padding:12px 5px 30px 5px;border-top:0.5px solid #333;z-index:1000;}
+  .nav-btn{background:none;border:none;color:#8e8e93;display:flex;flex-direction:column;align-items:center;font-size:0.7em;flex:1; cursor:pointer;}
+  .nav-btn.active{color:#0a84ff;font-weight:bold;}
+  
+  /* Paneles */
+  .panel-card { background: #161618; border: 1px solid #2c2c2e; border-radius: 20px; padding: 20px 15px; margin-bottom: 25px; position: relative;}
+  .panel-header { font-size: 0.85em; font-weight: 800; text-align: center; margin-bottom: 18px; text-transform: uppercase; letter-spacing: 1.5px; }
 
-  /* --- PANELES --- */
-  .panel-card { background: #161618; border: 1px solid #2c2c2e; border-radius: 20px; padding: 20px 15px; margin-bottom: 25px; }
-  .panel-header { font-size: 0.85em; font-weight: 800; text-align: center; margin-bottom: 15px; text-transform: uppercase; color: #aaa; }
-
-  /* --- SUGERENCIAS (DISEÑO 23551) --- */
+  /* Sugerencias Estilo Profesional 23551 */
   .guia-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-  .guia-item { background: #1c1c1e; border: 1px solid #333; border-radius: 12px; padding: 15px 5px; text-align: center; }
-  .guia-lab { font-size: 0.6em; color: #8e8e93; display: block; font-weight: 800; margin-bottom: 4px; }
-  .guia-val { font-size: 1.3em; font-weight: 900; }
+  .guia-item { background: #1c1c1e; border: 1px solid #333; border-radius: 15px; padding: 15px 5px; text-align: center; }
+  .guia-lab { font-size: 0.6em; color: #8e8e93; display: block; text-transform: uppercase; font-weight: 800; margin-bottom: 4px; }
+  .guia-val { font-size: 1.3em; font-weight: 900; display: block; }
 
-  /* --- INPUTS REGISTRO (DISEÑO 23551) --- */
+  /* Ingresar Datos Estilo 23551 */
   .input-grid-reg { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 15px; }
   .input-reg { background: #1c1c1e; border: 1px solid #333; border-radius: 10px; padding: 15px; color: #fff; text-align: center; font-size: 1.1em; font-weight: bold; width: 100%; box-sizing: border-box; }
-  .btn-registrar { background: #1c3d99; color: white; width: 100%; padding: 18px; border: none; border-radius: 12px; font-weight: bold; font-size: 1.1em; cursor: pointer; }
+  .btn-registrar-solid { background: #1c3d99; color: white; width: 100%; padding: 18px; border: none; border-radius: 12px; font-weight: bold; font-size: 1.1em; text-transform: uppercase; cursor: pointer; }
 
-  /* --- TUS REGISTROS SCROLL --- */
-  .lista-scroll { display: flex; overflow-x: auto; gap: 12px; padding-bottom: 10px; scrollbar-width: none; }
-  .log-card { background: #1c1c1e; border: 1px solid #333; border-radius: 15px; padding: 15px 20px; min-width: 110px; text-align: center; flex: 0 0 auto; cursor:pointer; font-weight: bold; }
-
-  /* --- MODALES --- */
-  .modal-overlay { display:none; position:fixed; z-index:2000; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.95); backdrop-filter:blur(10px); }
-  .modal-content { background:#161618; margin: 10% auto; padding:25px; border:1px solid #333; width:85%; border-radius:25px; color:white; position: relative; }
+  /* Tus Registros (Solo Nombre en Scroll) */
+  .lista-scroll { display: flex; overflow-x: auto; gap: 12px; padding-bottom: 5px; scrollbar-width: none; }
+  .log-card { background: #1c1c1e; border: 1px solid #333; border-radius: 15px; padding: 20px 15px; min-width: 115px; text-align: center; flex: 0 0 auto; cursor:pointer; font-weight: bold; color: #fff; }
   
-  /* --- BOTONES --- */
-  .nav-bar{position:fixed;bottom:0;left:0;right:0;background:rgba(15,15,15,0.95);display:flex;padding:12px 5px 30px;border-top:0.5px solid #333;}
-  .nav-btn{background:none;border:none;color:#8e8e93;display:flex;flex-direction:column;align-items:center;font-size:0.7em;flex:1;}
-  .nav-btn.active{color:#0a84ff;font-weight:bold;}
-  .btn-green { background: #248a3d; color: white; width: 100%; padding: 15px; border: none; border-radius: 12px; font-weight: bold; margin-top: 10px; }
-  .btn-white { background: #444; color: white; width: 100%; padding: 12px; border: none; border-radius: 10px; margin-top: 8px; }
-  .btn-red { background: #b02a2a; color: white; width: 100%; padding: 15px; border: none; border-radius: 12px; font-weight: bold; margin-top: 15px; }
-  .btn-trash { position: absolute; top: 15px; right: 15px; font-size: 1.4em; cursor: pointer; color: #ff453a; }
-
-  /* --- TABLA HISTORIAL --- */
-  .scroll-area { overflow-x: auto; }
-  table { width: 100%; border-collapse: collapse; min-width: 450px; text-align: center; }
-  th { background: #1c1c1e; padding: 10px; font-size: 0.65em; border-bottom: 2px solid #333; }
-  th .m-val { display: block; color: #0a84ff; font-size: 1.1em; }
-  td { padding: 12px 5px; border-bottom: 1px solid #222; font-weight: bold; }
-
-  /* --- METAS --- */
-  .meta-row { display: flex; align-items: center; margin-bottom: 10px; }
-  .meta-label { flex: 1; font-size: 0.8em; color: #aaa; font-weight: bold; text-transform: uppercase; }
-  .meta-input-box { background: #111; border: 1px solid #333; border-radius: 12px; display: flex; align-items: center; justify-content: center; height: 50px; flex: 1.5; }
-  .meta-input-box input { background: transparent; border: none; color: #fff; font-size: 1.1em; font-weight: bold; text-align: center; width: 60px; outline: none; }
-
-  .grid-circles{display:grid;grid-template-columns:repeat(3,1fr);gap:15px 5px;}
+  /* Círculos de Progreso */
+  .grid-circles{display:grid;grid-template-columns:repeat(3,1fr);gap:15px 5px; text-align:center;}
   .circle-container{position:relative;width:75px;height:75px;margin:auto;} 
   .circle-svg{transform:rotate(-90deg);width:100%;height:100%;}
   .circle-bg{fill:none;stroke:#1c1c1e;stroke-width:6;} 
   .circle-bar{fill:none;stroke-width:6;stroke-linecap:round;transition:stroke-dasharray 0.5s ease;}
   .circle-text{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:0.9em;font-weight:bold;}
+  .circle-footer { font-size: 0.55em; font-weight: bold; color: #aaa; margin-top: 5px; text-transform: uppercase; }
+
+  /* Historial Tabla Cartel */
+  .scroll-area { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; min-width: 480px; }
+  th { background: #1c1c1e; padding: 10px 2px; color: #eee; border-bottom: 2px solid #333; font-size: 0.6em; text-align: center; }
+  th .m-val { display: block; color: #0a84ff; font-size: 1.1em; font-weight: 800; margin-top: 2px; }
+  td { padding: 12px 2px; border-bottom: 1px solid #222; text-align: center; font-weight: bold; font-size: 0.9em; }
+  td:first-child { color: #0a84ff; text-align: left; padding-left: 8px; min-width: 100px; }
+
+  /* Metas con Label a la izquierda */
+  .meta-row { display: flex; align-items: center; margin-bottom: 10px; gap: 10px; }
+  .meta-label { flex: 1; font-size: 0.8em; color: #aaa; font-weight: bold; text-transform: uppercase; }
+  .meta-input-box { background: #111; border: 1px solid #333; border-radius: 12px; display: flex; align-items: center; justify-content: center; height: 50px; flex: 1.5; }
+  .meta-input-box input { background: transparent; border: none; color: #fff; font-size: 1.1em; font-weight: bold; text-align: center; width: 65px; outline: none; }
+
+  /* Modales y Seguridad */
+  .modal-overlay { display:none; position:fixed; z-index:2000; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.9); backdrop-filter:blur(10px); }
+  .modal-content { background:#161618; margin: 10% auto; padding:25px; border:1px solid #333; width:85%; border-radius:25px; color:white; position: relative; }
+  .btn-trash-red { position: absolute; top: 15px; right: 15px; color: #ff453a; font-size: 1.4em; cursor: pointer; }
+  .btn-green-modal { background: #248a3d; color: white; width: 100%; padding: 16px; border: none; border-radius: 12px; font-weight: bold; margin-top: 20px; cursor: pointer; }
+  .btn-white-modal { background: #444; color: white; width: 100%; padding: 12px; border: none; border-radius: 12px; margin-top: 10px; cursor: pointer; }
 </style>
 </head>
 <body onload="cargarTodo()">
+<audio id="sonidoAplausos" src="https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3" crossorigin="anonymous"></audio>
 
 <div class="container">
   <div id="page-perfil" class="page active-page">
-    <h2 style="margin-top:80px;">Control Total</h2>
-    <input type="text" id="inputNombre" class="input-reg" placeholder="Tu nombre" style="margin-bottom:20px;">
-    <button class="btn-registrar" onclick="ingresarUsuario()">🚀 ENTRAR</button>
+    <h2 style="margin-top:60px;">Control Total</h2>
+    <input type="text" id="inputNombre" class="input-reg" style="margin-bottom:20px;" placeholder="Tu nombre">
+    <button class="btn-registrar-solid" onclick="ingresarUsuario()">🚀 Entrar</button>
   </div>
 
   <div id="page-hoy" class="page">
@@ -78,12 +82,12 @@
     <p class="subtitulo" id="fechaHoy"></p>
     
     <div class="panel-card" id="guiaDinamica" style="display:none;">
-      <div class="panel-header" id="tituloSugerencia" style="color:#0a84ff;"></div>
+      <div class="panel-header" id="tituloSugerencia" style="color:#0a84ff;">💡 SUGERENCIA</div>
       <div id="guiaValores" class="guia-grid"></div>
     </div>
     
     <div class="panel-card">
-      <div class="panel-header">✍️ REGISTRO DIARIO</div>
+      <div class="panel-header" style="color:#aaa;">✍️ INGRESAR DATOS</div>
       <select id="tipoComida" class="input-reg" style="margin-bottom:15px;" onchange="verificarSoloAgua()"></select>
       <div class="input-grid-reg">
         <input type="number" id="kcal" class="input-reg" placeholder="🔥 KCAL">
@@ -93,24 +97,31 @@
         <input type="number" id="fibra" class="input-reg" placeholder="🌿 FIBR">
         <input type="number" id="agua" class="input-reg" placeholder="💧 AGUA">
       </div>
-      <button class="btn-registrar" onclick="registrarComida()">+ REGISTRAR</button>
+      <button class="btn-registrar-solid" onclick="registrarComida()">REGISTRAR</button>
     </div>
     
-    <div class="panel-card"><div class="panel-header" style="color:#32d74b;">📊 PROGRESO</div><div class="grid-circles" id="circulosHoy"></div></div>
+    <div class="panel-card"><div class="panel-header" style="color:#32d74b;">📊 PROGRESO DE HOY</div><div class="grid-circles" id="circulosHoy"></div></div>
     
     <div class="panel-card">
-      <div class="panel-header">📋 TUS REGISTROS</div>
+      <div class="panel-header" style="color:#aaa;">📋 TUS REGISTROS</div>
       <div id="listaComidasHoy" class="lista-scroll"></div>
     </div>
-    <button class="btn-green" style="background:#1c1c1e; border:1px solid #248a3d" onclick="cerrarDia()">💾 FINALIZAR DÍA</button>
+    <button class="btn-green-modal" style="background:#1c1c1e; border:1px solid #248a3d" onclick="cerrarDia()">💾 FINALIZAR DÍA</button>
   </div>
 
-  <div id="page-semanal" class="page"><h2>Semana</h2><p class="subtitulo" id="rangoSemanaTexto"></p><div class="panel-card"><div class="grid-circles" id="circulosSemanal"></div></div></div>
-  <div id="page-mensual" class="page"><h2>Mes</h2><p class="subtitulo" id="rangoMesTexto"></p><div class="panel-card"><div class="grid-circles" id="circulosMensual"></div></div></div>
-  <div id="page-historial" class="page"><h2>Historial</h2><div class="panel-card"><div class="scroll-area"><table><thead><tr id="historialHeader"></tr></thead><tbody id="tablaHistorial"></tbody></table></div></div></div>
+  <div id="page-semanal" class="page"><h2>Reporte Semanal</h2><p class="subtitulo" id="rangoSemanaTexto"></p><div class="panel-card"><div class="grid-circles" id="circulosSemanal"></div></div></div>
+  <div id="page-mensual" class="page"><h2>Reporte Mensual</h2><p class="subtitulo" id="rangoMesTexto"></p><div class="panel-card"><div class="grid-circles" id="circulosMensual"></div></div></div>
+  
+  <div id="page-historial" class="page">
+    <h2>Historial Diario</h2>
+    <div class="panel-card">
+        <div class="scroll-area"><table><thead><tr id="historialHeader"></tr></thead><tbody id="tablaHistorial"></tbody></table></div>
+    </div>
+    <button class="btn-white-modal" style="width:100%" onclick="window.print()">📄 EXPORTAR PDF</button>
+  </div>
   
   <div id="page-config" class="page">
-    <h2>Metas</h2>
+    <h2>Metas Diarias</h2>
     <div class="panel-card">
       <div class="meta-row"><span class="meta-label">🔥 Calorías</span><div class="meta-input-box"><input type="number" id="mKcal"></div></div>
       <div class="meta-row"><span class="meta-label">💪 Proteína</span><div class="meta-input-box"><input type="number" id="mProt"></div></div>
@@ -118,28 +129,28 @@
       <div class="meta-row"><span class="meta-label">🥑 Grasas</span><div class="meta-input-box"><input type="number" id="mGrasas"></div></div>
       <div class="meta-row"><span class="meta-label">🌿 Fibra</span><div class="meta-input-box"><input type="number" id="mFibra"></div></div>
       <div class="meta-row"><span class="meta-label">💧 Agua</span><div class="meta-input-box"><input type="number" id="mAgua"></div></div>
-      <button class="btn-green" onclick="guardarMetas()">💾 GUARDAR METAS</button>
+      <button class="btn-green-modal" onclick="guardarMetas()">💾 GUARDAR METAS</button>
     </div>
-    <button class="btn-white" style="width:100%" onclick="cambiarPerfil()">Cerrar Sesión</button>
+    <button class="btn-white-modal" style="width:100%" onclick="cambiarPerfil()">Cerrar Sesión</button>
   </div>
 </div>
 
 <div id="modalDetalle" class="modal-overlay">
   <div class="modal-content">
-    <div class="btn-trash" id="btnBorrarDetalle">🗑️</div>
-    <h3 id="detalleTitulo" style="color:#0a84ff; text-align:left;">Editar Comida</h3>
+    <div class="btn-trash-red" id="btnBorrarDetalle">🗑️</div>
+    <h3 id="detalleTitulo" style="color:#0a84ff; text-align:left; margin-bottom:20px;">Editar</h3>
     <div id="detalleContenido" class="input-grid-reg"></div>
-    <button class="btn-green" id="btnActualizar">✅ ACTUALIZAR</button>
-    <button class="btn-white" onclick="cerrarDetalle()">↩️ VOLVER</button>
+    <button class="btn-green-modal" id="btnActualizar">✅ ACTUALIZAR</button>
+    <button class="btn-white-modal" onclick="cerrarDetalle()">↩️ VOLVER</button>
 
     <div id="confirmArea" style="display:none; margin-top:20px; border-top:1px solid #333; padding-top:20px; text-align:center;">
-      <h3 style="color:#ff453a;">¿SEGURO?</h3>
-      <button class="btn-red" id="confirmSi">SÍ, CONTINUAR</button>
+      <h3 style="color:#ff453a;">¿ESTÁS SEGURO?</h3>
+      <button class="btn-registrar-solid" style="background:#b02a2a; margin-top:10px;" id="confirmSi">SÍ, CONTINUAR</button>
     </div>
   </div>
 </div>
 
-<div id="miModalResumen" class="modal-overlay"><div class="modal-content"><h3>📊 Resumen</h3><div id="modalTexto" style="text-align:left; font-size:0.9em;"></div><button class="btn-registrar" style="margin-top:15px" onclick="cerrarModal()">ACEPTAR</button></div></div>
+<div id="miModalResumen" class="modal-overlay"><div class="modal-content"><h3>📊 Resumen</h3><div id="modalTexto" style="text-align:left; font-size:0.9em;"></div><button class="btn-registrar-solid" style="margin-top:15px" onclick="cerrarModal()">ACEPTAR</button></div></div>
 
 <div class="nav-bar" id="main-nav" style="display:none;">
   <button class="nav-btn active" onclick="verPagina('hoy', this)"><span>📝</span>Hoy</button>
@@ -176,6 +187,12 @@ function seleccionarPerfil(n){
 function actualizarFechas(){
   const f = new Date(), dias = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
   document.getElementById('fechaHoy').innerText = `${dias[f.getDay()]} ${f.getDate()}/${f.getMonth()+1}`;
+  
+  let hoy = new Date();
+  let lun = new Date(hoy.setDate(hoy.getDate()-hoy.getDay()+(hoy.getDay()===0?-6:1)));
+  let dom = new Date(lun); dom.setDate(lun.getDate()+6);
+  document.getElementById('rangoSemanaTexto').innerText = `Desde el Lunes ${lun.getDate()}/${lun.getMonth()+1} hasta el Domingo ${dom.getDate()}/${dom.getMonth()+1}`;
+  document.getElementById('rangoMesTexto').innerText = new Date().toLocaleDateString('es-ES',{month:'long',year:'numeric'});
 }
 function verificarSoloAgua(){
   let es = document.getElementById('tipoComida').value === "💧 Solo Agua";
@@ -192,18 +209,17 @@ function registrarComida(){
 function guardarYActualizar(){ localStorage.setItem('nutriDataV6', JSON.stringify(perfiles)); actualizarUI(); }
 function obtenerTotales(l){ return l.reduce((a,c)=>({kcal:a.kcal+(c.kcal||0),prot:a.prot+(c.prot||0),carbs:a.carbs+(c.carbs||0),grasas:a.grasas+(c.grasas||0),fibra:a.fibra+(c.fibra||0),agua:a.agua+(c.agua||0)}),{kcal:0,prot:0,carbs:0,grasas:0,fibra:0,agua:0}); }
 function renderCircle(k, a, m){
-  let p = (m>0)? Math.min((a/m)*100,100) : 0, d = p*2.1, r = m-a;
-  let txt = (m==0)?'-' : (r>0?`Faltan ${Math.round(r)}` : `¡Límite!`);
-  return `<div style="text-align:center"><div class="circle-container"><svg class="circle-svg" viewBox="0 0 80 80"><circle class="circle-bg" cx="40" cy="40" r="35"/><circle class="circle-bar" cx="40" cy="40" r="35" style="stroke:${COLORES[k]};stroke-dasharray:${d} 220"/></svg><div class="circle-text" style="color:${COLORES[k]}">${Math.round(p)}%</div></div><div style="font-size:0.55em;font-weight:bold;margin-top:5px;color:#aaa">${ICONOS[k]} ${k.toUpperCase()}</div></div>`;
+  let p = (m>0)? Math.min((a/m)*100,100) : 0, d = p*2.1;
+  return `<div style="text-align:center"><div class="circle-container"><svg class="circle-svg" viewBox="0 0 80 80"><circle class="circle-bg" cx="40" cy="40" r="35"/><circle class="circle-bar" cx="40" cy="40" r="35" style="stroke:${COLORES[k]};stroke-dasharray:${d} 220"/></svg><div class="circle-text" style="color:${COLORES[k]}">${Math.round(p)}%</div></div><div class="circle-footer">${ICONOS[k]} ${k.toUpperCase()}</div></div>`;
 }
 function actualizarUI(){
   let p = perfiles[usuarioActual], t = obtenerTotales(p.hoy);
   document.getElementById('circulosHoy').innerHTML = Object.keys(p.METAS).map(k=> renderCircle(k, t[k], p.METAS[k])).join('');
-  document.getElementById('listaComidasHoy').innerHTML = p.hoy.map(c=> `<div class="log-card" onclick="abrirDetalle(${c.id})">${c.tipo}</div>`).join('') || `<p style="text-align:center;width:100%;color:#666">Sin registros</p>`;
+  document.getElementById('listaComidasHoy').innerHTML = p.hoy.map(c=> `<div class="log-card" onclick="abrirDetalle(${c.id})">${c.tipo}</div>`).join('') || `<p style="text-align:center;width:100%;color:#666">Vacío</p>`;
   actualizarGuia(p.hoy, p.METAS, t);
 }
 function actualizarGuia(h, m, t){
-  let pen = ["🍳 Desayuno", "Almuerzo", "🍽️ Cena"].filter(c=> !h.map(x=>x.tipo).includes(c));
+  let pen = ["🍳 Desayuno", " Almuerzo", "🍽️ Cena"].filter(c=> !h.map(x=>x.tipo).includes(c));
   if(!pen.length){ document.getElementById('guiaDinamica').style.display='none'; return; }
   document.getElementById('guiaDinamica').style.display='block';
   document.getElementById('tituloSugerencia').innerText = `💡 SUGERENCIA PARA EL ${pen[0].toUpperCase()}`;
@@ -222,6 +238,7 @@ function abrirDetalle(id){
   document.getElementById('modalDetalle').style.display='block';
 }
 document.getElementById('confirmSi').onclick = () => { if(callbackConfirm) callbackConfirm(); };
+function cerrarDetalle(){ document.getElementById('modalDetalle').style.display='none'; }
 function verPagina(id, b){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active-page'));
   document.getElementById('page-'+id).classList.add('active-page');
@@ -237,19 +254,19 @@ function renderReporte(tipo){
 }
 function renderHistorial(){
   let p = perfiles[usuarioActual], m = p.METAS;
-  document.getElementById('historialHeader').innerHTML = `<th>FECHA</th>` + Object.keys(m).map(k=> `<th>${ICONOS[k]} ${k.toUpperCase()}<span class="m-val">${m[k]}</span></th>`).join('');
+  document.getElementById('historialHeader').innerHTML = `<th>FECHA</th>` + Object.keys(m).map(k=> `<th>${ICONOS[k]} ${k.toUpperCase()}<span class="m-val">${m[k]}${k==='agua'?'ml':'g'}</span></th>`).join('');
   document.getElementById('tablaHistorial').innerHTML = p.historial.map(h=> `<tr><td>${h.f || ''}</td><td>${h.kcal}</td><td>${h.prot}</td><td>${h.carbs}</td><td>${h.grasas}</td><td>${h.fibra}</td><td>${h.agua}</td></tr>`).join('');
 }
 function cerrarDia(){
   let p = perfiles[usuarioActual], t = obtenerTotales(p.hoy);
   const f = new Date(), dias = ['D','L','M','X','J','V','S'];
   t.f = `${dias[f.getDay()]} ${f.getDate()}/${f.getMonth()+1}`;
-  p.historial.unshift(t); p.hoy = []; guardarYActualizar(); confetti(); alert("Día Finalizado");
+  p.historial.unshift(t); p.hoy = []; guardarYActualizar();
+  document.getElementById('modalTexto').innerHTML = "Día guardado en el historial."; document.getElementById('miModalResumen').style.display='block'; confetti();
 }
 function cargarMetasInputs(){ let m = perfiles[usuarioActual].METAS; for(let k in m) document.getElementById('m'+k.charAt(0).toUpperCase()+k.slice(1)).value = m[k]; }
 function guardarMetas(){ ['Kcal','Prot','Carbs','Grasas','Fibra','Agua'].forEach(k=> perfiles[usuarioActual].METAS[k.toLowerCase()] = +document.getElementById('m'+k).value || 0); guardarYActualizar(); alert("Metas guardadas"); }
 function actualizarDropdown(){ let h = perfiles[usuarioActual].hoy.map(c=>c.tipo), s = document.getElementById('tipoComida'); s.innerHTML = ["🍳 Desayuno", "🍎 Colación AM", "Almuerzo", "🥪 Colación PM", "🍽️ Cena", "💧 Solo Agua"].filter(c=> !h.includes(c) || c==="💧 Solo Agua").map(c=>`<option value="${c}">${c}</option>`).join(''); verificarSoloAgua(); }
-function cerrarDetalle(){ document.getElementById('modalDetalle').style.display='none'; }
 function cerrarModal(){ document.getElementById('miModalResumen').style.display='none'; }
 function cambiarPerfil(){ localStorage.removeItem('nutriUsuarioActivo'); location.reload(); }
 </script>
