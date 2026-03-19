@@ -98,9 +98,9 @@
     <button class="btn-green" style="width:100%" onclick="cerrarDia()">💾 FINALIZAR DÍA</button>
   </div>
 
-  <div id="page-semanal" class="page"><h2>Semana</h2><p class="subtitulo" id="rangoSemanaTexto"></p><div class="panel-card panel-luminoso"><div class="grid-circles" id="circulosSemanal"></div><p id="msgSemana" style="text-align:center;font-size:0.8em;color:#888;margin-top:15px;"></p></div><button class="btn-white" style="width:100%" onclick="window.print()">📄 PDF SEMANAL</button></div>
-  <div id="page-mensual" class="page"><h2>Mes</h2><p class="subtitulo" id="rangoMesTexto"></p><div class="panel-card panel-luminoso"><div class="grid-circles" id="circulosMensual"></div><p id="msgMes" style="text-align:center;font-size:0.8em;color:#888;margin-top:15px;"></p></div><button class="btn-white" style="width:100%" onclick="window.print()">📄 PDF MENSUAL</button></div>
-  <div id="page-historial" class="page"><h2>Historial</h2><div class="panel-card"><div class="scroll-area"><table><thead><tr id="historialHeader"></tr></thead><tbody id="tablaHistorial"></tbody></table></div></div><button class="btn-white" style="width:100%" onclick="window.print()">📄 PDF HISTORIAL</button></div>
+  <div id="page-semanal" class="page"><h2>Reporte Semanal</h2><p class="subtitulo" id="rangoSemanaTexto"></p><div class="panel-card panel-luminoso"><div class="grid-circles" id="circulosSemanal"></div><p id="msgSemana" style="text-align:center;font-size:0.8em;color:#888;margin-top:15px;"></p></div><button class="btn-white" style="width:100%" onclick="window.print()">📄 PDF SEMANAL</button></div>
+  <div id="page-mensual" class="page"><h2>Reporte Mensual</h2><p class="subtitulo" id="rangoMesTexto"></p><div class="panel-card panel-luminoso"><div class="grid-circles" id="circulosMensual"></div><p id="msgMes" style="text-align:center;font-size:0.8em;color:#888;margin-top:15px;"></p></div><button class="btn-white" style="width:100%" onclick="window.print()">📄 PDF MENSUAL</button></div>
+  <div id="page-historial" class="page"><h2>Historial Diario</h2><div class="panel-card"><div class="scroll-area"><table><thead><tr id="historialHeader"></tr></thead><tbody id="tablaHistorial"></tbody></table></div></div><button class="btn-white" style="width:100%" onclick="window.print()">📄 PDF HISTORIAL</button></div>
   
   <div id="page-config" class="page">
     <h2>Metas</h2>
@@ -179,11 +179,15 @@ function actualizarDropdown(){
 function verificarSoloAgua(){
   let es = document.getElementById('tipoComida').value === "💧 Solo Agua";
   ['kcal','prot','carbs','grasas','fibra'].forEach(id=>{
-    document.getElementById(id).disabled = es; if(es) document.getElementById(id).value = '';
-    document.getElementById('box-'+id).classList.toggle('disabled', es);
+    let input = document.getElementById(id);
+    if(input){
+        input.disabled = es; if(es) input.value = '';
+        document.getElementById('box-'+id).classList.toggle('disabled', es);
+    }
   });
 }
 function saltarEnter(e, n){ if(e.key==='Enter'){ e.preventDefault(); if(n==='btnRegistrar') registrarComida(); else document.getElementById(n).focus(); } }
+
 function registrarComida(){
   let s = document.getElementById('tipoComida').value, a = +document.getElementById('agua').value || 0;
   if(s === "💧 Solo Agua"){
@@ -196,7 +200,8 @@ function registrarComida(){
   guardarYActualizar(); actualizarDropdown();
 }
 function guardarYActualizar(){ localStorage.setItem('nutriDataV6', JSON.stringify(perfiles)); actualizarUI(); }
-function obtenerTotales(l){ return l.reduce((a,c)=>({kcal:a.kcal+c.kcal,prot:a.prot+c.prot,carbs:a.carbs+c.carbs,grasas:a.grasas+c.grasas,fibra:a.fibra+c.fibra,agua:a.agua+c.agua}),{kcal:0,prot:0,carbs:0,grasas:0,fibra:0,agua:0}); }
+function obtenerTotales(l){ return l.reduce((a,c)=>({kcal:a.kcal+(c.kcal||0),prot:a.prot+(c.prot||0),carbs:a.carbs+(c.carbs||0),grasas:a.grasas+(c.grasas||0),fibra:a.fibra+(c.fibra||0),agua:a.agua+(c.agua||0)}),{kcal:0,prot:0,carbs:0,grasas:0,fibra:0,agua:0}); }
+
 function actualizarUI(){
   let p = perfiles[usuarioActual], t = obtenerTotales(p.hoy);
   document.getElementById('circulosHoy').innerHTML = Object.keys(p.METAS).map(k=> renderCircle(k, t[k], p.METAS[k])).join('');
@@ -249,9 +254,9 @@ function verPagina(id, b){
   if(id==='semanal') renderReporte('semanal'); if(id==='mensual') renderReporte('mensual');
 }
 function renderReporte(tipo){
-  let p = perfiles[usuarioActual], m = p.METAS, t = tipo==='semanal'? 7 : 30, h = p.historial.slice(0, t), tot = obtenerTotales(h);
-  document.getElementById('circulos'+tipo.charAt(0).toUpperCase()+tipo.slice(1)).innerHTML = Object.keys(m).map(k=> renderCircle(k, tot[k], (m[k]||0)*t)).join('');
-  document.getElementById('msg'+tipo.charAt(0).toUpperCase()+tipo.slice(1)).innerText = `Basado en los últimos ${h.length} días vs meta de ${t} días.`;
+  let p = perfiles[usuarioActual], m = p.METAS, d = tipo==='semanal'? 7 : 30, h = p.historial.slice(0, d), tot = obtenerTotales(h);
+  document.getElementById('circulos'+tipo.charAt(0).toUpperCase()+tipo.slice(1)).innerHTML = Object.keys(m).map(k=> renderCircle(k, tot[k], (m[k]||0)*d)).join('');
+  document.getElementById('msg'+tipo.charAt(0).toUpperCase()+tipo.slice(1)).innerText = `Basado en los últimos ${h.length} días vs meta de ${d} días.`;
 }
 function renderHistorial(){
   let p = perfiles[usuarioActual];
