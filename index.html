@@ -62,7 +62,7 @@
   .meta-blue {color:#0a84ff; font-weight:bold; font-size:1.1em; display:block; margin-top:4px;}
   .scroll-area {max-height:400px; overflow-y:auto;}
   
-  /* --- NUEVAS CAJAS INTELIGENTES DE INGRESO --- */
+  /* --- CAJAS INTELIGENTES DE INGRESO --- */
   .input-basico, select {
       background:#111; border:1px solid #333; color:#fff; padding:15px; border-radius:12px; width:100%; box-sizing:border-box; margin-bottom:12px; font-size:16px; transition: border 0.3s;
   }
@@ -84,16 +84,17 @@
   .input-box input {
       background: transparent; border: none; color: #fff; font-size: 1.2em;
       font-weight: bold; text-align: center; width: 55px; padding: 0; outline: none;
-      -moz-appearance: textfield; /* Quita flechas en Firefox */
+      -moz-appearance: textfield; 
   }
   .input-box input::-webkit-outer-spin-button,
   .input-box input::-webkit-inner-spin-button {
-      -webkit-appearance: none; margin: 0; /* Quita flechas en Chrome/Safari */
+      -webkit-appearance: none; margin: 0; 
   }
 
   .btn-blue{background:linear-gradient(145deg, #1c3d99, #0a84ff);color:white;width:100%;padding:16px;border:none;border-radius:12px;font-weight:bold;cursor:pointer; margin-bottom: 10px; font-size:1.1em; text-transform:uppercase; letter-spacing:1px; box-shadow: 0 4px 15px rgba(10, 132, 255, 0.3);}
   .btn-green{background:linear-gradient(145deg, #248a3d, #32d74b);color:white;width:100%;padding:16px;border:none;border-radius:12px;font-weight:bold;cursor:pointer;margin-top:15px; font-size:1.1em; text-transform:uppercase; letter-spacing:1px; box-shadow: 0 4px 15px rgba(50, 215, 75, 0.2);}
   .btn-white{background:#fff;color:#000;width:100%;padding:16px;border:none;border-radius:12px;font-weight:bold;cursor:pointer;margin-top:15px; font-size:1.1em;}
+  .btn-red{background:#ff453a;color:white;width:100%;padding:16px;border:none;border-radius:12px;font-weight:bold;cursor:pointer; margin-bottom: 10px; font-size:1.1em;}
   
   /* CARRUSEL HORIZONTAL PARA COMIDAS DE HOY */
   .lista-horizontal-scroll { display: flex; overflow-x: auto; gap: 12px; padding: 5px 0 10px 0; scrollbar-width: none; scroll-behavior: smooth; }
@@ -106,11 +107,8 @@
 
   /* VENTANAS MODALES */
   .modal-overlay { display:none; position:fixed; z-index:2000; left:0; top:0; width:100%; height:100%; background-color:rgba(0,0,0,0.85); backdrop-filter:blur(5px); }
-  .modal-content { background-color:#1c1c1e; margin: 30% auto; padding:25px; border:1px solid #333; width:80%; border-radius:20px; color:white; font-size: 1.05em; line-height: 1.5; box-shadow: 0 10px 30px rgba(0,0,0,0.5);}
+  .modal-content { background-color:#1c1c1e; margin: 25% auto; padding:25px; border:1px solid #333; width:85%; border-radius:20px; color:white; font-size: 1.05em; line-height: 1.5; box-shadow: 0 10px 30px rgba(0,0,0,0.5);}
   .modal-titulo { text-align:center; font-size: 1.3em; font-weight:bold; color:#0a84ff; margin-bottom:15px; border-bottom: 1px solid #333; padding-bottom: 10px;}
-  .detalle-grid { display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:20px; text-align:left; font-size: 0.9em;}
-  .detalle-item { background: #111; padding:12px; border-radius:8px; border:1px solid #222;}
-  .detalle-item b { float: right; }
 
   /* CONFIGURACIÓN PARA EXPORTAR PDF LIMPIO */
   @media print {
@@ -303,10 +301,43 @@
 
 <div id="modalDetalle" class="modal-overlay">
   <div class="modal-content">
-    <div class="modal-titulo" id="detalleTitulo">Detalle</div>
-    <div id="detalleContenido" class="detalle-grid">
-      </div>
-    <button class="btn-blue" style="background:#ff453a; margin-bottom:10px; box-shadow:none;" id="btnBorrarDetalle">🗑️ Eliminar Registro</button>
+    <div class="modal-titulo" id="detalleTitulo">Editar</div>
+    
+    <div class="input-grid" style="margin-bottom: 20px;">
+        <div class="input-box">
+            <span class="icono">🔥</span>
+            <input type="number" id="edit-kcal">
+            <span class="unidad">kcal</span>
+        </div>
+        <div class="input-box">
+            <span class="icono">💪</span>
+            <input type="number" id="edit-prot">
+            <span class="unidad">g</span>
+        </div>
+        <div class="input-box">
+            <span class="icono">🍞</span>
+            <input type="number" id="edit-carbs">
+            <span class="unidad">g</span>
+        </div>
+        <div class="input-box">
+            <span class="icono">🥑</span>
+            <input type="number" id="edit-grasas">
+            <span class="unidad">g</span>
+        </div>
+        <div class="input-box">
+            <span class="icono">🌿</span>
+            <input type="number" id="edit-fibra">
+            <span class="unidad">g</span>
+        </div>
+        <div class="input-box">
+            <span class="icono">💧</span>
+            <input type="number" id="edit-agua">
+            <span class="unidad">ml</span>
+        </div>
+    </div>
+    
+    <input type="hidden" id="edit-id"> <button class="btn-blue" id="btnActualizarDetalle">Actualizar Cambios</button>
+    <button class="btn-red" id="btnBorrarDetalle">🗑️ Eliminar Registro</button>
     <button class="btn-white" onclick="cerrarDetalle()">↩️ Volver</button>
   </div>
 </div>
@@ -537,19 +568,26 @@ function borrarComida(id) {
   actualizarDropdown();
 }
 
+// NUEVAS FUNCIONES PARA EDITAR
 function abrirDetalle(id) {
     const comida = perfiles[usuarioActual].hoy.find(c => c.id === id);
     if(!comida) return;
     
     document.getElementById('detalleTitulo').innerText = comida.tipo;
-    document.getElementById('detalleContenido').innerHTML = `
-        <div class="detalle-item">🔥 Calorías: <b style="color:${COLORES.kcal}">${comida.kcal}</b></div>
-        <div class="detalle-item">💪 Proteína: <b style="color:${COLORES.prot}">${comida.prot} g</b></div>
-        <div class="detalle-item">🍞 Carbos: <b style="color:${COLORES.carbs}">${comida.carbs} g</b></div>
-        <div class="detalle-item">🥑 Grasas: <b style="color:${COLORES.grasas}">${comida.grasas} g</b></div>
-        <div class="detalle-item">🌿 Fibra: <b style="color:${COLORES.fibra}">${comida.fibra} g</b></div>
-        <div class="detalle-item">💧 Agua: <b style="color:${COLORES.agua}">${comida.agua} ml</b></div>
-    `;
+    document.getElementById('edit-id').value = id; // Guardamos el ID oculto
+    
+    // Rellenamos los inputs con los valores actuales
+    document.getElementById('edit-kcal').value = comida.kcal || '';
+    document.getElementById('edit-prot').value = comida.prot || '';
+    document.getElementById('edit-carbs').value = comida.carbs || '';
+    document.getElementById('edit-grasas').value = comida.grasas || '';
+    document.getElementById('edit-fibra').value = comida.fibra || '';
+    document.getElementById('edit-agua').value = comida.agua || '';
+    
+    // Configuramos los botones de acción
+    document.getElementById('btnActualizarDetalle').onclick = function() {
+        actualizarComida();
+    };
     
     document.getElementById('btnBorrarDetalle').onclick = function() {
         borrarComida(id);
@@ -557,6 +595,24 @@ function abrirDetalle(id) {
     };
     
     document.getElementById('modalDetalle').style.display = 'block';
+}
+
+function actualizarComida() {
+    const id = parseInt(document.getElementById('edit-id').value);
+    const comida = perfiles[usuarioActual].hoy.find(c => c.id === id);
+    
+    if(comida) {
+        // Actualizamos los valores
+        comida.kcal = +document.getElementById('edit-kcal').value || 0;
+        comida.prot = +document.getElementById('edit-prot').value || 0;
+        comida.carbs = +document.getElementById('edit-carbs').value || 0;
+        comida.grasas = +document.getElementById('edit-grasas').value || 0;
+        comida.fibra = +document.getElementById('edit-fibra').value || 0;
+        comida.agua = +document.getElementById('edit-agua').value || 0;
+        
+        guardarYActualizar();
+        cerrarDetalle();
+    }
 }
 
 function cerrarDetalle() {
@@ -671,199 +727,4 @@ function renderCircle(label, actual, meta) {
       <div class="circle-container">
         <svg class="circle-svg" viewBox="0 0 85 85">
           <circle class="circle-bg" cx="42.5" cy="42.5" r="38"/>
-          <circle class="circle-bar" cx="42.5" cy="42.5" r="38" style="stroke:${COLORES[label]}; stroke-dasharray: ${dash} 240;"/>
-        </svg>
-        <div class="circle-text" style="color:${COLORES[label]}">${displayPct}</div>
-      </div>
-      <div class="circle-label-bottom">${label}</div>
-      <div class="circle-fraction">${textoAbajo}</div>
-    </div>`;
-}
-
-function cerrarDia() {
-  if(perfiles[usuarioActual].hoy.length === 0) {
-      alert("No hay comidas para registrar hoy.");
-      return;
-  }
-  
-  const hoy = perfiles[usuarioActual].hoy;
-  const totales = obtenerTotales(hoy);
-  const metas = perfiles[usuarioActual].METAS;
-  
-  let logrados = [];
-  let excedidos = [];
-  let noLogrados = [];
-  
-  for(let key in metas) {
-      if(metas[key] > 0 && !isNaN(metas[key])) {
-          let pctExacto = (totales[key] / metas[key]) * 100;
-          let diff = pctExacto - 100;
-          
-          let unit = key === 'agua' ? 'ml' : (key === 'kcal' ? 'kcal' : 'g');
-          let valorDiferencia = Math.abs(totales[key] - metas[key]);
-          valorDiferencia = Math.round(valorDiferencia); 
-          
-          let textoItem = "";
-          if (diff > 0) {
-              textoItem = `${ICONOS[key]} ${NOMBRES[key]} <span style="color:#ff453a;">(te pasaste por ${valorDiferencia} ${unit})</span>`;
-          } else if (diff < 0) {
-              textoItem = `${ICONOS[key]} ${NOMBRES[key]} <span style="color:#ff9f0a;">(te faltaron ${valorDiferencia} ${unit})</span>`;
-          } else {
-              textoItem = `${ICONOS[key]} ${NOMBRES[key]} <span style="color:#32d74b;">(Meta exacta)</span>`;
-          }
-
-          if(pctExacto > 110) { 
-              excedidos.push(textoItem);
-          } else if(pctExacto >= 90) { 
-              logrados.push(textoItem);
-          } else {
-              noLogrados.push(textoItem);
-          }
-      }
-  }
-  
-  let mensajeResumenHTML = "";
-  let mereceAplauso = false;
-  
-  if(logrados.length > 0) {
-      mensajeResumenHTML += "<p><b>✅ En la zona ideal (90-110%):</b><br>• " + logrados.join("<br>• ") + "</p>";
-      mereceAplauso = true;
-  }
-  if(excedidos.length > 0) {
-      mensajeResumenHTML += "<p><b>⚠️ Excediste tu límite (>110%):</b><br>• " + excedidos.join("<br>• ") + "</p>";
-  }
-  if(noLogrados.length > 0) {
-      mensajeResumenHTML += "<p><b>📉 Aún necesitas consumir (<90%):</b><br>• " + noLogrados.join("<br>• ") + "</p>";
-  }
-  
-  if(excedidos.length === 0 && noLogrados.length === 0) {
-      mensajeResumenHTML += "<p style='color:#32d74b; font-weight:bold; text-align:center; font-size:1.2em;'>🏆 ¡BRUTAL! Todo quedó en tu rango ideal.</p>";
-      confetti({ particleCount: 200, spread: 100, origin: { y: 0.6 } });
-      mereceAplauso = true;
-  } else if (mereceAplauso) {
-      confetti({ particleCount: 80, spread: 70, origin: { y: 0.6 } });
-  }
-
-  let audio = document.getElementById('sonidoAplausos');
-  audio.muted = false; 
-  audio.currentTime = 0; 
-  audio.play().catch(e => console.log("Bloqueo del navegador", e));
-  
-  totales.fechaISO = obtenerFechaLocal(); 
-  totales.fechaCorta = formatearFechaCorta(new Date());
-  
-  perfiles[usuarioActual].historial = perfiles[usuarioActual].historial.filter(h => h.fechaISO !== totales.fechaISO);
-  perfiles[usuarioActual].historial.unshift(totales);
-  perfiles[usuarioActual].hoy = [];
-  
-  guardarYActualizar();
-  actualizarDropdown();
-  
-  document.getElementById('modalTexto').innerHTML = mensajeResumenHTML;
-  document.getElementById('miModalResumen').style.display = 'block';
-}
-
-function cerrarModal() {
-    document.getElementById('miModalResumen').style.display = 'none';
-}
-
-function renderReporteSemanal() {
-  const rango = getRangoSemana();
-  document.getElementById('rangoSemanaTexto').innerText = `Semana del ${rango.texto}`;
-  
-  const historialSemana = perfiles[usuarioActual].historial.filter(h => h.fechaISO >= rango.inicio && h.fechaISO <= rango.fin);
-  const container = document.getElementById('circulosSemanal');
-  const msg = document.getElementById('msgSemana');
-  
-  const metasDiarias = perfiles[usuarioActual].METAS;
-  const metasSemanales = {};
-  for (let key in metasDiarias) metasSemanales[key] = (metasDiarias[key] || 0) * 7;
-  
-  const sumas = obtenerTotales(historialSemana);
-  const hoyTotales = obtenerTotales(perfiles[usuarioActual].hoy);
-  for(let key in sumas) sumas[key] += hoyTotales[key];
-  
-  container.innerHTML = '';
-  for (let key in metasSemanales) container.innerHTML += renderCircle(key, sumas[key], metasSemanales[key]);
-  
-  msg.innerText = `Mostrando progreso de la semana (incluye tus registros de hoy).`;
-}
-
-function renderReporteMensual() {
-  const hoy = new Date();
-  const mesActualStr = `${hoy.getFullYear()}-${(hoy.getMonth() + 1).toString().padStart(2, '0')}`;
-  const diasEnMes = new Date(hoy.getFullYear(), hoy.getMonth() + 1, 0).getDate();
-  
-  document.getElementById('rangoMesTexto').innerText = `Mes de ${hoy.toLocaleDateString('es-ES',{month:'long'})} (${diasEnMes} días)`;
-  
-  const historialMes = perfiles[usuarioActual].historial.filter(h => h.fechaISO && h.fechaISO.startsWith(mesActualStr));
-  const container = document.getElementById('circulosMensual');
-  const msg = document.getElementById('msgMes');
-  
-  const metasDiarias = perfiles[usuarioActual].METAS;
-  const metasMensuales = {};
-  for (let key in metasDiarias) metasMensuales[key] = (metasDiarias[key] || 0) * diasEnMes;
-  
-  const sumas = obtenerTotales(historialMes);
-  const hoyTotales = obtenerTotales(perfiles[usuarioActual].hoy);
-  for(let key in sumas) sumas[key] += hoyTotales[key];
-  
-  container.innerHTML = '';
-  for (let key in metasMensuales) container.innerHTML += renderCircle(key, sumas[key], metasMensuales[key]);
-  
-  msg.innerText = `Mostrando progreso del mes (incluye tus registros de hoy).`;
-}
-
-function renderHistorial() {
-  const m = perfiles[usuarioActual].METAS;
-  
-  document.getElementById('historialHeader').innerHTML = `
-    <th style="text-align:left;">Fecha</th>
-    <th>🔥<span class="meta-blue">${m.kcal || 0}</span></th>
-    <th>💪<span class="meta-blue">${m.prot || 0}</span></th>
-    <th>🍞<span class="meta-blue">${m.carbs || 0}</span></th>
-    <th>🥑<span class="meta-blue">${m.grasas || 0}</span></th>
-    <th>🌿<span class="meta-blue">${m.fibra || 0}</span></th>
-    <th>💧<span class="meta-blue">${m.agua || 0}</span></th>
-  `;
-
-  const tabla = document.getElementById('tablaHistorial');
-  tabla.innerHTML = perfiles[usuarioActual].historial.map(h => `
-    <tr><td style="text-align:left; font-weight:bold;">${h.fechaCorta}</td><td>${h.kcal}</td><td>${h.prot}</td><td>${h.carbs}</td><td>${h.grasas}</td><td>${h.fibra}</td><td>${h.agua}</td></tr>
-  `).join('');
-}
-
-function cargarMetasInputs() {
-  const m = perfiles[usuarioActual].METAS;
-  document.getElementById('mKcal').value = m.kcal || '';
-  document.getElementById('mProt').value = m.prot || '';
-  document.getElementById('mCarbs').value = m.carbs || '';
-  document.getElementById('mGrasas').value = m.grasas || '';
-  document.getElementById('mFibra').value = m.fibra || '';
-  document.getElementById('mAgua').value = m.agua || '';
-}
-
-function guardarMetas() {
-  perfiles[usuarioActual].METAS = {
-    kcal: +document.getElementById('mKcal').value || 0, 
-    prot: +document.getElementById('mProt').value || 0,
-    carbs: +document.getElementById('mCarbs').value || 0, 
-    grasas: +document.getElementById('mGrasas').value || 0,
-    fibra: +document.getElementById('mFibra').value || 0, 
-    agua: +document.getElementById('mAgua').value || 0
-  };
-  guardarYActualizar();
-  alert("Metas actualizadas ✅");
-}
-
-function cambiarPerfil() {
-  usuarioActual = null;
-  localStorage.removeItem('nutriUsuarioActivo');
-  document.getElementById('inputNombre').value = '';
-  document.getElementById('main-nav').style.display = 'none';
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
-  document.getElementById('page-perfil').classList.add('active-page');
-}
-</script>
-</body>
-</html>
+          <circle class="circle-bar" cx="42.5" cy="42
