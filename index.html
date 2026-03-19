@@ -26,11 +26,16 @@
   .nav-btn.active{color:#0a84ff;font-weight:bold;}
   .nav-icon{font-size:1.6em;margin-bottom:4px;}
   
-  /* --- PANELES UNIFICADOS (DISEÑO PREMIUM) --- */
+  /* --- PANELES UNIFICADOS --- */
   .panel-card { background: linear-gradient(145deg, #161618 0%, #0f0f11 100%); border: 1px solid #2c2c2e; border-radius: 20px; padding: 20px 15px; margin-bottom: 25px; box-shadow: 0 8px 30px rgba(0,0,0,0.6); }
+  
+  /* NUEVO: Panel Luminoso para los Círculos */
+  .panel-luminoso { background: radial-gradient(circle at top, #222 0%, #111 80%); border: 1px solid #333; box-shadow: 0 10px 40px rgba(10, 132, 255, 0.1); }
+
   .panel-header { font-size: 0.85em; font-weight: 800; text-align: center; margin-bottom: 18px; text-transform: uppercase; letter-spacing: 1.5px; }
   .header-sugerencia { color: #0a84ff; }
   .header-ingreso { color: #fff; }
+  .header-progreso { color: #32d74b; text-shadow: 0 0 10px rgba(50, 215, 75, 0.3); } /* Brillo en el título */
   .header-registros { color: #aaa; }
 
   /* Elementos internos de la Sugerencia */
@@ -40,14 +45,14 @@
   .guia-lab { font-size: 0.7em; color: #aaa; text-transform: uppercase; white-space: nowrap; font-weight:bold;}
 
   /* Círculos Rediseñados */
-  .grid-circles{display:grid;grid-template-columns:repeat(3,1fr);gap:25px 5px;margin:30px 0;text-align:center;}
+  .grid-circles{display:grid;grid-template-columns:repeat(3,1fr);gap:25px 5px; margin-top: 10px; text-align:center;}
   .circle-wrapper{display:flex; flex-direction:column; align-items:center;}
-  .circle-top-icon{font-size:1.8em; margin-bottom:5px;} 
+  .circle-top-icon{font-size:1.8em; margin-bottom:5px; filter: drop-shadow(0px 0px 5px rgba(255,255,255,0.2));} /* Sombra a los iconos */
   .circle-container{position:relative;width:90px;height:90px;} 
   .circle-svg{transform:rotate(-90deg);width:100%;height:100%;}
   .circle-bg{fill:none;stroke:#1c1c1e;stroke-width:6;} 
-  .circle-bar{fill:none;stroke-width:6;stroke-linecap:round;transition:stroke-dasharray 0.8s ease;}
-  .circle-text{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:1.2em;font-weight:bold;} 
+  .circle-bar{fill:none;stroke-width:6;stroke-linecap:round;transition:stroke-dasharray 0.8s ease; filter: drop-shadow(0px 0px 4px currentColor);} /* Brillo en la barra */
+  .circle-text{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:1.2em;font-weight:bold; text-shadow: 0 0 8px rgba(255,255,255,0.2);} 
   .circle-label-bottom{font-size:0.75em;color:#aaa;font-weight:bold;text-transform:uppercase;margin-top:10px;} 
   .circle-fraction{font-size:0.85em;color:#8e8e93; margin-top:4px; font-weight:bold;} 
   
@@ -65,7 +70,7 @@
   select { text-align: center; text-align-last: center; font-weight: bold; } 
   .input-grid{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
   .btn-blue{background:linear-gradient(145deg, #1c3d99, #0a84ff);color:white;width:100%;padding:16px;border:none;border-radius:12px;font-weight:bold;cursor:pointer; margin-bottom: 10px; font-size:1.1em; text-transform:uppercase; letter-spacing:1px; box-shadow: 0 4px 15px rgba(10, 132, 255, 0.3);}
-  .btn-green{background:linear-gradient(145deg, #248a3d, #32d74b);color:white;width:100%;padding:16px;border:none;border-radius:12px;font-weight:bold;cursor:pointer;margin-top:15px; font-size:1.1em; text-transform:uppercase; letter-spacing:1px;}
+  .btn-green{background:linear-gradient(145deg, #248a3d, #32d74b);color:white;width:100%;padding:16px;border:none;border-radius:12px;font-weight:bold;cursor:pointer;margin-top:15px; font-size:1.1em; text-transform:uppercase; letter-spacing:1px; box-shadow: 0 4px 15px rgba(50, 215, 75, 0.2);}
   .btn-white{background:#fff;color:#000;width:100%;padding:16px;border:none;border-radius:12px;font-weight:bold;cursor:pointer;margin-top:15px; font-size:1.1em;}
   
   /* CARRUSEL HORIZONTAL PARA COMIDAS DE HOY */
@@ -75,6 +80,8 @@
   .log-card:active { transform: scale(0.95); background: #2c2c2e; }
   .log-card-titulo { font-size: 0.9em; color: #aaa; margin-bottom: 8px; font-weight: bold; text-align: center; white-space: nowrap;}
   .log-card-kcal { font-size: 1.2em; color: #ff453a; font-weight: bold; }
+  /* Estilo especial para la tarjeta de agua en el carrusel */
+  .log-card-agua .log-card-kcal { color: #00bfff; } 
 
   /* VENTANAS MODALES */
   .modal-overlay { display:none; position:fixed; z-index:2000; left:0; top:0; width:100%; height:100%; background-color:rgba(0,0,0,0.85); backdrop-filter:blur(5px); }
@@ -136,7 +143,10 @@
       <button class="btn-blue" id="btnRegistrar" onclick="registrarComida()">GUARDAR</button>
     </div>
     
-    <div class="grid-circles" id="circulosHoy"></div>
+    <div class="panel-card panel-luminoso">
+      <div class="panel-header header-progreso">📊 TU PROGRESO DE HOY</div>
+      <div class="grid-circles" id="circulosHoy"></div>
+    </div>
     
     <div class="panel-card">
       <div class="panel-header header-registros">📋 Tus registros de hoy</div>
@@ -149,7 +159,11 @@
   <div id="page-semanal" class="page">
     <h2>Reporte Semanal</h2>
     <p class="subtitulo" id="rangoSemanaTexto"></p>
-    <div class="grid-circles" id="circulosSemanal"></div>
+    
+    <div class="panel-card panel-luminoso">
+        <div class="grid-circles" id="circulosSemanal"></div>
+    </div>
+    
     <p id="msgSemana" style="text-align:center; font-size:0.9em; color:#8e8e93;"></p>
     <button class="btn-white" onclick="window.print()">📄 EXPORTAR PDF SEMANAL</button>
   </div>
@@ -157,7 +171,11 @@
   <div id="page-mensual" class="page">
     <h2>Reporte Mensual</h2>
     <p class="subtitulo" id="rangoMesTexto"></p>
-    <div class="grid-circles" id="circulosMensual"></div>
+    
+    <div class="panel-card panel-luminoso">
+        <div class="grid-circles" id="circulosMensual"></div>
+    </div>
+
     <p id="msgMes" style="text-align:center; font-size:0.9em; color:#8e8e93;"></p>
     <button class="btn-white" onclick="window.print()">📄 EXPORTAR PDF MENSUAL</button>
   </div>
@@ -324,6 +342,7 @@ function actualizarDropdown() {
     sel.innerHTML = '';
     let agregadas = 0;
     COMIDAS_BASE.forEach(c => {
+        // La opción de agua SIEMPRE debe estar disponible, las demás desaparecen al registrarse.
         if (!comidasRegistradas.includes(c) || c === "💧 Solo Agua") {
             sel.innerHTML += `<option value="${c}">${c}</option>`;
             agregadas++;
@@ -355,18 +374,45 @@ function verPagina(id, btn) {
 function registrarComida() {
   const sel = document.getElementById('tipoComida');
   if(!sel.value) return;
-  const nueva = {
-    id: Date.now(),
-    tipo: sel.value,
-    kcal: +document.getElementById('kcal').value || 0,
-    prot: +document.getElementById('prot').value || 0,
-    carbs: +document.getElementById('carbs').value || 0,
-    grasas: +document.getElementById('grasas').value || 0,
-    fibra: +document.getElementById('fibra').value || 0,
-    agua: +document.getElementById('agua').value || 0
-  };
-  perfiles[usuarioActual].hoy.push(nueva);
+  
+  const tipoSeleccionado = sel.value;
+  const aguaIngresada = +document.getElementById('agua').value || 0;
+  
+  // LOGICA INTELIGENTE PARA EL AGUA
+  if (tipoSeleccionado === "💧 Solo Agua") {
+      // 1. Verificamos si ya existe una tarjeta de "Solo Agua"
+      let registroAguaExistente = perfiles[usuarioActual].hoy.find(c => c.tipo === "💧 Solo Agua");
+      
+      if (registroAguaExistente) {
+          // Si existe, le sumamos el agua nueva
+          registroAguaExistente.agua += aguaIngresada;
+      } else {
+          // Si no existe, creamos la tarjeta
+          perfiles[usuarioActual].hoy.push({
+            id: Date.now(),
+            tipo: "💧 Solo Agua",
+            kcal: 0, prot: 0, carbs: 0, grasas: 0, fibra: 0,
+            agua: aguaIngresada
+          });
+      }
+  } else {
+      // Si es una comida normal (Desayuno, Cena, etc.), la registramos completa
+      const nueva = {
+        id: Date.now(),
+        tipo: tipoSeleccionado,
+        kcal: +document.getElementById('kcal').value || 0,
+        prot: +document.getElementById('prot').value || 0,
+        carbs: +document.getElementById('carbs').value || 0,
+        grasas: +document.getElementById('grasas').value || 0,
+        fibra: +document.getElementById('fibra').value || 0,
+        agua: aguaIngresada
+      };
+      perfiles[usuarioActual].hoy.push(nueva);
+  }
+
+  // Limpiamos los inputs
   ['kcal','prot','carbs','grasas','fibra','agua'].forEach(id => document.getElementById(id).value = '');
+  
   guardarYActualizar();
   actualizarDropdown();
 }
@@ -466,12 +512,22 @@ function actualizarUI() {
   if(hoy.length === 0) {
       lista.innerHTML = `<p style="text-align:center; color:#8e8e93; font-size:0.9em;">Aún no has registrado nada hoy.</p>`;
   } else {
-      lista.innerHTML = `<div class="lista-horizontal-scroll">` + hoy.map(c => `
-        <div class="log-card" onclick="abrirDetalle(${c.id})">
-          <span class="log-card-titulo">${c.tipo}</span>
-          <span class="log-card-kcal">🔥 ${c.kcal}</span>
-        </div>
-      `).join('') + `</div>`;
+      lista.innerHTML = `<div class="lista-horizontal-scroll">` + hoy.map(c => {
+        // Logica visual para diferenciar la tarjeta de Agua de las comidas normales
+        if(c.tipo === "💧 Solo Agua") {
+            return `
+            <div class="log-card log-card-agua" onclick="abrirDetalle(${c.id})">
+              <span class="log-card-titulo">💧 AGUA</span>
+              <span class="log-card-kcal">${c.agua} ml</span>
+            </div>`;
+        } else {
+            return `
+            <div class="log-card" onclick="abrirDetalle(${c.id})">
+              <span class="log-card-titulo">${c.tipo}</span>
+              <span class="log-card-kcal">🔥 ${c.kcal}</span>
+            </div>`;
+        }
+      }).join('') + `</div>`;
   }
 
   actualizarGuiaDinamica(hoy, metas, totales);
@@ -612,85 +668,3 @@ function renderReporteSemanal() {
   const sumas = obtenerTotales(historialSemana);
   const hoyTotales = obtenerTotales(perfiles[usuarioActual].hoy);
   for(let key in sumas) sumas[key] += hoyTotales[key];
-  
-  container.innerHTML = '';
-  for (let key in metasSemanales) container.innerHTML += renderCircle(key, sumas[key], metasSemanales[key]);
-  
-  msg.innerText = `Mostrando progreso de la semana (incluye tus registros de hoy).`;
-}
-
-function renderReporteMensual() {
-  const hoy = new Date();
-  const mesActualStr = `${hoy.getFullYear()}-${(hoy.getMonth() + 1).toString().padStart(2, '0')}`;
-  const diasEnMes = new Date(hoy.getFullYear(), hoy.getMonth() + 1, 0).getDate();
-  
-  document.getElementById('rangoMesTexto').innerText = `Mes de ${hoy.toLocaleDateString('es-ES',{month:'long'})} (${diasEnMes} días)`;
-  
-  const historialMes = perfiles[usuarioActual].historial.filter(h => h.fechaISO && h.fechaISO.startsWith(mesActualStr));
-  const container = document.getElementById('circulosMensual');
-  const msg = document.getElementById('msgMes');
-  
-  const metasDiarias = perfiles[usuarioActual].METAS;
-  const metasMensuales = {};
-  for (let key in metasDiarias) metasMensuales[key] = metasDiarias[key] * diasEnMes;
-  
-  const sumas = obtenerTotales(historialMes);
-  const hoyTotales = obtenerTotales(perfiles[usuarioActual].hoy);
-  for(let key in sumas) sumas[key] += hoyTotales[key];
-  
-  container.innerHTML = '';
-  for (let key in metasMensuales) container.innerHTML += renderCircle(key, sumas[key], metasMensuales[key]);
-  
-  msg.innerText = `Mostrando progreso del mes (incluye tus registros de hoy).`;
-}
-
-function renderHistorial() {
-  const m = perfiles[usuarioActual].METAS;
-  
-  document.getElementById('historialHeader').innerHTML = `
-    <th style="text-align:left;">Fecha</th>
-    <th>🔥<span class="meta-blue">${m.kcal}</span></th>
-    <th>💪<span class="meta-blue">${m.prot}</span></th>
-    <th>🍞<span class="meta-blue">${m.carbs}</span></th>
-    <th>🥑<span class="meta-blue">${m.grasas}</span></th>
-    <th>🌿<span class="meta-blue">${m.fibra}</span></th>
-    <th>💧<span class="meta-blue">${m.agua}</span></th>
-  `;
-
-  const tabla = document.getElementById('tablaHistorial');
-  tabla.innerHTML = perfiles[usuarioActual].historial.map(h => `
-    <tr><td style="text-align:left; font-weight:bold;">${h.fechaCorta}</td><td>${h.kcal}</td><td>${h.prot}</td><td>${h.carbs}</td><td>${h.grasas}</td><td>${h.fibra}</td><td>${h.agua}</td></tr>
-  `).join('');
-}
-
-function cargarMetasInputs() {
-  const m = perfiles[usuarioActual].METAS;
-  document.getElementById('mKcal').value = m.kcal;
-  document.getElementById('mProt').value = m.prot;
-  document.getElementById('mCarbs').value = m.carbs;
-  document.getElementById('mGrasas').value = m.grasas;
-  document.getElementById('mFibra').value = m.fibra;
-  document.getElementById('mAgua').value = m.agua;
-}
-
-function guardarMetas() {
-  perfiles[usuarioActual].METAS = {
-    kcal: +document.getElementById('mKcal').value, prot: +document.getElementById('mProt').value,
-    carbs: +document.getElementById('mCarbs').value, grasas: +document.getElementById('mGrasas').value,
-    fibra: +document.getElementById('mFibra').value, agua: +document.getElementById('mAgua').value
-  };
-  guardarYActualizar();
-  alert("Metas actualizadas ✅");
-}
-
-function cambiarPerfil() {
-  usuarioActual = null;
-  localStorage.removeItem('nutriUsuarioActivo');
-  document.getElementById('inputNombre').value = '';
-  document.getElementById('main-nav').style.display = 'none';
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
-  document.getElementById('page-perfil').classList.add('active-page');
-}
-</script>
-</body>
-</html>
