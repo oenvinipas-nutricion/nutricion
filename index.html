@@ -29,29 +29,31 @@
   /* --- PANELES UNIFICADOS --- */
   .panel-card { background: linear-gradient(145deg, #161618 0%, #0f0f11 100%); border: 1px solid #2c2c2e; border-radius: 20px; padding: 20px 15px; margin-bottom: 25px; box-shadow: 0 8px 30px rgba(0,0,0,0.6); }
   
-  .panel-luminoso { background: radial-gradient(circle at top, #222 0%, #111 80%); border: 1px solid #333; box-shadow: 0 10px 40px rgba(10, 132, 255, 0.1); }
+  /* Panel Luminoso (Brillo reducido) */
+  .panel-luminoso { background: radial-gradient(circle at top, #1e1e24 0%, #111 80%); border: 1px solid #333; box-shadow: 0 5px 20px rgba(10, 132, 255, 0.05); }
 
   .panel-header { font-size: 0.85em; font-weight: 800; text-align: center; margin-bottom: 18px; text-transform: uppercase; letter-spacing: 1.5px; }
   .header-sugerencia { color: #0a84ff; }
   .header-ingreso { color: #fff; }
-  .header-progreso { color: #32d74b; text-shadow: 0 0 10px rgba(50, 215, 75, 0.3); } 
+  .header-progreso { color: #32d74b; text-shadow: 0 0 5px rgba(50, 215, 75, 0.2); } 
   .header-registros { color: #aaa; }
+  .header-metas { color: #bf5af2; }
 
   /* Elementos internos de la Sugerencia */
   .guia-grid-fija { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; justify-items: center; width: 100%; }
   .guia-item { background: linear-gradient(180deg, #1c1c1e, #111); border: 1px solid #333; border-radius: 12px; padding: 12px 2px; width: 100%; box-sizing: border-box; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.2); }
-  .guia-val { font-size: 1.2em; font-weight: bold; display: block; margin-top: 5px; text-shadow: 0px 0px 8px rgba(255,255,255,0.1);}
+  .guia-val { font-size: 1.2em; font-weight: bold; display: block; margin-top: 5px; text-shadow: 0px 0px 4px rgba(255,255,255,0.05);}
   .guia-lab { font-size: 0.7em; color: #aaa; text-transform: uppercase; white-space: nowrap; font-weight:bold;}
 
-  /* Círculos Rediseñados */
+  /* Círculos Rediseñados (Brillo reducido) */
   .grid-circles{display:grid;grid-template-columns:repeat(3,1fr);gap:25px 5px; margin-top: 10px; text-align:center;}
   .circle-wrapper{display:flex; flex-direction:column; align-items:center;}
-  .circle-top-icon{font-size:1.8em; margin-bottom:5px; filter: drop-shadow(0px 0px 5px rgba(255,255,255,0.2));} 
+  .circle-top-icon{font-size:1.8em; margin-bottom:5px; filter: drop-shadow(0px 0px 2px rgba(255,255,255,0.1));} 
   .circle-container{position:relative;width:90px;height:90px;} 
   .circle-svg{transform:rotate(-90deg);width:100%;height:100%;}
   .circle-bg{fill:none;stroke:#1c1c1e;stroke-width:6;} 
-  .circle-bar{fill:none;stroke-width:6;stroke-linecap:round;transition:stroke-dasharray 0.8s ease; filter: drop-shadow(0px 0px 4px currentColor);} 
-  .circle-text{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:1.2em;font-weight:bold; text-shadow: 0 0 8px rgba(255,255,255,0.2);} 
+  .circle-bar{fill:none;stroke-width:6;stroke-linecap:round;transition:stroke-dasharray 0.8s ease; filter: drop-shadow(0px 0px 2px currentColor);} 
+  .circle-text{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:1.2em;font-weight:bold; text-shadow: 0 0 4px rgba(255,255,255,0.1);} 
   .circle-label-bottom{font-size:0.75em;color:#aaa;font-weight:bold;text-transform:uppercase;margin-top:10px;} 
   .circle-fraction{font-size:0.85em;color:#8e8e93; margin-top:4px; font-weight:bold;} 
   
@@ -66,12 +68,16 @@
   /* Formularios */
   input, select{background:#111;border:1px solid #333;color:#fff;padding:15px;border-radius:12px;width:100%;box-sizing:border-box;margin-bottom:12px;font-size:16px; transition: border 0.3s, background 0.3s, opacity 0.3s;}
   input:focus, select:focus { border-color: #0a84ff; outline: none; }
-  
-  /* NUEVO: Estilo para inputs deshabilitados */
   input:disabled { background: #0a0a0a; border-color: #222; color: #555; opacity: 0.6; }
-
   select { text-align: center; text-align-last: center; font-weight: bold; } 
+  
   .input-grid{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+  
+  /* Contenedor relativo para el ícono dentro del input en Configuración */
+  .input-icon-wrapper { position: relative; }
+  .input-icon-wrapper input { padding-left: 35px; } /* Espacio para el icono */
+  .input-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 1.1em; pointer-events: none; }
+
   .btn-blue{background:linear-gradient(145deg, #1c3d99, #0a84ff);color:white;width:100%;padding:16px;border:none;border-radius:12px;font-weight:bold;cursor:pointer; margin-bottom: 10px; font-size:1.1em; text-transform:uppercase; letter-spacing:1px; box-shadow: 0 4px 15px rgba(10, 132, 255, 0.3);}
   .btn-green{background:linear-gradient(145deg, #248a3d, #32d74b);color:white;width:100%;padding:16px;border:none;border-radius:12px;font-weight:bold;cursor:pointer;margin-top:15px; font-size:1.1em; text-transform:uppercase; letter-spacing:1px; box-shadow: 0 4px 15px rgba(50, 215, 75, 0.2);}
   .btn-white{background:#fff;color:#000;width:100%;padding:16px;border:none;border-radius:12px;font-weight:bold;cursor:pointer;margin-top:15px; font-size:1.1em;}
@@ -134,12 +140,12 @@
       <select id="tipoComida" onchange="verificarSoloAgua()"></select>
       
       <div class="input-grid">
-        <input type="number" id="kcal" placeholder="🔥 KCal">
-        <input type="number" id="prot" placeholder="💪 Prot">
-        <input type="number" id="carbs" placeholder="🍞 Carb">
-        <input type="number" id="grasas" placeholder="🥑 Gras">
-        <input type="number" id="fibra" placeholder="🌿 Fibr">
-        <input type="number" id="agua" placeholder="💧 Agua (ml)">
+        <input type="number" id="kcal" placeholder="🔥 KCal" onkeydown="saltarEnter(event, 'prot')">
+        <input type="number" id="prot" placeholder="💪 Prot" onkeydown="saltarEnter(event, 'carbs')">
+        <input type="number" id="carbs" placeholder="🍞 Carb" onkeydown="saltarEnter(event, 'grasas')">
+        <input type="number" id="grasas" placeholder="🥑 Gras" onkeydown="saltarEnter(event, 'fibra')">
+        <input type="number" id="fibra" placeholder="🌿 Fibr" onkeydown="saltarEnter(event, 'agua')">
+        <input type="number" id="agua" placeholder="💧 Agua (ml)" onkeydown="saltarEnter(event, 'btnRegistrar')">
       </div>
       
       <button class="btn-blue" id="btnRegistrar" onclick="registrarComida()">GUARDAR</button>
@@ -198,17 +204,42 @@
   </div>
 
   <div id="page-config" class="page">
-    <h2>Metas Diarias</h2>
-    <p class="subtitulo">Configura para: <b id="perfilConfigLabel" style="color:#fff;"></b></p>
-    <label style="color:#aaa; font-size:0.9em;">🔥 KCal:</label><input type="number" id="mKcal">
-    <label style="color:#aaa; font-size:0.9em;">💪 Proteína (g):</label><input type="number" id="mProt">
-    <label style="color:#aaa; font-size:0.9em;">🍞 Carbos (g):</label><input type="number" id="mCarbs">
-    <label style="color:#aaa; font-size:0.9em;">🥑 Grasas (g):</label><input type="number" id="mGrasas">
-    <label style="color:#aaa; font-size:0.9em;">🌿 Fibra (g):</label><input type="number" id="mFibra">
-    <label style="color:#aaa; font-size:0.9em;">💧 Agua (ml):</label><input type="number" id="mAgua">
-    <button class="btn-green" onclick="guardarMetas()">💾 GUARDAR METAS</button>
+    <h2>Configuración</h2>
+    <p class="subtitulo">Perfil activo: <b id="perfilConfigLabel" style="color:#fff;"></b></p>
     
-    <button class="btn-blue" style="background:#333; margin-top:30px; font-size:0.9em; box-shadow:none;" onclick="cambiarPerfil()">Cerrar Sesión / Cambiar Usuario</button>
+    <div class="panel-card">
+        <div class="panel-header header-metas">🎯 TUS METAS DIARIAS</div>
+        
+        <div class="input-grid">
+            <div class="input-icon-wrapper">
+                <span class="input-icon">🔥</span>
+                <input type="number" id="mKcal" placeholder="KCal">
+            </div>
+            <div class="input-icon-wrapper">
+                <span class="input-icon">💪</span>
+                <input type="number" id="mProt" placeholder="Prot (g)">
+            </div>
+            <div class="input-icon-wrapper">
+                <span class="input-icon">🍞</span>
+                <input type="number" id="mCarbs" placeholder="Carb (g)">
+            </div>
+            <div class="input-icon-wrapper">
+                <span class="input-icon">🥑</span>
+                <input type="number" id="mGrasas" placeholder="Grasa (g)">
+            </div>
+            <div class="input-icon-wrapper">
+                <span class="input-icon">🌿</span>
+                <input type="number" id="mFibra" placeholder="Fibra (g)">
+            </div>
+            <div class="input-icon-wrapper">
+                <span class="input-icon">💧</span>
+                <input type="number" id="mAgua" placeholder="Agua (ml)">
+            </div>
+        </div>
+        <button class="btn-green" style="margin-top:20px;" onclick="guardarMetas()">💾 GUARDAR METAS</button>
+    </div>
+    
+    <button class="btn-blue" style="background:#333; margin-top:10px; font-size:0.9em; box-shadow:none;" onclick="cambiarPerfil()">Cerrar Sesión / Cambiar Usuario</button>
   </div>
 </div>
 
@@ -263,6 +294,26 @@ function desbloquearAudio() {
 
 document.addEventListener('click', desbloquearAudio);
 document.addEventListener('touchstart', desbloquearAudio);
+
+// Función para salto automático (Auto-Focus)
+function saltarEnter(event, nextId) {
+    if (event.key === 'Enter') {
+        event.preventDefault(); // Evitar el comportamiento por defecto
+        
+        // Si el siguiente ID es el botón, lo presionamos
+        if(nextId === 'btnRegistrar') {
+            document.getElementById(nextId).click();
+            // Para mantener el teclado oculto después de registrar, quitamos el foco
+            document.activeElement.blur(); 
+        } else {
+            // Si es otro input, le damos el foco
+            const nextInput = document.getElementById(nextId);
+            if(nextInput && !nextInput.disabled) {
+                nextInput.focus();
+            }
+        }
+    }
+}
 
 let perfiles = {};
 let usuarioActual = null;
@@ -359,11 +410,9 @@ function actualizarDropdown() {
         btn.style.opacity = "1";
     }
     
-    // Ejecutar verificación visual al cargar el dropdown
     verificarSoloAgua(); 
 }
 
-// NUEVA FUNCIÓN: Deshabilita los inputs si eliges Solo Agua
 function verificarSoloAgua() {
     const sel = document.getElementById('tipoComida');
     const esSoloAgua = sel.value === "💧 Solo Agua";
@@ -374,7 +423,7 @@ function verificarSoloAgua() {
         const input = document.getElementById(id);
         if (input) {
             input.disabled = esSoloAgua;
-            if(esSoloAgua) input.value = ''; // Limpiamos por si había algo escrito
+            if(esSoloAgua) input.value = ''; 
         }
     });
 }
@@ -598,15 +647,19 @@ function cerrarDia() {
       if(metas[key] > 0) {
           let pctExacto = (totales[key] / metas[key]) * 100;
           let diff = pctExacto - 100;
-          let diffStr = Number(Math.abs(diff).toFixed(1)); 
+          
+          let unit = key === 'agua' ? 'ml' : (key === 'kcal' ? 'kcal' : 'g');
+          let valorDiferencia = Math.abs(totales[key] - metas[key]);
+          // Redondeamos para no mostrar decimales en los reportes
+          valorDiferencia = Math.round(valorDiferencia); 
           
           let textoItem = "";
           if (diff > 0) {
-              textoItem = `${ICONOS[key]} ${NOMBRES[key]} <span style="color:#ff453a;">(te sobra el ${diffStr}%)</span>`;
+              textoItem = `${ICONOS[key]} ${NOMBRES[key]} <span style="color:#ff453a;">(te pasaste por ${valorDiferencia} ${unit})</span>`;
           } else if (diff < 0) {
-              textoItem = `${ICONOS[key]} ${NOMBRES[key]} <span style="color:#ff9f0a;">(te falta el ${diffStr}%)</span>`;
+              textoItem = `${ICONOS[key]} ${NOMBRES[key]} <span style="color:#ff9f0a;">(te faltaron ${valorDiferencia} ${unit})</span>`;
           } else {
-              textoItem = `${ICONOS[key]} ${NOMBRES[key]} <span style="color:#32d74b;">(100% exacto)</span>`;
+              textoItem = `${ICONOS[key]} ${NOMBRES[key]} <span style="color:#32d74b;">(Meta exacta)</span>`;
           }
 
           if(pctExacto > 110) { 
@@ -641,12 +694,11 @@ function cerrarDia() {
       confetti({ particleCount: 80, spread: 70, origin: { y: 0.6 } });
   }
 
-  if (mereceAplauso) {
-      let audio = document.getElementById('sonidoAplausos');
-      audio.muted = false; 
-      audio.currentTime = 0; 
-      audio.play().catch(e => console.log("Bloqueo del navegador", e));
-  }
+  // Se asegura de reproducir el sonido de aplausos
+  let audio = document.getElementById('sonidoAplausos');
+  audio.muted = false; 
+  audio.currentTime = 0; 
+  audio.play().catch(e => console.log("Bloqueo del navegador", e));
   
   totales.fechaISO = obtenerFechaLocal(); 
   totales.fechaCorta = formatearFechaCorta(new Date());
