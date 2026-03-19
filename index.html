@@ -29,7 +29,7 @@
   /* --- PANELES UNIFICADOS --- */
   .panel-card { background: linear-gradient(145deg, #161618 0%, #0f0f11 100%); border: 1px solid #2c2c2e; border-radius: 20px; padding: 20px 15px; margin-bottom: 25px; box-shadow: 0 8px 30px rgba(0,0,0,0.6); }
   
-  /* Panel Luminoso (Brillo reducido) */
+  /* Panel Luminoso (Brillo sutil) */
   .panel-luminoso { background: radial-gradient(circle at top, #1e1e24 0%, #111 80%); border: 1px solid #333; box-shadow: 0 5px 20px rgba(10, 132, 255, 0.05); }
 
   .panel-header { font-size: 0.85em; font-weight: 800; text-align: center; margin-bottom: 18px; text-transform: uppercase; letter-spacing: 1.5px; }
@@ -45,7 +45,7 @@
   .guia-val { font-size: 1.2em; font-weight: bold; display: block; margin-top: 5px; text-shadow: 0px 0px 4px rgba(255,255,255,0.05);}
   .guia-lab { font-size: 0.7em; color: #aaa; text-transform: uppercase; white-space: nowrap; font-weight:bold;}
 
-  /* Círculos Rediseñados (Brillo reducido) */
+  /* Círculos Rediseñados */
   .grid-circles{display:grid;grid-template-columns:repeat(3,1fr);gap:25px 5px; margin-top: 10px; text-align:center;}
   .circle-wrapper{display:flex; flex-direction:column; align-items:center;}
   .circle-top-icon{font-size:1.8em; margin-bottom:5px; filter: drop-shadow(0px 0px 2px rgba(255,255,255,0.1));} 
@@ -57,13 +57,12 @@
   .circle-label-bottom{font-size:0.75em;color:#aaa;font-weight:bold;text-transform:uppercase;margin-top:10px;} 
   .circle-fraction{font-size:0.85em;color:#8e8e93; margin-top:4px; font-weight:bold;} 
   
-  /* Historial */
-  .historial-card{background:#111; border:1px solid #222; border-radius:20px; padding:15px; margin-top:10px;}
-  .historial-card table{width:100%; border-collapse:collapse; font-size:0.85em; text-align:center;} 
-  .historial-card th{padding:10px 2px; color:#aaa; font-weight:normal; border-bottom:1px solid #222;}
-  .historial-card td{padding:12px 2px; border-bottom:1px solid #222; color:#eee;}
-  .meta-blue{color:#0a84ff; font-weight:bold; font-size:0.95em; display:block; margin-top:4px;}
-  .scroll-area{max-height:400px;overflow-y:auto;}
+  /* Historial Tabla */
+  table {width:100%; border-collapse:collapse; font-size:0.85em; text-align:center;} 
+  th {padding:10px 2px; color:#aaa; font-weight:bold; border-bottom:1px solid #333; text-transform: uppercase; font-size: 0.8em;}
+  td {padding:12px 2px; border-bottom:1px solid #222; color:#eee;}
+  .meta-blue {color:#0a84ff; font-weight:bold; font-size:1.1em; display:block; margin-top:4px;}
+  .scroll-area {max-height:400px; overflow-y:auto;}
   
   /* Formularios */
   input, select{background:#111;border:1px solid #333;color:#fff;padding:15px;border-radius:12px;width:100%;box-sizing:border-box;margin-bottom:12px;font-size:16px; transition: border 0.3s, background 0.3s, opacity 0.3s;}
@@ -75,7 +74,7 @@
   
   /* Contenedor relativo para el ícono dentro del input en Configuración */
   .input-icon-wrapper { position: relative; }
-  .input-icon-wrapper input { padding-left: 35px; } /* Espacio para el icono */
+  .input-icon-wrapper input { padding-left: 35px; } 
   .input-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 1.1em; pointer-events: none; }
 
   .btn-blue{background:linear-gradient(145deg, #1c3d99, #0a84ff);color:white;width:100%;padding:16px;border:none;border-radius:12px;font-weight:bold;cursor:pointer; margin-bottom: 10px; font-size:1.1em; text-transform:uppercase; letter-spacing:1px; box-shadow: 0 4px 15px rgba(10, 132, 255, 0.3);}
@@ -95,19 +94,22 @@
   .modal-overlay { display:none; position:fixed; z-index:2000; left:0; top:0; width:100%; height:100%; background-color:rgba(0,0,0,0.85); backdrop-filter:blur(5px); }
   .modal-content { background-color:#1c1c1e; margin: 30% auto; padding:25px; border:1px solid #333; width:80%; border-radius:20px; color:white; font-size: 1.05em; line-height: 1.5; box-shadow: 0 10px 30px rgba(0,0,0,0.5);}
   .modal-titulo { text-align:center; font-size: 1.3em; font-weight:bold; color:#0a84ff; margin-bottom:15px; border-bottom: 1px solid #333; padding-bottom: 10px;}
-  
-  /* Estilos para el Modal de Detalle de Comida */
   .detalle-grid { display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:20px; text-align:left; font-size: 0.9em;}
   .detalle-item { background: #111; padding:12px; border-radius:8px; border:1px solid #222;}
   .detalle-item b { float: right; }
 
+  /* CONFIGURACIÓN PARA EXPORTAR PDF LIMPIO */
   @media print {
-    .nav-bar, button, input, select, .panel-card, .lista-horizontal-scroll { display: none !important; }
+    .nav-bar, button, select, .lista-horizontal-scroll { display: none !important; }
     .active-page { display: block !important; width: 100%; }
     body { background: white; color: black; }
+    /* Convertimos los paneles a estilo papel */
+    .panel-card { background: white !important; border: none !important; box-shadow: none !important; padding: 0 !important; margin-bottom: 30px !important; }
+    .panel-header { color: #000 !important; border-bottom: 1px solid #000; padding-bottom: 5px; }
     .circle-bg { stroke: #eee; }
-    .historial-card { background: white; border:none; }
-    .historial-card td, .historial-card th { border-bottom: 1px solid #ccc; color: black; }
+    th, td { border-bottom: 1px solid #ccc !important; color: black !important; }
+    /* Expandimos la tabla para que se imprima completa */
+    .scroll-area { max-height: none !important; overflow: visible !important; }
   }
 </style>
 </head>
@@ -169,10 +171,11 @@
     <p class="subtitulo" id="rangoSemanaTexto"></p>
     
     <div class="panel-card panel-luminoso">
+        <div class="panel-header header-sugerencia">📊 Progreso Acumulado</div>
         <div class="grid-circles" id="circulosSemanal"></div>
+        <p id="msgSemana" style="text-align:center; font-size:0.9em; color:#8e8e93; margin-top:20px;"></p>
     </div>
     
-    <p id="msgSemana" style="text-align:center; font-size:0.9em; color:#8e8e93;"></p>
     <button class="btn-white" onclick="window.print()">📄 EXPORTAR PDF SEMANAL</button>
   </div>
 
@@ -181,26 +184,31 @@
     <p class="subtitulo" id="rangoMesTexto"></p>
     
     <div class="panel-card panel-luminoso">
+        <div class="panel-header header-sugerencia">📊 Progreso Acumulado</div>
         <div class="grid-circles" id="circulosMensual"></div>
+        <p id="msgMes" style="text-align:center; font-size:0.9em; color:#8e8e93; margin-top:20px;"></p>
     </div>
 
-    <p id="msgMes" style="text-align:center; font-size:0.9em; color:#8e8e93;"></p>
     <button class="btn-white" onclick="window.print()">📄 EXPORTAR PDF MENSUAL</button>
   </div>
 
   <div id="page-historial" class="page">
-    <div class="historial-card">
-      <h3 style="margin-top:0;">📚 Historial Diario</h3>
+    <h2>Historial Diario</h2>
+    <p class="subtitulo">Tus registros anteriores</p>
+
+    <div class="panel-card">
+      <div class="panel-header header-registros">📚 Registro Completo</div>
       <div class="scroll-area">
         <table id="tablaCompleta">
           <thead>
-            <tr id="historialHeader">
-              </tr>
+            <tr id="historialHeader"></tr>
           </thead>
           <tbody id="tablaHistorial"></tbody>
         </table>
       </div>
     </div>
+
+    <button class="btn-white" onclick="window.print()">📄 EXPORTAR HISTORIAL EN PDF</button>
   </div>
 
   <div id="page-config" class="page">
@@ -298,15 +306,11 @@ document.addEventListener('touchstart', desbloquearAudio);
 // Función para salto automático (Auto-Focus)
 function saltarEnter(event, nextId) {
     if (event.key === 'Enter') {
-        event.preventDefault(); // Evitar el comportamiento por defecto
-        
-        // Si el siguiente ID es el botón, lo presionamos
+        event.preventDefault(); 
         if(nextId === 'btnRegistrar') {
             document.getElementById(nextId).click();
-            // Para mantener el teclado oculto después de registrar, quitamos el foco
             document.activeElement.blur(); 
         } else {
-            // Si es otro input, le damos el foco
             const nextInput = document.getElementById(nextId);
             if(nextInput && !nextInput.disabled) {
                 nextInput.focus();
@@ -650,7 +654,6 @@ function cerrarDia() {
           
           let unit = key === 'agua' ? 'ml' : (key === 'kcal' ? 'kcal' : 'g');
           let valorDiferencia = Math.abs(totales[key] - metas[key]);
-          // Redondeamos para no mostrar decimales en los reportes
           valorDiferencia = Math.round(valorDiferencia); 
           
           let textoItem = "";
@@ -694,7 +697,6 @@ function cerrarDia() {
       confetti({ particleCount: 80, spread: 70, origin: { y: 0.6 } });
   }
 
-  // Se asegura de reproducir el sonido de aplausos
   let audio = document.getElementById('sonidoAplausos');
   audio.muted = false; 
   audio.currentTime = 0; 
