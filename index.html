@@ -6,59 +6,63 @@
 <title>Control Total</title>
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 <style>
-  /* --- RESET Y BASE --- */
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-  body { font-family:-apple-system,BlinkMacSystemFont,sans-serif; padding:10px; background:#000; color:#eee; margin:0; padding-bottom:100px; }
+  body { font-family:-apple-system,BlinkMacSystemFont,sans-serif; padding:10px; background:#000; color:#eee; margin:0; padding-bottom:110px; }
   .container { max-width:420px; margin:auto; }
   
-  /* --- SISTEMA DE PÁGINAS (EL MURO) --- */
-  .page { display: none !important; } /* Oculta todo por defecto */
-  .active-page { display: block !important; } /* Solo muestra la activa */
+  .page { display: none !important; } 
+  .active-page { display: block !important; } 
 
   h2, h3 { text-align:center; color:#fff; text-transform: uppercase; letter-spacing: 1px; }
   .subtitulo { text-align:center; color:#0a84ff; font-size:0.9em; margin-bottom:20px; font-weight:bold; text-transform: uppercase; }
 
-  /* --- PANELES --- */
   .panel-card { background: #161618; border: 1px solid #2c2c2e; border-radius: 20px; padding: 20px 15px; margin-bottom: 25px; }
   .panel-header { font-size: 0.85em; font-weight: 800; text-align: center; margin-bottom: 18px; text-transform: uppercase; color: #aaa; }
 
-  /* --- REGISTRO DIARIO (FOTO 23614 - SÁNDWICH) --- */
+  /* REGISTRO DIARIO (FOTO 23614) */
   .input-row { display: flex; align-items: center; margin-bottom: 12px; gap: 10px; height: 52px; width: 100%; }
   .label-left { flex: 1.2; display: flex; align-items: center; gap: 6px; font-size: 0.75em; color: #bbb; font-weight: 800; text-transform: uppercase; }
   .box-center { background: #1c1c1e; border: 1px solid #333; border-radius: 12px; display: flex; align-items: center; justify-content: center; height: 100%; flex: 2; }
   .box-center input { background: transparent; border: none; color: #fff; font-size: 1.2em; font-weight: bold; text-align: center; width: 100%; outline: none; }
-  .unit-right { flex: 0.6; font-size: 0.75em; color: #8e8e93; font-weight: bold; text-align: right; text-transform: lowercase; }
+  .unit-right { flex: 0.6; font-size: 0.75em; color: #8e8e93; font-weight: bold; text-align: right; }
 
-  /* --- SUGERENCIAS (FOTO 23551) --- */
+  /* SUGERENCIAS (FOTO 23551) */
   .guia-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
   .guia-item { background: #1c1c1e; border: 1px solid #333; border-radius: 15px; padding: 15px 5px; text-align: center; }
   .guia-lab { font-size: 0.55em; color: #8e8e93; display: block; font-weight: 800; text-transform: uppercase; margin-bottom: 4px; }
   .guia-val { font-size: 1.2em; font-weight: 900; }
 
-  /* --- TUS REGISTROS (FOTO 23627) --- */
-  .btn-editar-box { background: #1c1c1e; border: 1px solid #0a84ff; padding: 16px; border-radius: 15px; text-align: center; font-weight: bold; color: #0a84ff; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; }
+  /* TUS REGISTROS (FOTO 23627) */
+  .btn-editar-box { background: #1c1c1e; border: 1px solid #0a84ff; padding: 16px; border-radius: 15px; text-align: center; font-weight: bold; color: #0a84ff; cursor: pointer; text-transform: uppercase; }
   .scroll-registros { display: none; margin-top: 15px; overflow-x: auto; gap: 12px; padding-bottom: 10px; scrollbar-width: none; }
   .card-comida { background: #2c2c2e; border: 1px solid #444; border-radius: 12px; padding: 15px 20px; min-width: 110px; text-align: center; flex: 0 0 auto; cursor:pointer; font-weight: bold; color: #fff; }
 
-  /* --- CÍRCULOS --- */
+  /* CÍRCULOS */
   .grid-circles { display:grid; grid-template-columns:repeat(3,1fr); gap:15px 5px; text-align: center; }
   .circle-container { position:relative; width:75px; height:75px; margin:auto; } 
   .circle-svg { transform:rotate(-90deg); width:100%; height:100%; }
   .circle-bg { fill:none; stroke:#1c1c1e; stroke-width:6; } 
   .circle-bar { fill:none; stroke-width:6; stroke-linecap:round; transition:stroke-dasharray 0.5s ease; }
   .circle-text { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); font-size:0.9em; font-weight:bold; }
+  .circle-lab-footer { font-size: 0.55em; color: #888; font-weight: bold; margin-top: 5px; text-transform: uppercase; }
 
-  /* --- BOTONES Y NAV --- */
+  /* TABLA HISTORIAL CARTEL */
+  .scroll-area { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; min-width: 500px; }
+  th { background: #1c1c1e; padding: 12px 5px; color: #eee; border-bottom: 2px solid #333; font-size: 0.6em; }
+  th .m-val { display: block; color: #0a84ff; font-size: 1.1em; font-weight: 800; margin-top: 2px; }
+  td { padding: 14px 5px; border-bottom: 1px solid #222; text-align: center; font-weight: bold; font-size: 0.9em; }
+  td:first-child { color: #0a84ff; text-align: left; padding-left: 10px; }
+
+  /* BOTONES Y NAV */
   .btn-blue { background: #1c3d99; color: white; width: 100%; padding: 18px; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; text-transform: uppercase; }
   .btn-green { background: #248a3d; color: white; width: 100%; padding: 18px; border: none; border-radius: 12px; font-weight: bold; text-transform: uppercase; }
   .nav-bar { position:fixed; bottom:0; left:0; right:0; background:rgba(15,15,15,0.98); display:none; padding:12px 5px 30px; border-top:0.5px solid #333; z-index: 1000; }
   .nav-btn { background:none; border:none; color:#8e8e93; display:flex; flex-direction:column; align-items:center; font-size:0.75em; flex:1; cursor:pointer; }
   .nav-btn.active { color:#0a84ff; font-weight:bold; }
 
-  /* --- MODALES --- */
   .modal-overlay { display:none; position:fixed; z-index:2000; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.95); backdrop-filter:blur(8px); }
   .modal-content { background:#161618; margin: 10% auto; padding:25px; border:1px solid #333; width:85%; border-radius:25px; color:white; position: relative; }
-  .confirm-box { display:none; margin-top:20px; border-top:1px solid #333; padding-top:20px; text-align:center; }
 </style>
 </head>
 <body onload="cargarTodo()">
@@ -106,24 +110,38 @@
     <button class="btn-green" onclick="cerrarDia()">💾 FINALIZAR DÍA</button>
   </div>
 
-  <div id="page-semanal" class="page"><h2>Reporte Semanal</h2><p class="subtitulo" id="rangoSemanaTexto"></p><div class="panel-card"><div class="grid-circles" id="circulosSemanal"></div></div></div>
-  <div id="page-mensual" class="page"><h2>Reporte Mensual</h2><p class="subtitulo" id="rangoMesTexto"></p><div class="panel-card"><div class="grid-circles" id="circulosMensual"></div></div></div>
-  <div id="page-historial" class="page"><h2>Historial Diario</h2><div class="panel-card" id="historialContenido"></div></div>
+  <div id="page-semanal" class="page">
+    <h2>Semana</h2>
+    <p class="subtitulo" id="rangoSemanaTexto"></p>
+    <div class="panel-card panel-luminoso"><div class="grid-circles" id="circulosSemanal"></div></div>
+  </div>
+
+  <div id="page-mensual" class="page">
+    <h2>Mes</h2>
+    <p class="subtitulo" id="rangoMesTexto"></p>
+    <div class="panel-card panel-luminoso"><div class="grid-circles" id="circulosMensual"></div></div>
+  </div>
+  
+  <div id="page-historial" class="page">
+    <h2>Historial</h2>
+    <div class="panel-card"><div class="scroll-area"><table><thead><tr id="historialHeader"></tr></thead><tbody id="tablaHistorial"></tbody></table></div></div>
+  </div>
+
   <div id="page-config" class="page">
-      <h2>Metas</h2>
-      <div class="panel-card" id="configMetas"></div>
-      <button class="btn-blue" style="background:#333; margin-top:20px;" onclick="cambiarPerfil()">Cerrar Sesión</button>
+    <h2>Metas</h2>
+    <div class="panel-card" id="configContenido"></div>
+    <button class="btn-blue" style="background:#333; margin-top:20px;" onclick="cambiarPerfil()">Cerrar Sesión</button>
   </div>
 </div>
 
 <div id="modalDetalle" class="modal-overlay">
   <div class="modal-content">
-    <div class="btn-trash" id="btnTrashIcon" style="position:absolute; top:15px; right:20px; font-size:1.5em; cursor:pointer; color:#ff453a;">🗑️</div>
+    <div id="btnTrashIcon" style="position:absolute; top:15px; right:20px; font-size:1.5em; cursor:pointer; color:#ff453a;">🗑️</div>
     <h3 id="detalleTitulo">Editar</h3>
     <div id="detalleContenido"></div>
     <button class="btn-green" style="margin-top:20px;" id="btnUpdate">✅ ACTUALIZAR DATOS</button>
     <button class="btn-blue" style="background:#444; margin-top:10px;" onclick="cerrarDetalle()">↩️ VOLVER</button>
-    <div id="confirmArea" class="confirm-box"><h3 style="color:#ff453a;">¿ESTÁS SEGURO?</h3><button class="btn-blue" style="background:#ff453a;" id="confirmAction">SÍ, CONTINUAR</button></div>
+    <div id="confirmArea" style="display:none; text-align:center; margin-top:20px; border-top:1px solid #333; padding-top:15px;"><h3 style="color:#ff453a;">¿SEGURO?</h3><button class="btn-blue" style="background:#ff453a;" id="confirmAction">SÍ, CONTINUAR</button></div>
   </div>
 </div>
 
@@ -139,6 +157,7 @@
 let perfiles = {}, usuarioActual = null, callbackConfirm = null;
 const COLORES = { kcal:'#ff453a', prot:'#0a84ff', carbs:'#ff9f0a', grasas:'#32d74b', fibra:'#bf5af2', agua:'#00bfff' };
 const ICONOS = { kcal:'🔥', prot:'💪', carbs:'🍞', grasas:'🥑', fibra:'🌿', agua:'💧' };
+const NOMBRES = { kcal:'KCAL', prot:'PROT', carbs:'CARB', grasas:'GRAS', fibra:'FIBR', agua:'AGUA' };
 
 function cargarTodo(){
   let d = localStorage.getItem('nutriDataV6'); if(d) perfiles = JSON.parse(d);
@@ -156,42 +175,25 @@ function seleccionarPerfil(n){
   usuarioActual = n; localStorage.setItem('nutriUsuarioActivo', n);
   document.getElementById('saludoHoy').innerText = "¡HOLA, " + n + "!";
   document.getElementById('main-nav').style.display = 'flex';
-  actualizarFechas(); verPagina('hoy'); actualizarUI();
+  actualizarFechas(); verPagina('hoy');
 }
 
 function verPagina(id, btn){
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
-  let target = document.getElementById('page-' + id);
-  if(target) target.classList.add('active-page');
-  
+  document.getElementById('page-' + id).classList.add('active-page');
   if(btn){
     document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
   }
+  if(id === 'hoy') actualizarUI();
+  if(id === 'semanal' || id === 'mensual') renderReporte(id);
+  if(id === 'historial') renderHistorial();
+  if(id === 'config') renderConfig();
 }
-
-function actualizarFechas(){
-  const f = new Date(), dias = ['DOMINGO','LUNES','MARTES','MIÉRCOLES','JUEVES','VIERNES','SÁBADO'], meses = ['ENERO','FEBRERO','MARZO','ABRIL','MAYO','JUNIO','JULIO','AGOSTO','SEPTIEMBRE','OCTUBRE','NOVIEMBRE','DICIEMBRE'];
-  document.getElementById('fechaHoy').innerText = `${dias[f.getDay()]} ${f.getDate()} DE ${meses[f.getMonth()]}`;
-}
-
-function mostrarListaEditar(){
-  const list = document.getElementById('listaComidasHoy');
-  list.style.display = (list.style.display === 'flex') ? 'none' : 'flex';
-}
-
-function registrarComida(){
-  let s = document.getElementById('tipoComida').value, p = perfiles[usuarioActual];
-  p.hoy.push({id:Date.now(), tipo:s, kcal:+document.getElementById('kcal').value||0, prot:+document.getElementById('prot').value||0, carbs:+document.getElementById('carbs').value||0, grasas:+document.getElementById('grasas').value||0, fibra:+document.getElementById('fibra').value||0, agua:+document.getElementById('agua').value||0});
-  ['kcal','prot','carbs','grasas','fibra','agua'].forEach(id=>document.getElementById(id).value='');
-  guardarYActualizar();
-}
-
-function guardarYActualizar(){ localStorage.setItem('nutriDataV6', JSON.stringify(perfiles)); actualizarUI(); actualizarDropdown(); }
 
 function renderCircle(k, a, m){
   let p = (m>0)? Math.min((a/m)*100,100) : 0, d = p*2.15;
-  return `<div><div class="circle-container"><svg class="circle-svg" viewBox="0 0 80 80"><circle class="circle-bg" cx="40" cy="40" r="35"/><circle class="circle-bar" cx="40" cy="40" r="35" style="stroke:${COLORES[k]};stroke-dasharray:${d} 220"/></svg><div class="circle-text" style="color:${COLORES[k]}">${Math.round(p)}%</div></div><div style="font-size:0.6em;font-weight:bold;margin-top:5px;color:#aaa">${ICONOS[k]} ${k.toUpperCase()}</div></div>`;
+  return `<div><div class="circle-container"><svg class="circle-svg" viewBox="0 0 80 80"><circle class="circle-bg" cx="40" cy="40" r="35"/><circle class="circle-bar" cx="40" cy="40" r="35" style="stroke:${COLORES[k]};stroke-dasharray:${d} 220"/></svg><div class="circle-text" style="color:${COLORES[k]}">${Math.round(p)}%</div></div><div class="circle-lab-footer">${ICONOS[k]} ${k}</div></div>`;
 }
 
 function actualizarUI(){
@@ -209,6 +211,32 @@ function actualizarUI(){
       return `<div class="guia-item"><span class="guia-lab">${ICONOS[k]} ${k}</span><span class="guia-val" style="color:${COLORES[k]}">${v}${k==='agua'?'ml':'g'}</span></div>`;
     }).join('');
   }
+  actualizarDropdown();
+}
+
+function renderReporte(tipo){
+  let p = perfiles[usuarioActual], d = tipo==='semanal'?7:30, h = p.historial.slice(0, d), tot = h.reduce((a,c)=>({kcal:a.kcal+c.kcal,prot:a.prot+c.prot,carbs:a.carbs+c.carbs,grasas:a.grasas+c.grasas,fibra:a.fibra+c.fibra,agua:a.agua+c.agua}),{kcal:0,prot:0,carbs:0,grasas:0,fibra:0,agua:0});
+  document.getElementById('circulos' + (tipo==='semanal'?'Semanal':'Mensual')).innerHTML = Object.keys(p.METAS).map(k=> renderCircle(k, tot[k], p.METAS[k]*d)).join('');
+}
+
+function renderHistorial(){
+  let p = perfiles[usuarioActual], m = p.METAS;
+  document.getElementById('historialHeader').innerHTML = `<th>FECHA</th>` + Object.keys(m).map(k=> `<th>${ICONOS[k]} ${k.toUpperCase()}<span class="m-val">${m[k]}</span></th>`).join('');
+  document.getElementById('tablaHistorial').innerHTML = p.historial.map(h=> `<tr><td>${h.f || ''}</td><td>${h.kcal}</td><td>${h.prot}</td><td>${h.carbs}</td><td>${h.grasas}</td><td>${h.fibra}</td><td>${h.agua}</td></tr>`).join('');
+}
+
+function renderConfig(){
+  let p = perfiles[usuarioActual];
+  document.getElementById('configContenido').innerHTML = Object.keys(p.METAS).map(k=> `
+    <div class="input-row"><div class="label-left">${k.toUpperCase()} ${ICONOS[k]}</div><div class="box-center"><input type="number" id="m-${k}" value="${p.METAS[k]}"></div><div class="unit-right">${k==='agua'?'ml':'g'}</div></div>
+  `).join('') + `<button class="btn-green" onclick="guardarMetas()">💾 GUARDAR METAS</button>`;
+}
+
+function guardarMetas(){
+  Object.keys(perfiles[usuarioActual].METAS).forEach(k => {
+    perfiles[usuarioActual].METAS[k] = +document.getElementById('m-' + k).value || 0;
+  });
+  localStorage.setItem('nutriDataV6', JSON.stringify(perfiles)); alert("Metas guardadas");
 }
 
 function abrirDetalle(id){
@@ -221,21 +249,38 @@ function abrirDetalle(id){
   document.getElementById('modalDetalle').style.display='block';
 }
 
+function registrarComida(){
+  let s = document.getElementById('tipoComida').value, p = perfiles[usuarioActual];
+  p.hoy.push({id:Date.now(), tipo:s, kcal:+document.getElementById('kcal').value||0, prot:+document.getElementById('prot').value||0, carbs:+document.getElementById('carbs').value||0, grasas:+document.getElementById('grasas').value||0, fibra:+document.getElementById('fibra').value||0, agua:+document.getElementById('agua').value||0});
+  ['kcal','prot','carbs','grasas','fibra','agua'].forEach(id=>document.getElementById(id).value='');
+  guardarYActualizar();
+}
+
 function cerrarDia(){
   let p = perfiles[usuarioActual], t = p.hoy.reduce((a,c)=>({kcal:a.kcal+c.kcal,prot:a.prot+c.prot,carbs:a.carbs+c.carbs,grasas:a.grasas+c.grasas,fibra:a.fibra+c.fibra,agua:a.agua+c.agua}),{kcal:0,prot:0,carbs:0,grasas:0,fibra:0,agua:0});
-  const f = new Date(); t.f = `${f.getDate()}/${f.getMonth()+1}`;
+  const f = new Date(), d = ['D','L','M','X','J','V','S']; t.f = `${d[f.getDay()]} ${f.getDate()}/${f.getMonth()+1}`;
   p.historial.unshift(t); p.hoy = []; guardarYActualizar(); confetti(); alert("Día Finalizado");
+}
+
+function actualizarFechas(){
+  const f = new Date(), dias = ['DOMINGO','LUNES','MARTES','MIÉRCOLES','JUEVES','VIERNES','SÁBADO'], meses = ['ENERO','FEBRERO','MARZO','ABRIL','MAYO','JUNIO','JULIO','AGOSTO','SEPTIEMBRE','OCTUBRE','NOVIEMBRE','DICIEMBRE'];
+  document.getElementById('fechaHoy').innerText = `${dias[f.getDay()]} ${f.getDate()} DE ${meses[f.getMonth()]}`;
+  let hoy = new Date(), lun = new Date(hoy.setDate(hoy.getDate()-hoy.getDay()+(hoy.getDay()===0?-6:1))), dom = new Date(lun); dom.setDate(lun.getDate()+6);
+  document.getElementById('rangoSemanaTexto').innerText = `DESDE EL LUNES ${lun.getDate()}/${lun.getMonth()+1} HASTA EL DOMINGO ${dom.getDate()}/${dom.getMonth()+1}`;
+  document.getElementById('rangoMesTexto').innerText = meses[new Date().getMonth()] + " " + new Date().getFullYear();
 }
 
 function actualizarDropdown(){ 
   let h = perfiles[usuarioActual].hoy.map(c=>c.tipo), s = document.getElementById('tipoComida'); 
-  s.innerHTML = ["🍳 Desayuno", "🍎 Colación AM", "🍱 Almuerzo", "🥪 Colación PM", "🍽️ Cena", "💧 Solo Agua"].filter(c=> !h.includes(c) || c==="💧 Solo Agua").map(c=>`<option value="${c}">${c}</option>`).join(''); 
+  s.innerHTML = ["🍳 Desayuno", "🍎 Colación AM", " Bento Almuerzo", "🥪 Colación PM", "🍽️ Cena", "💧 Solo Agua"].filter(c=> !h.includes(c) || c==="💧 Solo Agua").map(c=>`<option value="${c}">${c}</option>`).join(''); 
 }
 function verificarSoloAgua(){
   let es = document.getElementById('tipoComida').value === "💧 Solo Agua";
-  ['kcal','prot','carbs','grasas','fibra'].forEach(id => {
-    let input = document.getElementById(id); if(input) input.disabled = es;
-  });
+  ['kcal','prot','carbs','grasas','fibra'].forEach(id => { document.getElementById(id).disabled = es; });
+}
+function mostrarListaEditar(){
+  const list = document.getElementById('listaComidasHoy');
+  list.style.display = (list.style.display === 'flex') ? 'none' : 'flex';
 }
 function cerrarDetalle(){ document.getElementById('modalDetalle').style.display='none'; }
 document.getElementById('confirmAction').onclick = () => { if(callbackConfirm) callbackConfirm(); };
