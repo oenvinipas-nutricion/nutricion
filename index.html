@@ -28,7 +28,6 @@
   
   /* --- PANELES UNIFICADOS --- */
   .panel-card { background: linear-gradient(145deg, #161618 0%, #0f0f11 100%); border: 1px solid #2c2c2e; border-radius: 20px; padding: 20px 15px; margin-bottom: 25px; box-shadow: 0 8px 30px rgba(0,0,0,0.6); }
-  
   .panel-luminoso { background: radial-gradient(circle at top, #1e1e24 0%, #111 80%); border: 1px solid #333; box-shadow: 0 5px 20px rgba(10, 132, 255, 0.05); }
 
   .panel-header { font-size: 0.85em; font-weight: 800; text-align: center; margin-bottom: 18px; text-transform: uppercase; letter-spacing: 1.5px; }
@@ -63,27 +62,35 @@
   .meta-blue {color:#0a84ff; font-weight:bold; font-size:1.1em; display:block; margin-top:4px;}
   .scroll-area {max-height:400px; overflow-y:auto;}
   
-  /* Formularios */
-  input, select{
-      background:#111;
-      border:1px solid #333;
-      color:#fff;
-      padding:15px;
-      border-radius:12px;
-      width:100%;
-      box-sizing:border-box;
-      margin-bottom:12px;
-      font-size:16px; 
-      transition: border 0.3s, background 0.3s, opacity 0.3s;
-      text-align: center; /* Asegura que el texto y las cifras estén centradas en todos los inputs */
+  /* --- NUEVAS CAJAS INTELIGENTES DE INGRESO --- */
+  .input-basico, select {
+      background:#111; border:1px solid #333; color:#fff; padding:15px; border-radius:12px; width:100%; box-sizing:border-box; margin-bottom:12px; font-size:16px; transition: border 0.3s;
   }
+  .input-basico:focus, select:focus { border-color: #0a84ff; outline: none; }
+  select { text-align: center; text-align-last: center; font-weight: bold; } 
   
-  input:focus, select:focus { border-color: #0a84ff; outline: none; }
-  input:disabled { background: #0a0a0a; border-color: #222; color: #555; opacity: 0.6; }
-  select { text-align-last: center; font-weight: bold; } 
+  .input-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
   
-  .input-grid{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+  .input-box {
+      background: #111; border: 1px solid #333; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      height: 54px; transition: border 0.3s, opacity 0.3s;
+  }
+  .input-box:focus-within { border-color: #0a84ff; }
+  .input-box.disabled { opacity: 0.4; pointer-events: none; background: #0a0a0a; border-color:#222; }
   
+  .input-box .icono { font-size: 1.2em; margin-right: 4px; }
+  .input-box .unidad { font-size: 0.85em; color: #8e8e93; font-weight: bold; margin-left: 2px; }
+  .input-box input {
+      background: transparent; border: none; color: #fff; font-size: 1.2em;
+      font-weight: bold; text-align: center; width: 55px; padding: 0; outline: none;
+      -moz-appearance: textfield; /* Quita flechas en Firefox */
+  }
+  .input-box input::-webkit-outer-spin-button,
+  .input-box input::-webkit-inner-spin-button {
+      -webkit-appearance: none; margin: 0; /* Quita flechas en Chrome/Safari */
+  }
+
   .btn-blue{background:linear-gradient(145deg, #1c3d99, #0a84ff);color:white;width:100%;padding:16px;border:none;border-radius:12px;font-weight:bold;cursor:pointer; margin-bottom: 10px; font-size:1.1em; text-transform:uppercase; letter-spacing:1px; box-shadow: 0 4px 15px rgba(10, 132, 255, 0.3);}
   .btn-green{background:linear-gradient(145deg, #248a3d, #32d74b);color:white;width:100%;padding:16px;border:none;border-radius:12px;font-weight:bold;cursor:pointer;margin-top:15px; font-size:1.1em; text-transform:uppercase; letter-spacing:1px; box-shadow: 0 4px 15px rgba(50, 215, 75, 0.2);}
   .btn-white{background:#fff;color:#000;width:100%;padding:16px;border:none;border-radius:12px;font-weight:bold;cursor:pointer;margin-top:15px; font-size:1.1em;}
@@ -127,7 +134,7 @@
     <h2>Bienvenido a Control Total</h2>
     <p style="text-align:center; color:#8e8e93; font-size:0.9em;">Ingresa tu nombre para comenzar:</p>
     <div style="margin-top:30px;">
-      <input type="text" id="inputNombre" placeholder="Ej. Carlos" style="text-align:center; font-size:1.2em; font-weight:bold;">
+      <input type="text" id="inputNombre" class="input-basico" placeholder="Ej. Carlos" style="text-align:center; font-size:1.2em; font-weight:bold;">
       <button class="btn-blue" style="margin-top:10px;" onclick="ingresarUsuario()">🚀 Entrar a mi perfil</button>
     </div>
   </div>
@@ -147,15 +154,39 @@
       <select id="tipoComida" onchange="verificarSoloAgua()"></select>
       
       <div class="input-grid">
-        <input type="number" id="kcal" placeholder="🔥 KCal" onkeydown="saltarEnter(event, 'prot')">
-        <input type="number" id="prot" placeholder="💪 Prot (g)" onkeydown="saltarEnter(event, 'carbs')">
-        <input type="number" id="carbs" placeholder="🍞 Carb (g)" onkeydown="saltarEnter(event, 'grasas')">
-        <input type="number" id="grasas" placeholder="🥑 Gras (g)" onkeydown="saltarEnter(event, 'fibra')">
-        <input type="number" id="fibra" placeholder="🌿 Fibr (g)" onkeydown="saltarEnter(event, 'agua')">
-        <input type="number" id="agua" placeholder="💧 Agua (ml)" onkeydown="saltarEnter(event, 'btnRegistrar')">
+        <div class="input-box" id="box-kcal">
+            <span class="icono">🔥</span>
+            <input type="number" id="kcal" onkeydown="saltarEnter(event, 'prot')">
+            <span class="unidad">kcal</span>
+        </div>
+        <div class="input-box" id="box-prot">
+            <span class="icono">💪</span>
+            <input type="number" id="prot" onkeydown="saltarEnter(event, 'carbs')">
+            <span class="unidad">g</span>
+        </div>
+        <div class="input-box" id="box-carbs">
+            <span class="icono">🍞</span>
+            <input type="number" id="carbs" onkeydown="saltarEnter(event, 'grasas')">
+            <span class="unidad">g</span>
+        </div>
+        <div class="input-box" id="box-grasas">
+            <span class="icono">🥑</span>
+            <input type="number" id="grasas" onkeydown="saltarEnter(event, 'fibra')">
+            <span class="unidad">g</span>
+        </div>
+        <div class="input-box" id="box-fibra">
+            <span class="icono">🌿</span>
+            <input type="number" id="fibra" onkeydown="saltarEnter(event, 'agua')">
+            <span class="unidad">g</span>
+        </div>
+        <div class="input-box" id="box-agua">
+            <span class="icono">💧</span>
+            <input type="number" id="agua" onkeydown="saltarEnter(event, 'btnRegistrar')">
+            <span class="unidad">ml</span>
+        </div>
       </div>
       
-      <button class="btn-blue" id="btnRegistrar" onclick="registrarComida()">GUARDAR</button>
+      <button class="btn-blue" id="btnRegistrar" style="margin-top:15px;" onclick="registrarComida()">GUARDAR</button>
     </div>
     
     <div class="panel-card panel-luminoso">
@@ -224,12 +255,36 @@
         <div class="panel-header header-metas">🎯 TUS METAS DIARIAS</div>
         
         <div class="input-grid">
-            <input type="number" id="mKcal" placeholder="🔥 KCal">
-            <input type="number" id="mProt" placeholder="💪 Prot (g)">
-            <input type="number" id="mCarbs" placeholder="🍞 Carb (g)">
-            <input type="number" id="mGrasas" placeholder="🥑 Gras (g)">
-            <input type="number" id="mFibra" placeholder="🌿 Fibr (g)">
-            <input type="number" id="mAgua" placeholder="💧 Agua (ml)">
+            <div class="input-box">
+                <span class="icono">🔥</span>
+                <input type="number" id="mKcal" onkeydown="saltarEnter(event, 'mProt')">
+                <span class="unidad">kcal</span>
+            </div>
+            <div class="input-box">
+                <span class="icono">💪</span>
+                <input type="number" id="mProt" onkeydown="saltarEnter(event, 'mCarbs')">
+                <span class="unidad">g</span>
+            </div>
+            <div class="input-box">
+                <span class="icono">🍞</span>
+                <input type="number" id="mCarbs" onkeydown="saltarEnter(event, 'mGrasas')">
+                <span class="unidad">g</span>
+            </div>
+            <div class="input-box">
+                <span class="icono">🥑</span>
+                <input type="number" id="mGrasas" onkeydown="saltarEnter(event, 'mFibra')">
+                <span class="unidad">g</span>
+            </div>
+            <div class="input-box">
+                <span class="icono">🌿</span>
+                <input type="number" id="mFibra" onkeydown="saltarEnter(event, 'mAgua')">
+                <span class="unidad">g</span>
+            </div>
+            <div class="input-box">
+                <span class="icono">💧</span>
+                <input type="number" id="mAgua">
+                <span class="unidad">ml</span>
+            </div>
         </div>
         <button class="btn-green" style="margin-top:20px;" onclick="guardarMetas()">💾 GUARDAR METAS</button>
     </div>
@@ -290,7 +345,6 @@ function desbloquearAudio() {
 document.addEventListener('click', desbloquearAudio);
 document.addEventListener('touchstart', desbloquearAudio);
 
-// Función para salto automático (Auto-Focus)
 function saltarEnter(event, nextId) {
     if (event.key === 'Enter') {
         event.preventDefault(); 
@@ -356,7 +410,6 @@ function ingresarUsuario() {
   
   if(!perfiles[nombreFormateado]) {
       perfiles[nombreFormateado] = { 
-          // Perfil nuevo inicia con campos vacíos
           METAS: { kcal: '', prot: '', carbs: '', grasas: '', fibra: '', agua: '' }, 
           hoy: [], 
           historial: [] 
@@ -413,9 +466,15 @@ function verificarSoloAgua() {
     
     inputsAlimenticios.forEach(id => {
         const input = document.getElementById(id);
+        const box = document.getElementById('box-' + id);
+        
         if (input) {
             input.disabled = esSoloAgua;
             if(esSoloAgua) input.value = ''; 
+        }
+        if (box) {
+            if(esSoloAgua) box.classList.add('disabled');
+            else box.classList.remove('disabled');
         }
     });
 }
@@ -540,7 +599,7 @@ function actualizarGuiaDinamica(hoy, metas, totales) {
 
   claves.forEach(k => {
     let restante = metas[k] - totales[k];
-    if (restante < 0) restante = 0; 
+    if (restante < 0 || isNaN(restante)) restante = 0; 
     let sugerido = Math.round(restante / factor);
 
     html += `
@@ -588,7 +647,7 @@ function actualizarUI() {
 }
 
 function renderCircle(label, actual, meta) {
-  const pct = meta > 0 ? Math.min((actual / meta) * 100, 100) : 0;
+  const pct = (meta > 0 && !isNaN(meta)) ? Math.min((actual / meta) * 100, 100) : 0;
   const displayPct = Math.round(pct) + '%';
   const dash = pct * 2.35; 
   
@@ -596,7 +655,7 @@ function renderCircle(label, actual, meta) {
   
   let restante = meta - actual;
   let textoAbajo = "";
-  if (meta === 0 || meta === '') {
+  if (meta === 0 || meta === '' || isNaN(meta)) {
       textoAbajo = "-";
   } else if (restante > 0) {
       textoAbajo = `Faltan ${Math.round(restante)} ${unit}`;
@@ -636,7 +695,7 @@ function cerrarDia() {
   let noLogrados = [];
   
   for(let key in metas) {
-      if(metas[key] > 0) {
+      if(metas[key] > 0 && !isNaN(metas[key])) {
           let pctExacto = (totales[key] / metas[key]) * 100;
           let diff = pctExacto - 100;
           
@@ -718,7 +777,7 @@ function renderReporteSemanal() {
   
   const metasDiarias = perfiles[usuarioActual].METAS;
   const metasSemanales = {};
-  for (let key in metasDiarias) metasSemanales[key] = metasDiarias[key] * 7;
+  for (let key in metasDiarias) metasSemanales[key] = (metasDiarias[key] || 0) * 7;
   
   const sumas = obtenerTotales(historialSemana);
   const hoyTotales = obtenerTotales(perfiles[usuarioActual].hoy);
@@ -743,7 +802,7 @@ function renderReporteMensual() {
   
   const metasDiarias = perfiles[usuarioActual].METAS;
   const metasMensuales = {};
-  for (let key in metasDiarias) metasMensuales[key] = metasDiarias[key] * diasEnMes;
+  for (let key in metasDiarias) metasMensuales[key] = (metasDiarias[key] || 0) * diasEnMes;
   
   const sumas = obtenerTotales(historialMes);
   const hoyTotales = obtenerTotales(perfiles[usuarioActual].hoy);
@@ -776,7 +835,6 @@ function renderHistorial() {
 
 function cargarMetasInputs() {
   const m = perfiles[usuarioActual].METAS;
-  // Solo mostramos el valor si existe, si no, se muestra vacío para que se vea el placeholder
   document.getElementById('mKcal').value = m.kcal || '';
   document.getElementById('mProt').value = m.prot || '';
   document.getElementById('mCarbs').value = m.carbs || '';
