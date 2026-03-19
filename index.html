@@ -9,7 +9,7 @@
   body { font-family:-apple-system,BlinkMacSystemFont,sans-serif; padding:10px; background:#000; color:#eee; margin-bottom:90px; -webkit-tap-highlight-color: transparent; }
   .container{max-width:420px; margin:auto;}
   h2,h3{text-align:center;color:#fff;}
-  .subtitulo{text-align:center; color:#0a84ff; font-size:0.85em; margin-bottom:20px; font-weight:bold;}
+  .subtitulo{text-align:center; color:#0a84ff; font-size:0.85em; margin-bottom:20px; font-weight:bold; text-transform: uppercase;}
   .page{display:none;} .active-page{display:block;}
   .nav-bar{position:fixed;bottom:0;left:0;right:0;background:rgba(15,15,15,0.95);backdrop-filter:blur(15px);display:flex;padding:12px 5px 30px 5px;border-top:0.5px solid #333;z-index:1000;}
   .nav-btn{background:none;border:none;color:#8e8e93;display:flex;flex-direction:column;align-items:center;font-size:0.7em;flex:1;}
@@ -69,13 +69,16 @@
   </div>
 
   <div id="page-hoy" class="page">
+    <h2 id="saludoHoy">¡Hola!</h2>
     <p class="subtitulo" id="fechaHoy"></p>
+    
     <div class="panel-card" id="guiaDinamica" style="display:none;">
-      <div class="panel-header" style="color:#0a84ff;">💡 SUGERENCIA</div>
+      <div class="panel-header" style="color:#0a84ff;">💡 SUGERENCIA PRÓXIMA COMIDA</div>
       <div class="guia-grid-fija" id="guiaValores"></div>
     </div>
+    
     <div class="panel-card">
-      <div class="panel-header">✍️ REGISTRO</div>
+      <div class="panel-header">✍️ REGISTRO DIARIO</div>
       <select id="tipoComida" onchange="verificarSoloAgua()"></select>
       <div class="input-grid">
         <div class="input-box" id="box-kcal"><span class="icono">🔥</span><input type="number" id="kcal" onkeydown="saltarEnter(event,'prot')"><span class="unidad">kcal</span></div>
@@ -87,20 +90,50 @@
       </div>
       <button class="btn-blue" id="btnRegistrar" style="margin-top:15px; width:100%" onclick="registrarComida()">GUARDAR</button>
     </div>
+    
     <div class="panel-card panel-luminoso">
       <div class="panel-header" style="color:#32d74b;">📊 PROGRESO DE HOY</div>
       <div class="grid-circles" id="circulosHoy"></div>
     </div>
+    
     <div class="panel-card">
-      <div class="panel-header" style="color:#aaa;">📋 REGISTROS</div>
+      <div class="panel-header" style="color:#aaa;">📋 TUS REGISTROS</div>
       <div id="listaComidasHoy"></div>
     </div>
-    <button class="btn-green" style="width:100%" onclick="cerrarDia()">💾 FINALIZAR DÍA</button>
+    <button class="btn-green" style="width:100%" onclick="cerrarDia()">💾 FINALIZAR DÍA Y EVALUAR</button>
   </div>
 
-  <div id="page-semanal" class="page"><h2>Reporte Semanal</h2><p class="subtitulo" id="rangoSemanaTexto"></p><div class="panel-card panel-luminoso"><div class="grid-circles" id="circulosSemanal"></div><p id="msgSemana" style="text-align:center;font-size:0.8em;color:#888;margin-top:15px;"></p></div><button class="btn-white" style="width:100%" onclick="window.print()">📄 PDF SEMANAL</button></div>
-  <div id="page-mensual" class="page"><h2>Reporte Mensual</h2><p class="subtitulo" id="rangoMesTexto"></p><div class="panel-card panel-luminoso"><div class="grid-circles" id="circulosMensual"></div><p id="msgMes" style="text-align:center;font-size:0.8em;color:#888;margin-top:15px;"></p></div><button class="btn-white" style="width:100%" onclick="window.print()">📄 PDF MENSUAL</button></div>
-  <div id="page-historial" class="page"><h2>Historial Diario</h2><div class="panel-card"><div class="scroll-area"><table><thead><tr id="historialHeader"></tr></thead><tbody id="tablaHistorial"></tbody></table></div></div><button class="btn-white" style="width:100%" onclick="window.print()">📄 PDF HISTORIAL</button></div>
+  <div id="page-semanal" class="page">
+    <h2>Reporte Semanal</h2>
+    <p class="subtitulo" id="rangoSemanaTexto"></p>
+    <div class="panel-card panel-luminoso">
+        <div class="panel-header">📊 PROGRESO ACUMULADO</div>
+        <div class="grid-circles" id="circulosSemanal"></div>
+        <p id="msgSemana" style="text-align:center;font-size:0.8em;color:#888;margin-top:15px;"></p>
+    </div>
+    <button class="btn-white" style="width:100%" onclick="window.print()">📄 EXPORTAR PDF SEMANAL</button>
+  </div>
+
+  <div id="page-mensual" class="page">
+    <h2>Reporte Mensual</h2>
+    <p class="subtitulo" id="rangoMesTexto"></p>
+    <div class="panel-card panel-luminoso">
+        <div class="panel-header">📊 PROGRESO ACUMULADO</div>
+        <div class="grid-circles" id="circulosMensual"></div>
+        <p id="msgMes" style="text-align:center;font-size:0.8em;color:#888;margin-top:15px;"></p>
+    </div>
+    <button class="btn-white" style="width:100%" onclick="window.print()">📄 EXPORTAR PDF MENSUAL</button>
+  </div>
+
+  <div id="page-historial" class="page">
+    <h2>Historial Diario</h2>
+    <p class="subtitulo">Tus registros anteriores</p>
+    <div class="panel-card">
+        <div class="panel-header">📚 REGISTRO COMPLETO</div>
+        <div class="scroll-area"><table><thead><tr id="historialHeader"></tr></thead><tbody id="tablaHistorial"></tbody></table></div>
+    </div>
+    <button class="btn-white" style="width:100%" onclick="window.print()">📄 EXPORTAR HISTORIAL EN PDF</button>
+  </div>
   
   <div id="page-config" class="page">
     <h2>Metas</h2>
@@ -115,14 +148,14 @@
       </div>
       <button class="btn-green" style="width:100%;margin-top:15px;" onclick="guardarMetas()">💾 GUARDAR METAS</button>
     </div>
-    <button class="btn-blue" style="background:#333;margin-top:20px;width:100%" onclick="cambiarPerfil()">Cerrar Sesión</button>
+    <button class="btn-blue" style="background:#333;margin-top:20px;width:100%" onclick="cambiarPerfil()">Cerrar Sesión / Cambiar Usuario</button>
   </div>
 </div>
 
 <div id="modalDetalle" class="modal-overlay">
   <div class="modal-content">
     <div class="btn-trash" id="btnBorrarDetalle">🗑️</div>
-    <h3 id="detalleTitulo" style="color:#0a84ff; text-align:left; margin-bottom:20px;">Editar</h3>
+    <h3 id="detalleTitulo" style="color:#0a84ff; text-align:left; margin-bottom:20px;">Editar Comida</h3>
     <div id="detalleContenido" class="input-grid"></div>
     <button class="btn-green" style="width:100%; margin-top:20px;" id="btnActualizar">✅ ACTUALIZAR DATOS</button>
     <button class="btn-white" style="width:100%; margin-top:10px;" onclick="cerrarDetalle()">↩️ VOLVER</button>
@@ -138,7 +171,7 @@
   </div>
 </div>
 
-<div id="miModalResumen" class="modal-overlay"><div class="modal-content"><h3>📊 Resumen</h3><div id="modalTexto" style="text-align:left; font-size:0.9em;"></div><button class="btn-blue" style="width:100%;margin-top:15px" onclick="cerrarModal()">Aceptar</button></div></div>
+<div id="miModalResumen" class="modal-overlay"><div class="modal-content"><h3>📊 Resumen de Hoy</h3><div id="modalTexto" style="text-align:left; font-size:0.9em;"></div><button class="btn-blue" style="width:100%;margin-top:15px" onclick="cerrarModal()">Aceptar</button></div></div>
 
 <div class="nav-bar" id="main-nav" style="display:none;">
   <button class="nav-btn active" onclick="verPagina('hoy', this)"><span>📝</span>Hoy</button>
@@ -166,10 +199,17 @@ function ingresarUsuario(){
 }
 function seleccionarPerfil(n){
   usuarioActual = n; localStorage.setItem('nutriUsuarioActivo', n);
+  document.getElementById('saludoHoy').innerText = "¡Hola, " + n + "!";
+  document.getElementById('fechaHoy').innerText = new Date().toLocaleDateString('es-ES', { weekday:'long', day:'numeric', month:'long' });
   document.getElementById('page-perfil').classList.remove('active-page');
   document.getElementById('page-hoy').classList.add('active-page');
   document.getElementById('main-nav').style.display = 'flex';
   actualizarDropdown(); actualizarUI();
+}
+function getRangoSemana() {
+    let hoy = new Date(), lunes = new Date(hoy.setDate(hoy.getDate() - hoy.getDay() + (hoy.getDay() === 0 ? -6 : 1)));
+    let domingo = new Date(lunes); domingo.setDate(lunes.getDate() + 6);
+    return `${lunes.getDate()}/${lunes.getMonth()+1} al ${domingo.getDate()}/${domingo.getMonth()+1}`;
 }
 function actualizarDropdown(){
   let h = perfiles[usuarioActual].hoy.map(c=>c.tipo), s = document.getElementById('tipoComida');
@@ -180,14 +220,10 @@ function verificarSoloAgua(){
   let es = document.getElementById('tipoComida').value === "💧 Solo Agua";
   ['kcal','prot','carbs','grasas','fibra'].forEach(id=>{
     let input = document.getElementById(id);
-    if(input){
-        input.disabled = es; if(es) input.value = '';
-        document.getElementById('box-'+id).classList.toggle('disabled', es);
-    }
+    if(input){ input.disabled = es; if(es) input.value = ''; document.getElementById('box-'+id).classList.toggle('disabled', es); }
   });
 }
 function saltarEnter(e, n){ if(e.key==='Enter'){ e.preventDefault(); if(n==='btnRegistrar') registrarComida(); else document.getElementById(n).focus(); } }
-
 function registrarComida(){
   let s = document.getElementById('tipoComida').value, a = +document.getElementById('agua').value || 0;
   if(s === "💧 Solo Agua"){
@@ -201,11 +237,10 @@ function registrarComida(){
 }
 function guardarYActualizar(){ localStorage.setItem('nutriDataV6', JSON.stringify(perfiles)); actualizarUI(); }
 function obtenerTotales(l){ return l.reduce((a,c)=>({kcal:a.kcal+(c.kcal||0),prot:a.prot+(c.prot||0),carbs:a.carbs+(c.carbs||0),grasas:a.grasas+(c.grasas||0),fibra:a.fibra+(c.fibra||0),agua:a.agua+(c.agua||0)}),{kcal:0,prot:0,carbs:0,grasas:0,fibra:0,agua:0}); }
-
 function actualizarUI(){
   let p = perfiles[usuarioActual], t = obtenerTotales(p.hoy);
   document.getElementById('circulosHoy').innerHTML = Object.keys(p.METAS).map(k=> renderCircle(k, t[k], p.METAS[k])).join('');
-  document.getElementById('listaComidasHoy').innerHTML = p.hoy.length ? `<div class="lista-horizontal-scroll">`+p.hoy.map(c=> `<div class="log-card" onclick="abrirDetalle(${c.id})"><div style="font-size:0.7em;color:#aaa">${c.tipo}</div><div style="font-weight:bold;color:${c.tipo.includes('Agua')?'#00bfff':'#ff453a'}">${c.tipo.includes('Agua')?c.agua+'ml':c.kcal+'kcal'}</div></div>`).join('')+`</div>` : `<p style="text-align:center;color:#666;font-size:0.8em;">Vacío</p>`;
+  document.getElementById('listaComidasHoy').innerHTML = p.hoy.length ? `<div class="lista-horizontal-scroll">`+p.hoy.map(c=> `<div class="log-card" onclick="abrirDetalle(${c.id})"><div style="font-size:0.7em;color:#aaa">${c.tipo}</div><div style="font-weight:bold;color:${c.tipo.includes('Agua')?'#00bfff':'#ff453a'}">${c.tipo.includes('Agua')?c.agua+'ml':c.kcal+'kcal'}</div></div>`).join('')+`</div>` : `<p style="text-align:center;color:#666;font-size:0.8em;">Sin registros hoy</p>`;
   actualizarGuia(p.hoy, p.METAS, t);
 }
 function renderCircle(k, a, m){
@@ -255,6 +290,7 @@ function verPagina(id, b){
 }
 function renderReporte(tipo){
   let p = perfiles[usuarioActual], m = p.METAS, d = tipo==='semanal'? 7 : 30, h = p.historial.slice(0, d), tot = obtenerTotales(h);
+  document.getElementById('rango'+tipo.charAt(0).toUpperCase()+tipo.slice(1)+'Texto').innerText = tipo==='semanal' ? "Semana del " + getRangoSemana() : "Mes de " + new Date().toLocaleDateString('es-ES', {month:'long'});
   document.getElementById('circulos'+tipo.charAt(0).toUpperCase()+tipo.slice(1)).innerHTML = Object.keys(m).map(k=> renderCircle(k, tot[k], (m[k]||0)*d)).join('');
   document.getElementById('msg'+tipo.charAt(0).toUpperCase()+tipo.slice(1)).innerText = `Basado en los últimos ${h.length} días vs meta de ${d} días.`;
 }
