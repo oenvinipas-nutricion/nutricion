@@ -101,7 +101,6 @@
   .btn-blue{background:linear-gradient(145deg, #1c3d99, #0a84ff);color:white;width:100%;padding:16px;border:none;border-radius:12px;font-weight:bold;cursor:pointer; margin-bottom: 10px; font-size:1.1em; text-transform:uppercase; letter-spacing:1px; box-shadow: 0 4px 15px rgba(10, 132, 255, 0.3);}
   .btn-green{background:linear-gradient(145deg, #248a3d, #32d74b);color:white;width:100%;padding:16px;border:none;border-radius:12px;font-weight:bold;cursor:pointer;margin-top:15px; font-size:1.1em; text-transform:uppercase; letter-spacing:1px; box-shadow: 0 4px 15px rgba(50, 215, 75, 0.2);}
   .btn-white{background:#fff;color:#000;width:100%;padding:16px;border:none;border-radius:12px;font-weight:bold;cursor:pointer;margin-top:15px; font-size:1.1em;}
-  .btn-red{background:#ff453a;color:white;width:100%;padding:16px;border:none;border-radius:12px;font-weight:bold;cursor:pointer; margin-bottom: 10px; font-size:1.1em;}
   
   /* CARRUSEL HORIZONTAL PARA COMIDAS DE HOY */
   .lista-horizontal-scroll { display: flex; overflow-x: auto; gap: 12px; padding: 5px 0 10px 0; scrollbar-width: none; scroll-behavior: smooth; }
@@ -308,7 +307,10 @@
 
 <div id="modalDetalle" class="modal-overlay">
   <div class="modal-content">
-    <div class="modal-titulo" id="detalleTitulo">Editar</div>
+    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom: 1px solid #333; padding-bottom: 10px; margin-bottom:15px;">
+        <div style="font-size: 1.3em; font-weight:bold; color:#0a84ff;" id="detalleTitulo">Editar</div>
+        <button id="btnBorrarDetalle" style="background:none; border:none; font-size:1.6em; cursor:pointer;" title="Eliminar Registro">🗑️</button>
+    </div>
     
     <div class="input-grid" style="margin-bottom: 20px;">
         <div class="input-box">
@@ -345,9 +347,8 @@
     
     <input type="hidden" id="edit-id">
     
-    <button class="btn-blue" id="btnActualizarDetalle">Actualizar Cambios</button>
-    <button class="btn-red" id="btnBorrarDetalle">🗑️ Eliminar Registro</button>
-    <button class="btn-white" onclick="cerrarDetalle()">↩️ Volver</button>
+    <button class="btn-blue" id="btnActualizarDetalle">💾 Actualizar Cambios</button>
+    <button class="btn-white" onclick="cerrarDetalle()">↩️ Cancelar y Volver</button>
   </div>
 </div>
 
@@ -454,7 +455,6 @@ function ingresarUsuario() {
           hoy: [], 
           historial: [] 
       };
-      // SOLUCION: Guardar en memoria antes de intentar dibujar la interfaz
       localStorage.setItem('nutriDataV6', JSON.stringify(perfiles));
   }
   seleccionarPerfil(nombreFormateado);
@@ -578,7 +578,7 @@ function borrarComida(id) {
   actualizarDropdown();
 }
 
-// FUNCIONES PARA EDITAR COMIDA
+// FUNCIONES PARA EDITAR COMIDA (CON ALERTA DE SEGURIDAD)
 function abrirDetalle(id) {
     const comida = perfiles[usuarioActual].hoy.find(c => c.id === id);
     if(!comida) return;
@@ -593,13 +593,19 @@ function abrirDetalle(id) {
     document.getElementById('edit-fibra').value = comida.fibra || '';
     document.getElementById('edit-agua').value = comida.agua || '';
     
+    // Alerta antes de guardar cambios
     document.getElementById('btnActualizarDetalle').onclick = function() {
-        actualizarComida();
+        if(confirm("¿Deseas guardar estas modificaciones?")) {
+            actualizarComida();
+        }
     };
     
+    // Alerta seria antes de eliminar
     document.getElementById('btnBorrarDetalle').onclick = function() {
-        borrarComida(id);
-        cerrarDetalle();
+        if(confirm("⚠️ ¿Estás seguro de borrar este registro?\n\nEsta acción no se puede deshacer.")) {
+            borrarComida(id);
+            cerrarDetalle();
+        }
     };
     
     document.getElementById('modalDetalle').style.display = 'block';
@@ -737,197 +743,4 @@ function renderCircle(label, actual, meta) {
           <circle class="circle-bg" cx="42.5" cy="42.5" r="38"/>
           <circle class="circle-bar" cx="42.5" cy="42.5" r="38" style="stroke:${COLORES[label]}; stroke-dasharray: ${dash} 240;"/>
         </svg>
-        <div class="circle-text" style="color:${COLORES[label]}">${displayPct}</div>
-      </div>
-      <div class="circle-label-bottom">${label}</div>
-      <div class="circle-fraction">${textoAbajo}</div>
-    </div>`;
-}
-
-function cerrarDia() {
-  if(perfiles[usuarioActual].hoy.length === 0) {
-      alert("No hay comidas para registrar hoy.");
-      return;
-  }
-  
-  const hoy = perfiles[usuarioActual].hoy;
-  const totales = obtenerTotales(hoy);
-  const metas = perfiles[usuarioActual].METAS;
-  
-  let logrados = [];
-  let excedidos = [];
-  let noLogrados = [];
-  
-  for(let key in metas) {
-      if(metas[key] > 0 && !isNaN(metas[key])) {
-          let pctExacto = (totales[key] / metas[key]) * 100;
-          let diff = pctExacto - 100;
-          
-          let unit = key === 'agua' ? 'ml' : (key === 'kcal' ? 'kcal' : 'g');
-          let valorDiferencia = Math.abs(totales[key] - metas[key]);
-          valorDiferencia = Math.round(valorDiferencia); 
-          
-          let textoItem = "";
-          if (diff > 0) {
-              textoItem = `${ICONOS[key]} ${NOMBRES[key]} <span style="color:#ff453a;">(te pasaste por ${valorDiferencia} ${unit})</span>`;
-          } else if (diff < 0) {
-              textoItem = `${ICONOS[key]} ${NOMBRES[key]} <span style="color:#ff9f0a;">(te faltaron ${valorDiferencia} ${unit})</span>`;
-          } else {
-              textoItem = `${ICONOS[key]} ${NOMBRES[key]} <span style="color:#32d74b;">(Meta exacta)</span>`;
-          }
-
-          if(pctExacto > 110) { 
-              excedidos.push(textoItem);
-          } else if(pctExacto >= 90) { 
-              logrados.push(textoItem);
-          } else {
-              noLogrados.push(textoItem);
-          }
-      }
-  }
-  
-  let mensajeResumenHTML = "";
-  let mereceAplauso = false;
-  
-  if(logrados.length > 0) {
-      mensajeResumenHTML += "<p><b>✅ En la zona ideal (90-110%):</b><br>• " + logrados.join("<br>• ") + "</p>";
-      mereceAplauso = true;
-  }
-  if(excedidos.length > 0) {
-      mensajeResumenHTML += "<p><b>⚠️ Excediste tu límite (>110%):</b><br>• " + excedidos.join("<br>• ") + "</p>";
-  }
-  if(noLogrados.length > 0) {
-      mensajeResumenHTML += "<p><b>📉 Aún necesitas consumir (<90%):</b><br>• " + noLogrados.join("<br>• ") + "</p>";
-  }
-  
-  if(excedidos.length === 0 && noLogrados.length === 0) {
-      mensajeResumenHTML += "<p style='color:#32d74b; font-weight:bold; text-align:center; font-size:1.2em;'>🏆 ¡BRUTAL! Todo quedó en tu rango ideal.</p>";
-      confetti({ particleCount: 200, spread: 100, origin: { y: 0.6 } });
-      mereceAplauso = true;
-  } else if (mereceAplauso) {
-      confetti({ particleCount: 80, spread: 70, origin: { y: 0.6 } });
-  }
-
-  let audio = document.getElementById('sonidoAplausos');
-  audio.muted = false; 
-  audio.currentTime = 0; 
-  audio.play().catch(e => console.log("Bloqueo del navegador", e));
-  
-  totales.fechaISO = obtenerFechaLocal(); 
-  totales.fechaCorta = formatearFechaCorta(new Date());
-  
-  perfiles[usuarioActual].historial = perfiles[usuarioActual].historial.filter(h => h.fechaISO !== totales.fechaISO);
-  perfiles[usuarioActual].historial.unshift(totales);
-  perfiles[usuarioActual].hoy = [];
-  
-  guardarYActualizar();
-  actualizarDropdown();
-  
-  document.getElementById('modalTexto').innerHTML = mensajeResumenHTML;
-  document.getElementById('miModalResumen').style.display = 'block';
-}
-
-function cerrarModal() {
-    document.getElementById('miModalResumen').style.display = 'none';
-}
-
-function renderReporteSemanal() {
-  const rango = getRangoSemana();
-  document.getElementById('rangoSemanaTexto').innerText = `Semana del ${rango.texto}`;
-  
-  const historialSemana = perfiles[usuarioActual].historial.filter(h => h.fechaISO >= rango.inicio && h.fechaISO <= rango.fin);
-  const container = document.getElementById('circulosSemanal');
-  const msg = document.getElementById('msgSemana');
-  
-  const metasDiarias = perfiles[usuarioActual].METAS;
-  const metasSemanales = {};
-  for (let key in metasDiarias) metasSemanales[key] = (metasDiarias[key] || 0) * 7;
-  
-  const sumas = obtenerTotales(historialSemana);
-  const hoyTotales = obtenerTotales(perfiles[usuarioActual].hoy);
-  for(let key in sumas) sumas[key] += hoyTotales[key];
-  
-  container.innerHTML = '';
-  for (let key in metasSemanales) container.innerHTML += renderCircle(key, sumas[key], metasSemanales[key]);
-  
-  msg.innerText = `Mostrando progreso de la semana (incluye tus registros de hoy).`;
-}
-
-function renderReporteMensual() {
-  const hoy = new Date();
-  const mesActualStr = `${hoy.getFullYear()}-${(hoy.getMonth() + 1).toString().padStart(2, '0')}`;
-  const diasEnMes = new Date(hoy.getFullYear(), hoy.getMonth() + 1, 0).getDate();
-  
-  document.getElementById('rangoMesTexto').innerText = `Mes de ${hoy.toLocaleDateString('es-ES',{month:'long'})} (${diasEnMes} días)`;
-  
-  const historialMes = perfiles[usuarioActual].historial.filter(h => h.fechaISO && h.fechaISO.startsWith(mesActualStr));
-  const container = document.getElementById('circulosMensual');
-  const msg = document.getElementById('msgMes');
-  
-  const metasDiarias = perfiles[usuarioActual].METAS;
-  const metasMensuales = {};
-  for (let key in metasDiarias) metasMensuales[key] = (metasDiarias[key] || 0) * diasEnMes;
-  
-  const sumas = obtenerTotales(historialMes);
-  const hoyTotales = obtenerTotales(perfiles[usuarioActual].hoy);
-  for(let key in sumas) sumas[key] += hoyTotales[key];
-  
-  container.innerHTML = '';
-  for (let key in metasMensuales) container.innerHTML += renderCircle(key, sumas[key], metasMensuales[key]);
-  
-  msg.innerText = `Mostrando progreso del mes (incluye tus registros de hoy).`;
-}
-
-function renderHistorial() {
-  const m = perfiles[usuarioActual].METAS;
-  
-  document.getElementById('historialHeader').innerHTML = `
-    <th style="text-align:left;">Fecha</th>
-    <th>🔥<span class="meta-blue">${m.kcal || 0}</span></th>
-    <th>💪<span class="meta-blue">${m.prot || 0}</span></th>
-    <th>🍞<span class="meta-blue">${m.carbs || 0}</span></th>
-    <th>🥑<span class="meta-blue">${m.grasas || 0}</span></th>
-    <th>🌿<span class="meta-blue">${m.fibra || 0}</span></th>
-    <th>💧<span class="meta-blue">${m.agua || 0}</span></th>
-  `;
-
-  const tabla = document.getElementById('tablaHistorial');
-  tabla.innerHTML = perfiles[usuarioActual].historial.map(h => `
-    <tr><td style="text-align:left; font-weight:bold;">${h.fechaCorta}</td><td>${h.kcal}</td><td>${h.prot}</td><td>${h.carbs}</td><td>${h.grasas}</td><td>${h.fibra}</td><td>${h.agua}</td></tr>
-  `).join('');
-}
-
-function cargarMetasInputs() {
-  const m = perfiles[usuarioActual].METAS;
-  document.getElementById('mKcal').value = m.kcal || '';
-  document.getElementById('mProt').value = m.prot || '';
-  document.getElementById('mCarbs').value = m.carbs || '';
-  document.getElementById('mGrasas').value = m.grasas || '';
-  document.getElementById('mFibra').value = m.fibra || '';
-  document.getElementById('mAgua').value = m.agua || '';
-}
-
-function guardarMetas() {
-  perfiles[usuarioActual].METAS = {
-    kcal: +document.getElementById('mKcal').value || 0, 
-    prot: +document.getElementById('mProt').value || 0,
-    carbs: +document.getElementById('mCarbs').value || 0, 
-    grasas: +document.getElementById('mGrasas').value || 0,
-    fibra: +document.getElementById('mFibra').value || 0, 
-    agua: +document.getElementById('mAgua').value || 0
-  };
-  guardarYActualizar();
-  alert("Metas actualizadas ✅");
-}
-
-function cambiarPerfil() {
-  usuarioActual = null;
-  localStorage.removeItem('nutriUsuarioActivo');
-  document.getElementById('inputNombre').value = '';
-  document.getElementById('main-nav').style.display = 'none';
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
-  document.getElementById('page-perfil').classList.add('active-page');
-}
-</script>
-</body>
-</html>
+        <div class="circle-text" style="
