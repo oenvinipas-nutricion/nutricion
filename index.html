@@ -26,9 +26,14 @@
   .nav-btn.active{color:#0a84ff;font-weight:bold;}
   .nav-icon{font-size:1.6em;margin-bottom:4px;}
   
-  /* --- GUÍA DINÁMICA FIJA (MEJORADA) --- */
-  .guia-card { background: linear-gradient(145deg, #111 0%, #1a1a1c 100%); border: 1px solid #333; border-radius: 15px; padding: 15px; margin-bottom: 20px; box-shadow: 0 6px 20px rgba(0,0,0,0.6); }
-  .guia-titulo { font-size: 0.85em; color: #0a84ff; font-weight: bold; text-align: center; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px;}
+  /* --- PANELES UNIFICADOS (DISEÑO PREMIUM) --- */
+  .panel-card { background: linear-gradient(145deg, #161618 0%, #0f0f11 100%); border: 1px solid #2c2c2e; border-radius: 20px; padding: 20px 15px; margin-bottom: 25px; box-shadow: 0 8px 30px rgba(0,0,0,0.6); }
+  .panel-header { font-size: 0.85em; font-weight: 800; text-align: center; margin-bottom: 18px; text-transform: uppercase; letter-spacing: 1.5px; }
+  .header-sugerencia { color: #0a84ff; }
+  .header-ingreso { color: #fff; }
+  .header-registros { color: #aaa; }
+
+  /* Elementos internos de la Sugerencia */
   .guia-grid-fija { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; justify-items: center; width: 100%; }
   .guia-item { background: linear-gradient(180deg, #1c1c1e, #111); border: 1px solid #333; border-radius: 12px; padding: 12px 2px; width: 100%; box-sizing: border-box; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.2); }
   .guia-val { font-size: 1.2em; font-weight: bold; display: block; margin-top: 5px; text-shadow: 0px 0px 8px rgba(255,255,255,0.1);}
@@ -55,15 +60,16 @@
   .scroll-area{max-height:400px;overflow-y:auto;}
   
   /* Formularios */
-  input, select{background:#111;border:1px solid #333;color:#fff;padding:15px;border-radius:12px;width:100%;box-sizing:border-box;margin-bottom:12px;font-size:16px;}
+  input, select{background:#111;border:1px solid #333;color:#fff;padding:15px;border-radius:12px;width:100%;box-sizing:border-box;margin-bottom:12px;font-size:16px; transition: border 0.3s;}
+  input:focus, select:focus { border-color: #0a84ff; outline: none; }
   select { text-align: center; text-align-last: center; font-weight: bold; } 
   .input-grid{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
-  .btn-blue{background:#1c3d99;color:white;width:100%;padding:16px;border:none;border-radius:12px;font-weight:bold;cursor:pointer; margin-bottom: 10px; font-size:1.1em;}
-  .btn-green{background:#34c759;color:white;width:100%;padding:16px;border:none;border-radius:12px;font-weight:bold;cursor:pointer;margin-top:15px; font-size:1.1em;}
+  .btn-blue{background:linear-gradient(145deg, #1c3d99, #0a84ff);color:white;width:100%;padding:16px;border:none;border-radius:12px;font-weight:bold;cursor:pointer; margin-bottom: 10px; font-size:1.1em; text-transform:uppercase; letter-spacing:1px; box-shadow: 0 4px 15px rgba(10, 132, 255, 0.3);}
+  .btn-green{background:linear-gradient(145deg, #248a3d, #32d74b);color:white;width:100%;padding:16px;border:none;border-radius:12px;font-weight:bold;cursor:pointer;margin-top:15px; font-size:1.1em; text-transform:uppercase; letter-spacing:1px;}
   .btn-white{background:#fff;color:#000;width:100%;padding:16px;border:none;border-radius:12px;font-weight:bold;cursor:pointer;margin-top:15px; font-size:1.1em;}
   
-  /* --- NUEVO: CARRUSEL HORIZONTAL PARA COMIDAS DE HOY --- */
-  .lista-horizontal-scroll { display: flex; overflow-x: auto; gap: 12px; padding: 5px 0 20px 0; scrollbar-width: none; scroll-behavior: smooth; }
+  /* CARRUSEL HORIZONTAL PARA COMIDAS DE HOY */
+  .lista-horizontal-scroll { display: flex; overflow-x: auto; gap: 12px; padding: 5px 0 10px 0; scrollbar-width: none; scroll-behavior: smooth; }
   .lista-horizontal-scroll::-webkit-scrollbar { display: none; }
   .log-card { background: #1c1c1e; border: 1px solid #333; border-radius: 15px; padding: 15px; min-width: 120px; flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.4); transition: transform 0.2s, background 0.2s; }
   .log-card:active { transform: scale(0.95); background: #2c2c2e; }
@@ -81,7 +87,7 @@
   .detalle-item b { float: right; }
 
   @media print {
-    .nav-bar, button, input, select, .lista-horizontal-scroll { display: none !important; }
+    .nav-bar, button, input, select, .panel-card, .lista-horizontal-scroll { display: none !important; }
     .active-page { display: block !important; width: 100%; }
     body { background: white; color: black; }
     .circle-bg { stroke: #eee; }
@@ -100,7 +106,7 @@
     <p style="text-align:center; color:#8e8e93; font-size:0.9em;">Ingresa tu nombre para comenzar:</p>
     <div style="margin-top:30px;">
       <input type="text" id="inputNombre" placeholder="Ej. Carlos" style="text-align:center; font-size:1.2em; font-weight:bold;">
-      <button class="btn-blue" style="background:#0a84ff; margin-top:10px;" onclick="ingresarUsuario()">🚀 Entrar a mi perfil</button>
+      <button class="btn-blue" style="margin-top:10px;" onclick="ingresarUsuario()">🚀 Entrar a mi perfil</button>
     </div>
   </div>
 
@@ -108,29 +114,34 @@
     <h2>Registro Diario</h2>
     <p class="subtitulo" id="fechaHoy"></p>
     
-    <div class="guia-card" id="guiaDinamica" style="display:none;">
-      <div class="guia-titulo" id="guiaTexto">💡 Sugerencia para próxima comida</div>
+    <div class="panel-card" id="guiaDinamica" style="display:none;">
+      <div class="panel-header header-sugerencia" id="guiaTexto">💡 Sugerencia para próxima comida</div>
       <div class="guia-grid-fija" id="guiaValores">
         </div>
     </div>
     
-    <select id="tipoComida"></select>
-    
-    <div class="input-grid">
-      <input type="number" id="kcal" placeholder="🔥 KCal">
-      <input type="number" id="prot" placeholder="💪 Prot">
-      <input type="number" id="carbs" placeholder="🍞 Carb">
-      <input type="number" id="grasas" placeholder="🥑 Gras">
-      <input type="number" id="fibra" placeholder="🌿 Fibr">
-      <input type="number" id="agua" placeholder="💧 Agua (ml)">
+    <div class="panel-card">
+      <div class="panel-header header-ingreso">✍️ Ingresar Datos</div>
+      <select id="tipoComida"></select>
+      
+      <div class="input-grid">
+        <input type="number" id="kcal" placeholder="🔥 KCal">
+        <input type="number" id="prot" placeholder="💪 Prot">
+        <input type="number" id="carbs" placeholder="🍞 Carb">
+        <input type="number" id="grasas" placeholder="🥑 Gras">
+        <input type="number" id="fibra" placeholder="🌿 Fibr">
+        <input type="number" id="agua" placeholder="💧 Agua (ml)">
+      </div>
+      
+      <button class="btn-blue" id="btnRegistrar" onclick="registrarComida()">GUARDAR</button>
     </div>
-    
-    <button class="btn-blue" id="btnRegistrar" onclick="registrarComida()">REGISTRAR</button>
     
     <div class="grid-circles" id="circulosHoy"></div>
     
-    <h3 style="margin-top:20px; margin-bottom:10px; font-size:1.1em; color:#aaa; text-align:left;">Tus registros de hoy:</h3>
-    <div id="listaComidasHoy"></div>
+    <div class="panel-card">
+      <div class="panel-header header-registros">📋 Tus registros de hoy</div>
+      <div id="listaComidasHoy"></div>
+    </div>
     
     <button id="btnFinalizar" class="btn-green" onclick="cerrarDia()">💾 FINALIZAR DÍA Y EVALUAR</button>
   </div>
@@ -177,7 +188,7 @@
     <label style="color:#aaa; font-size:0.9em;">💧 Agua (ml):</label><input type="number" id="mAgua">
     <button class="btn-green" onclick="guardarMetas()">💾 GUARDAR METAS</button>
     
-    <button class="btn-blue" style="background:#333; margin-top:30px; font-size:0.9em;" onclick="cambiarPerfil()">Cerrar Sesión / Cambiar Usuario</button>
+    <button class="btn-blue" style="background:#333; margin-top:30px; font-size:0.9em; box-shadow:none;" onclick="cambiarPerfil()">Cerrar Sesión / Cambiar Usuario</button>
   </div>
 </div>
 
@@ -194,7 +205,7 @@
     <div class="modal-titulo" id="detalleTitulo">Detalle</div>
     <div id="detalleContenido" class="detalle-grid">
       </div>
-    <button class="btn-blue" style="background:#ff453a; margin-bottom:10px;" id="btnBorrarDetalle">🗑️ Eliminar Registro</button>
+    <button class="btn-blue" style="background:#ff453a; margin-bottom:10px; box-shadow:none;" id="btnBorrarDetalle">🗑️ Eliminar Registro</button>
     <button class="btn-white" onclick="cerrarDetalle()">↩️ Volver</button>
   </div>
 </div>
@@ -366,7 +377,6 @@ function borrarComida(id) {
   actualizarDropdown();
 }
 
-// Funciones para el Modal de Detalles
 function abrirDetalle(id) {
     const comida = perfiles[usuarioActual].hoy.find(c => c.id === id);
     if(!comida) return;
@@ -432,7 +442,6 @@ function actualizarGuiaDinamica(hoy, metas, totales) {
     if (restante < 0) restante = 0; 
     let sugerido = Math.round(restante / factor);
 
-    // Se agrega borde de color para hacerlo más vistoso
     html += `
       <div class="guia-item" style="border-bottom: 4px solid ${COLORES[k]};">
         <span class="guia-lab">${ICONOS[k]} ${NOMBRES[k]}</span>
@@ -453,7 +462,6 @@ function actualizarUI() {
   container.innerHTML = '';
   for (let key in metas) container.innerHTML += renderCircle(key, totales[key], metas[key]);
 
-  // Renderizado de Carrusel Horizontal (Sugerencia 1B)
   const lista = document.getElementById('listaComidasHoy');
   if(hoy.length === 0) {
       lista.innerHTML = `<p style="text-align:center; color:#8e8e93; font-size:0.9em;">Aún no has registrado nada hoy.</p>`;
