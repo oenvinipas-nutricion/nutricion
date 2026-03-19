@@ -336,7 +336,9 @@
         </div>
     </div>
     
-    <input type="hidden" id="edit-id"> <button class="btn-blue" id="btnActualizarDetalle">Actualizar Cambios</button>
+    <input type="hidden" id="edit-id">
+    
+    <button class="btn-blue" id="btnActualizarDetalle">Actualizar Cambios</button>
     <button class="btn-red" id="btnBorrarDetalle">🗑️ Eliminar Registro</button>
     <button class="btn-white" onclick="cerrarDetalle()">↩️ Volver</button>
   </div>
@@ -445,7 +447,8 @@ function ingresarUsuario() {
           hoy: [], 
           historial: [] 
       };
-      guardarYActualizar(); 
+      // SOLUCIÓN: Guardamos en memoria primero, sin intentar dibujar la UI aún.
+      localStorage.setItem('nutriDataV6', JSON.stringify(perfiles));
   }
   seleccionarPerfil(nombreFormateado);
 }
@@ -568,15 +571,14 @@ function borrarComida(id) {
   actualizarDropdown();
 }
 
-// NUEVAS FUNCIONES PARA EDITAR
+// FUNCIONES PARA EDITAR COMIDA
 function abrirDetalle(id) {
     const comida = perfiles[usuarioActual].hoy.find(c => c.id === id);
     if(!comida) return;
     
     document.getElementById('detalleTitulo').innerText = comida.tipo;
-    document.getElementById('edit-id').value = id; // Guardamos el ID oculto
+    document.getElementById('edit-id').value = id; 
     
-    // Rellenamos los inputs con los valores actuales
     document.getElementById('edit-kcal').value = comida.kcal || '';
     document.getElementById('edit-prot').value = comida.prot || '';
     document.getElementById('edit-carbs').value = comida.carbs || '';
@@ -584,7 +586,6 @@ function abrirDetalle(id) {
     document.getElementById('edit-fibra').value = comida.fibra || '';
     document.getElementById('edit-agua').value = comida.agua || '';
     
-    // Configuramos los botones de acción
     document.getElementById('btnActualizarDetalle').onclick = function() {
         actualizarComida();
     };
@@ -602,7 +603,6 @@ function actualizarComida() {
     const comida = perfiles[usuarioActual].hoy.find(c => c.id === id);
     
     if(comida) {
-        // Actualizamos los valores
         comida.kcal = +document.getElementById('edit-kcal').value || 0;
         comida.prot = +document.getElementById('edit-prot').value || 0;
         comida.carbs = +document.getElementById('edit-carbs').value || 0;
@@ -654,7 +654,8 @@ function actualizarGuiaDinamica(hoy, metas, totales) {
   const factor = principalesRestantes.length; 
 
   claves.forEach(k => {
-    let restante = metas[k] - totales[k];
+    let metaValor = Number(metas[k]) || 0;
+    let restante = metaValor - totales[k];
     if (restante < 0 || isNaN(restante)) restante = 0; 
     let sugerido = Math.round(restante / factor);
 
@@ -727,4 +728,6 @@ function renderCircle(label, actual, meta) {
       <div class="circle-container">
         <svg class="circle-svg" viewBox="0 0 85 85">
           <circle class="circle-bg" cx="42.5" cy="42.5" r="38"/>
-          <circle class="circle-bar" cx="42.5" cy="42
+          <circle class="circle-bar" cx="42.5" cy="42.5" r="38" style="stroke:${COLORES[label]}; stroke-dasharray: ${dash} 240;"/>
+        </svg>
+        <div class="circle-text" style="color:${COLORES[label]}">${displayPct}
