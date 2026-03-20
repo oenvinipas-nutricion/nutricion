@@ -3,7 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes">
-<title>Control Total Enrique V6</title>
+<title>Control Total Enrique</title>
+
+<link rel="icon" href="https://emojicdn.elk.sh/🥑">
+<link rel="apple-touch-icon" href="https://emojicdn.elk.sh/🥑">
+
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 <style>
   /* CONFIGURACIÓN BASE */
@@ -19,24 +23,25 @@
   .panel-card { background: #161618; border: 1px solid #2c2c2e; border-radius: 20px; padding: 20px 15px; margin-bottom: 25px; }
   .panel-header { font-size: 0.85em; font-weight: 800; text-align: center; margin-bottom: 18px; text-transform: uppercase; color: #aaa; }
 
-  /* --- SUGERENCIAS (RESTAURADAS) --- */
+  /* --- SUGERENCIAS --- */
   .guia-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
   .guia-item { background: #1c1c1e; border: 1px solid #333; border-radius: 15px; padding: 12px 5px; text-align: center; }
   .guia-lab { font-size: 0.55em; color: #8e8e93; font-weight: 800; text-transform: uppercase; display: block; margin-bottom: 4px; }
   .guia-val { font-size: 1em; font-weight: 900; }
 
-  /* --- DISEÑO COMPACTO Y BAJO (ESTILO FOTO 3) --- */
+  /* --- CUADROS BAJOS Y COMPACTOS (44px) --- */
   .grid-registro { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
-  .cuadro-compacto { background: #1c1c1e; border: 1px solid #333; border-radius: 12px; padding: 5px 10px; display: flex; align-items: center; justify-content: space-between; height: 42px; }
-  .label-compacto { font-size: 0.55em; color: #bbb; font-weight: 800; display: flex; align-items: center; gap: 4px; width: 65px; text-transform: uppercase; }
-  .input-compacto { background: transparent; border: none; color: #fff; font-size: 1.1em; font-weight: bold; text-align: center; width: 55px; outline: none; }
-  .unit-compacto { font-size: 0.55em; color: #8e8e93; font-weight: bold; width: 25px; text-align: right; }
+  .cuadro-compacto { background: #1c1c1e; border: 1px solid #333; border-radius: 12px; padding: 5px 8px; display: flex; align-items: center; justify-content: space-between; height: 44px; }
+  .label-compacto { font-size: 0.52em; color: #bbb; font-weight: 800; display: flex; align-items: center; gap: 4px; width: 85px; text-transform: uppercase; }
+  .label-compacto span { font-size: 1.2em; }
+  .input-compacto { background: transparent; border: none; color: #fff; font-size: 1.1em; font-weight: bold; text-align: center; width: 50px; outline: none; }
+  .unit-compacto { font-size: 0.52em; color: #8e8e93; font-weight: bold; width: 25px; text-align: right; }
 
-  /* --- SELECTORES --- */
+  /* SELECTORES */
   .selector-fijo { background:#1c1c1e; border:1px solid #333; color:#fff; padding:15px; border-radius:12px; width:100%; margin-bottom:12px; text-align-last:center; font-weight:bold; font-size: 1em; cursor:pointer; }
   .selector-modificar { background:#ff9f0a; color:white; border:none; -webkit-appearance: none; appearance: none; }
 
-  /* --- CÍRCULOS (GRILLA 3x2) --- */
+  /* CÍRCULOS (3x2) */
   .grid-circles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px 5px; text-align: center; width: 100%; }
   .circle-container { position:relative; width:68px; height:68px; margin:auto; } 
   .circle-svg { transform:rotate(-90deg); width:100%; height:100%; }
@@ -44,21 +49,21 @@
   .circle-bar { fill:none; stroke-width:6; stroke-linecap:round; transition:stroke-dasharray 0.5s ease; }
   .circle-text { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); font-size:0.85em; font-weight:bold; }
 
-  /* --- MODALES CENTRALES (ADVERTENCIAS FLOTANTES) --- */
+  /* MODALES CENTRALES */
   .modal-overlay { display:none; position:fixed; z-index:9999; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.92); backdrop-filter:blur(8px); align-items: center; justify-content: center; }
   .modal-content { background:#161618; padding:20px; border:1px solid #333; width:90%; max-width:360px; border-radius:25px; color:white; position: relative; }
 
-  /* --- BOTONES --- */
+  /* BOTONES */
   .btn-blue { background: #1c3d99; color: white; width: 100%; padding: 16px; border: none; border-radius: 12px; font-weight: 800; cursor: pointer; text-transform: uppercase; }
   .btn-green { background: #248a3d; color: white; width: 100%; padding: 16px; border: none; border-radius: 12px; font-weight: bold; text-transform: uppercase; cursor:pointer; }
   .btn-trash { position:absolute; top:15px; right:20px; font-size: 1.6em; cursor:pointer; }
 
-  /* --- NAV BAR --- */
+  /* NAV BAR */
   .nav-bar { position:fixed; bottom:0; left:0; right:0; background:rgba(15,15,15,0.98); display:flex; padding:12px 5px 30px; border-top:0.5px solid #333; z-index: 1000; }
   .nav-btn { background:none; border:none; color:#8e8e93; display:flex; flex-direction:column; align-items:center; font-size:0.7em; flex:1; cursor:pointer; }
   .nav-btn.active { color:#0a84ff; font-weight:bold; }
 
-  /* --- HISTORIAL --- */
+  /* HISTORIAL */
   table { width: 100%; border-collapse: collapse; table-layout: fixed; }
   th { background: #1c1c1e; padding: 6px 1px; font-size: 0.45em; text-align: center; }
   td { padding: 10px 1px; border-bottom: 1px solid #222; text-align: center; font-size: 0.7em; font-weight: bold; }
@@ -88,12 +93,12 @@
       <div class="panel-header">✍️ REGISTRO DIARIO</div>
       <select id="tipoComida" class="selector-fijo" onchange="verificarSoloAgua()"></select>
       <div class="grid-registro">
-        <div class="cuadro-compacto"><div class="label-compacto">🔥 KCAL</div><input type="number" id="kcal" class="input-compacto"><div class="unit-compacto">kcal</div></div>
-        <div class="cuadro-compacto"><div class="label-compacto">💪 PROT</div><input type="number" id="prot" class="input-compacto"><div class="unit-compacto">gr</div></div>
-        <div class="cuadro-compacto"><div class="label-compacto">🍞 CARB</div><input type="number" id="carbs" class="input-compacto"><div class="unit-compacto">gr</div></div>
-        <div class="cuadro-compacto"><div class="label-compacto">🥑 GRAS</div><input type="number" id="grasas" class="input-compacto"><div class="unit-compacto">gr</div></div>
-        <div class="cuadro-compacto"><div class="label-compacto">🌿 FIBR</div><input type="number" id="fibra" class="input-compacto"><div class="unit-compacto">gr</div></div>
-        <div class="cuadro-compacto"><div class="label-compacto">💧 AGUA</div><input type="number" id="agua" class="input-compacto"><div class="unit-compacto">ml</div></div>
+        <div class="cuadro-compacto"><div class="label-compacto"><span>🔥</span> KCAL</div><input type="number" id="kcal" class="input-compacto"><div class="unit-compacto">kcal</div></div>
+        <div class="cuadro-compacto"><div class="label-compacto"><span>💪</span> PROT</div><input type="number" id="prot" class="input-compacto"><div class="unit-compacto">gr</div></div>
+        <div class="cuadro-compacto"><div class="label-compacto"><span>🍞</span> CARB</div><input type="number" id="carbs" class="input-compacto"><div class="unit-compacto">gr</div></div>
+        <div class="cuadro-compacto"><div class="label-compacto"><span>🥑</span> GRAS</div><input type="number" id="grasas" class="input-compacto"><div class="unit-compacto">gr</div></div>
+        <div class="cuadro-compacto"><div class="label-compacto"><span>🌿</span> FIBR</div><input type="number" id="fibra" class="input-compacto"><div class="unit-compacto">gr</div></div>
+        <div class="cuadro-compacto"><div class="label-compacto"><span>💧</span> AGUA</div><input type="number" id="agua" class="input-compacto"><div class="unit-compacto">ml</div></div>
       </div>
       <button class="btn-blue" onclick="registrarComida()">REGISTRAR</button>
     </div>
@@ -119,11 +124,10 @@
 <div id="modalDetalle" class="modal-overlay">
   <div class="modal-content">
     <div class="btn-trash" onclick="pedirConfirmarBorrar()">🗑️</div>
-    <h3 id="detalleTitulo" style="margin-bottom:15px;">MODIFICAR</h3>
+    <h3 id="detalleTitulo">MODIFICAR</h3>
     <div id="detalleContenido"></div>
     <button class="btn-green" style="margin-top:20px;" onclick="actualizarRegistro()">✅ ACTUALIZAR</button>
     <button class="btn-blue" style="background:#444; margin-top:10px;" onclick="cerrarDetalle()">↩️ VOLVER</button>
-    
     <div id="confirmArea" style="display:none; text-align:center; margin-top:20px; border-top:1px solid #333; padding-top:15px;">
       <h3 style="color:#ff453a;">¿ELIMINAR ESTO?</h3>
       <button class="btn-blue" style="background:#ff453a;" onclick="confirmarBorrar()">SÍ, ELIMINAR</button>
@@ -134,9 +138,8 @@
 
 <div id="modalCierreDia" class="modal-overlay">
   <div class="modal-content" style="text-align:center;">
-    <h1 style="font-size:3.5em; margin:0;">⚠️</h1>
-    <h3 style="color:#ff453a;">¿FINALIZAR DÍA?</h3>
-    <p style="color:#aaa; font-size:0.8em; margin-bottom:20px;">Los datos irán al historial.</p>
+    <h1 style="font-size:3em; margin:0;">⚠️</h1>
+    <h3>¿FINALIZAR DÍA?</h3>
     <button class="btn-green" onclick="cerrarDia()">SÍ, FINALIZAR</button>
     <button class="btn-blue" style="background:#444; margin-top:10px;" onclick="document.getElementById('modalCierreDia').style.display='none'">CANCELAR</button>
   </div>
@@ -225,7 +228,7 @@ function abrirDetalle(id){
   document.getElementById('detalleTitulo').innerText = "MODIFICAR " + c.tipo;
   document.getElementById('detalleContenido').innerHTML = Object.keys(COLORES).map(k=> `
     <div class="cuadro-compacto" style="width:100%; margin-bottom:8px;">
-      <div class="label-compacto">${ICONOS[k]} ${k.toUpperCase()}</div>
+      <div class="label-compacto"><span>${ICONOS[k]}</span> ${k.toUpperCase()}</div>
       <input type="number" id="edit-${k}" value="${c[k]}" class="input-compacto">
       <div class="unit-compacto">${k==='agua'?'ml':'gr'}</div>
     </div>`).join('');
@@ -260,7 +263,7 @@ function renderHistorial(){
 
 function renderConfig(){
   let p = perfiles[usuarioActual];
-  document.getElementById('configContenido').innerHTML = Object.keys(p.METAS).map(k=> `<div class="cuadro-compacto" style="width:100%; margin-bottom:10px;"><div class="label-compacto">${ICONOS[k]} ${k.toUpperCase()}</div><input type="number" id="m-${k}" value="${p.METAS[k]}" class="input-compacto"><div class="unit-compacto">${k==='agua'?'ml':'gr'}</div></div>`).join('') + `<button class="btn-green" onclick="guardarMetas()">💾 GUARDAR METAS</button>`;
+  document.getElementById('configContenido').innerHTML = Object.keys(p.METAS).map(k=> `<div class="cuadro-compacto" style="width:100%; margin-bottom:10px;"><div class="label-compacto"><span>${ICONOS[k]}</span> ${k.toUpperCase()}</div><input type="number" id="m-${k}" value="${p.METAS[k]}" class="input-compacto"><div class="unit-compacto">${k==='agua'?'ml':'gr'}</div></div>`).join('') + `<button class="btn-green" onclick="guardarMetas()">💾 GUARDAR METAS</button>`;
 }
 
 function registrarComida(){
@@ -281,6 +284,7 @@ function actualizarFechas(){ const f = new Date(), meses = ['ENERO','FEBRERO','M
 function verificarSoloAgua(){ let es = document.getElementById('tipoComida').value === "💧 Solo Agua"; ['kcal','prot','carbs','grasas','fibra'].forEach(id => { document.getElementById(id).disabled = es; if(es) document.getElementById(id).value=''; }); }
 function cerrarDetalle(){ document.getElementById('modalDetalle').style.display='none'; }
 function guardarMetas(){ Object.keys(perfiles[usuarioActual].METAS).forEach(k => { perfiles[usuarioActual].METAS[k] = +document.getElementById('m-' + k).value || 0; }); guardarYActualizar(); alert("Metas guardadas"); }
+function ingresarUsuario(){ let n = document.getElementById('inputNombre').value.trim().toUpperCase(); if(!n) return; if(!perfiles[n]) perfiles[n] = { METAS:{kcal:1800,prot:110,carbs:200,grasas:60,fibra:45,agua:2500}, hoy:[], historial:[] }; seleccionarPerfil(n); }
 function cambiarPerfil(){ localStorage.removeItem('nutriUsuarioActivo'); location.reload(); }
 </script>
 </body>
