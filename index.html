@@ -11,31 +11,31 @@
   .container { max-width:420px; margin:auto; }
   .page { display: none !important; } 
   .active-page { display: block !important; } 
+  
   h2, h3 { text-align:center; color:#fff; text-transform: uppercase; letter-spacing: 1px; }
   .subtitulo { text-align:center; color:#0a84ff; font-size:0.9em; margin-bottom:20px; font-weight:bold; text-transform: uppercase; }
 
-  /* PANEL Y CABECERAS */
-  .panel-card { background: #161618; border: 1px solid #2c2c2e; border-radius: 20px; padding: 20px 15px; margin-bottom: 25px; position: relative; }
+  .panel-card { background: #161618; border: 1px solid #2c2c2e; border-radius: 20px; padding: 20px 15px; margin-bottom: 25px; }
   .panel-header { font-size: 0.85em; font-weight: 800; text-align: center; margin-bottom: 18px; text-transform: uppercase; color: #aaa; }
 
   /* --- SUGERENCIAS --- */
   .guia-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
   .guia-item { background: #1c1c1e; border: 1px solid #333; border-radius: 15px; padding: 15px 5px; text-align: center; }
-  .guia-lab { font-size: 0.55em; color: #8e8e93; display: block; font-weight: 800; text-transform: uppercase; margin-bottom: 4px; }
+  .guia-lab { font-size: 0.55em; color: #8e8e93; font-weight: 800; text-transform: uppercase; display: block; margin-bottom: 4px; }
   .guia-val { font-size: 1.1em; font-weight: 900; }
 
-  /* --- DISEÑO COMPACTO (FOTO 3 / image_2.png) --- */
+  /* --- DISEÑO COMPACTO (FOTO 3) --- */
   .grid-registro { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
-  .cuadro-compacto { background: #1c1c1e; border: 1px solid #333; border-radius: 12px; padding: 8px 5px; display: flex; align-items: center; justify-content: space-between; height: 48px; }
-  .label-compacto { font-size: 0.55em; color: #bbb; font-weight: 800; display: flex; align-items: center; gap: 4px; width: 60px; text-transform: uppercase; }
-  .input-compacto { background: transparent; border: none; color: #fff; font-size: 1.15em; font-weight: bold; text-align: center; width: 60px; outline: none; }
-  .unit-compacto { font-size: 0.55em; color: #8e8e93; font-weight: bold; width: 30px; text-align: left; }
+  .cuadro-compacto { background: #1c1c1e; border: 1px solid #333; border-radius: 12px; padding: 8px 10px; display: flex; align-items: center; justify-content: space-between; height: 48px; }
+  .label-compacto { font-size: 0.55em; color: #bbb; font-weight: 800; display: flex; align-items: center; gap: 5px; width: 70px; }
+  .input-compacto { background: transparent; border: none; color: #fff; font-size: 1.15em; font-weight: bold; text-align: center; width: 55px; outline: none; }
+  .unit-compacto { font-size: 0.55em; color: #8e8e93; font-weight: bold; width: 30px; text-align: right; }
 
-  /* --- SELECTORES FIJOS (DROPDOWN) --- */
-  .selector-fijo { background:#1c1c1e; border:1px solid #333; color:#fff; padding:15px; border-radius:12px; width:100%; margin-bottom:10px; text-align-last:center; font-weight:bold; font-size: 1em; cursor:pointer; -webkit-appearance: none; appearance: none; }
+  /* --- SELECTORES --- */
+  .selector-fijo { background:#1c1c1e; border:1px solid #333; color:#fff; padding:15px; border-radius:12px; width:100%; margin-bottom:12px; text-align-last:center; font-weight:bold; font-size: 1em; cursor:pointer; }
   .selector-modificar { background:#ff9f0a; color:white; border:none; -webkit-appearance: none; appearance: none; }
 
-  /* --- CÍRCULOS DE PROGRESO REPARADOS (3x2, 70px) --- */
+  /* --- CÍRCULOS (3x2, 70px) --- */
   .grid-circles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px 5px; text-align: center; width: 100%; }
   .circle-container { position:relative; width:70px; height:70px; margin:auto; } 
   .circle-svg { transform:rotate(-90deg); width:100%; height:100%; }
@@ -45,20 +45,20 @@
 
   /* --- VENTANAS FLOTANTES (MODALES CENTRALES) --- */
   .modal-overlay { display:none; position:fixed; z-index:9999; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.9); backdrop-filter:blur(8px); align-items: center; justify-content: center; }
-  .modal-content { background:#161618; padding:25px; border:1px solid #333; width:90%; max-width:380px; border-radius:25px; color:white; position: relative; max-height: 90vh; overflow-y: auto; }
+  .modal-content { background:#161618; padding:25px; border:1px solid #333; width:90%; max-width:380px; border-radius:25px; color:white; position: relative; }
 
-  /* HISTORIAL SEMÁFORO */
+  /* --- TABLA HISTORIAL --- */
   table { width: 100%; border-collapse: collapse; table-layout: fixed; }
   th { background: #1c1c1e; padding: 8px 1px; font-size: 0.45em; text-align: center; vertical-align: top; }
   th .h-icon { display: block; font-size: 1.8em; margin: 4px 0; }
   th .m-val { display: block; color: #0a84ff; font-size: 1.2em; font-weight: 900; }
-  td { padding: 12px 1px; border-bottom: 1px solid #222; text-align: center; font-weight: 800; font-size: 0.7em; }
+  td { padding: 12px 1px; border-bottom: 1px solid #222; text-align: center; font-weight: 800; font-size: 0.75em; }
 
-  /* BOTONES */
+  /* --- BOTONES --- */
   .btn-blue { background: #1c3d99; color: white; width: 100%; padding: 18px; border: none; border-radius: 12px; font-weight: 800; cursor: pointer; text-transform: uppercase; }
   .btn-green { background: #248a3d; color: white; width: 100%; padding: 18px; border: none; border-radius: 12px; font-weight: bold; text-transform: uppercase; cursor:pointer; }
   
-  .nav-bar { position:fixed; bottom:0; left:0; right:0; background:rgba(15,15,15,0.98); display:flex; padding:12px 5px 30px; border-top:0.5px solid #333; z-index: 1000; }
+  .nav-bar { position:fixed; bottom:0; left:0; right:0; background:rgba(15,15,15,0.98); display:none; padding:12px 5px 30px; border-top:0.5px solid #333; z-index: 1000; }
   .nav-btn { background:none; border:none; color:#8e8e93; display:flex; flex-direction:column; align-items:center; font-size:0.7em; flex:1; cursor:pointer; }
   .nav-btn.active { color:#0a84ff; font-weight:bold; }
 </style>
@@ -117,13 +117,13 @@
 
 <div id="modalDetalle" class="modal-overlay" style="display:none;">
   <div class="modal-content">
-    <div id="btnTrashIcon" style="position:absolute; top:15px; right:20px; font-size:1.6em; cursor:pointer;">🗑️</div>
-    <h3 id="detalleTitulo" style="margin-top:10px;">MODIFICAR</h3>
+    <div id="btnTrashIcon" style="position:absolute; top:15px; right:20px; font-size:1.8em; cursor:pointer; color:#ff453a;">🗑️</div>
+    <h3 id="detalleTitulo" style="margin-top:5px;">EDITAR</h3>
     <div id="detalleContenido"></div>
-    <button class="btn-green" style="margin-top:25px;" id="btnUpdate">✅ ACTUALIZAR</button>
-    <button class="btn-blue" style="background:#444; margin-top:12px;" onclick="cerrarDetalle()">↩️ VOLVER</button>
+    <button class="btn-green" style="margin-top:20px;" id="btnUpdate">✅ ACTUALIZAR</button>
+    <button class="btn-blue" style="background:#444; margin-top:10px;" onclick="cerrarDetalle()">↩️ VOLVER</button>
     
-    <div id="confirmArea" style="display:none; text-align:center; margin-top:25px; border-top:1px solid #333; padding-top:20px;">
+    <div id="confirmArea" style="display:none; text-align:center; margin-top:20px; border-top:1px solid #333; padding-top:15px;">
       <h3 style="color:#ff453a;">¿ESTÁS SEGURO?</h3>
       <button class="btn-blue" style="background:#ff453a;" id="confirmAction">SÍ, CONTINUAR</button>
     </div>
@@ -133,10 +133,10 @@
 <div id="modalCierreDia" class="modal-overlay" style="display:none;">
   <div class="modal-content" style="text-align:center;">
     <h1 style="font-size:3em; margin:0;">⚠️</h1>
-    <h3 style="color:#ff453a; margin-top:10px;">¿ESTÁS SEGURO DE FINALIZAR EL DÍA?</h3>
-    <p style="color:#aaa; font-size:0.8em; margin-bottom:25px;">Esta acción guardará los datos en el historial y limpiará el registro de hoy.</p>
+    <h3 style="color:#ff453a;">¿FINALIZAR EL DÍA?</h3>
+    <p style="color:#aaa; font-size:0.8em; margin-bottom:20px;">Se guardará en el historial y se limpiará hoy.</p>
     <button class="btn-green" onclick="cerrarDia()">SÍ, FINALIZAR</button>
-    <button class="btn-blue" style="background:#444; margin-top:12px;" onclick="document.getElementById('modalCierreDia').style.display='none'">CANCELAR</button>
+    <button class="btn-blue" style="background:#444; margin-top:10px;" onclick="document.getElementById('modalCierreDia').style.display='none'">CANCELAR</button>
   </div>
 </div>
 
@@ -160,12 +160,6 @@ function cargarTodo(){
   if(u && perfiles[u]) seleccionarPerfil(u); else verPagina('perfil');
 }
 
-function ingresarUsuario(){
-  let n = document.getElementById('inputNombre').value.trim().toUpperCase(); if(!n) return;
-  if(!perfiles[n]) perfiles[n] = { METAS:{kcal:1800,prot:110,carbs:200,grasas:60,fibra:45,agua:2500}, hoy:[], historial:[] };
-  seleccionarPerfil(n);
-}
-
 function seleccionarPerfil(n){
   usuarioActual = n; localStorage.setItem('nutriUsuarioActivo', n);
   document.getElementById('saludoHoy').innerText = "¡HOLA, " + n + "!";
@@ -185,16 +179,13 @@ function verPagina(id, btn){
 
 function renderCircle(k, a, m){
   let p = (m>0)? Math.min((a/m)*100,100) : 0, d = p*2.15;
-  return `<div><div class="circle-container"><svg class="circle-svg" viewBox="0 0 80 80"><circle class="circle-bg" cx="40" cy="40" r="35"/><circle class="circle-bar" cx="40" cy="40" r="35" style="stroke:${COLORES[k]};stroke-dasharray:${d} 220"/></svg><div class="circle-text" style="color:${COLORES[k]}">${Math.round(p)}%</div></div><div style="font-size:0.5em;font-weight:bold;margin-top:5px;color:#aaa">${ICONOS[k]} ${k.toUpperCase()}</div></div>`;
+  return `<div><div class="circle-container"><svg class="circle-svg" viewBox="0 0 80 80"><circle class="circle-bg" cx="40" cy="40" r="35"/><circle class="circle-bar" cx="40" cy="40" r="35" style="stroke:${COLORES[k]};stroke-dasharray:${d} 220"/></svg><div class="circle-text" style="color:${COLORES[k]}">${Math.round(p)}%</div></div><div style="font-size:0.5em;font-weight:bold;margin-top:5px;color:#aaa">${ICONOS[k]} ${k}</div></div>`;
 }
 
 function actualizarUI(){
   let p = perfiles[usuarioActual], t = p.hoy.reduce((a,c)=>({kcal:a.kcal+c.kcal,prot:a.prot+c.prot,carbs:a.carbs+c.carbs,grasas:a.grasas+c.grasas,fibra:a.fibra+c.fibra,agua:a.agua+c.agua}),{kcal:0,prot:0,carbs:0,grasas:0,fibra:0,agua:0});
-  
-  // Círculos Hoy Reparados (Grilla 3)
   document.getElementById('circulosHoy').innerHTML = Object.keys(p.METAS).map(k=> renderCircle(k, t[k], p.METAS[k])).join('');
   
-  // Sugerencias Restauradas
   let pen = ["🍳 Desayuno", "Almuerzo", "🍽️ Cena"].filter(c=> !p.hoy.map(x=>x.tipo).includes(c));
   if(!pen.length) document.getElementById('guiaDinamica').style.display='none';
   else {
@@ -210,43 +201,30 @@ function actualizarUI(){
 
 function actualizarDropdowns(){
   let p = perfiles[usuarioActual], h = p.hoy.map(c=>c.tipo);
-  let sReg = document.getElementById('tipoComida');
-  sReg.innerHTML = ["🍳 Desayuno", "🍎 Colación AM", "Almuerzo", "🥪 Colación PM", "🍽️ Cena", "💧 Solo Agua"].filter(c=> !h.includes(c) || c==="💧 Solo Agua").map(c=>`<option value="${c}">${c}</option>`).join('');
-  
-  let sMod = document.getElementById('selectorModificar');
-  sMod.innerHTML = `<option value="" disabled selected>SELECCIONAR PARA MODIFICAR</option>` + ["🍳 Desayuno", "🍎 Colación AM", "Almuerzo", "🥪 Colación PM", "🍽️ Cena", "💧 Solo Agua"].filter(c=> h.includes(c)).map(c=>`<option value="${c}">${c}</option>`).join('');
+  document.getElementById('tipoComida').innerHTML = ["🍳 Desayuno", "🍎 Colación AM", "Almuerzo", "🥪 Colación PM", "🍽️ Cena", "💧 Solo Agua"].filter(c=> !h.includes(c) || c==="💧 Solo Agua").map(c=>`<option value="${c}">${c}</option>`).join('');
+  document.getElementById('selectorModificar').innerHTML = `<option value="" disabled selected>SELECCIONAR PARA MODIFICAR</option>` + ["🍳 Desayuno", "🍎 Colación AM", "Almuerzo", "🥪 Colación PM", "🍽️ Cena", "💧 Solo Agua"].filter(c=> h.includes(c)).map(c=>`<option value="${c}">${c}</option>`).join('');
 }
 
 function abrirModificarDesdeSelector(){
   let val = document.getElementById('selectorModificar').value;
-  if(!val) return;
   let registro = perfiles[usuarioActual].hoy.find(r => r.tipo === val);
   if(registro) abrirDetalle(registro.id);
-  document.getElementById('selectorModificar').value = ""; // Limpiar selector
+  document.getElementById('selectorModificar').value = "";
 }
 
 function abrirDetalle(id){
   let c = perfiles[usuarioActual].hoy.find(x=>x.id===id);
   document.getElementById('detalleTitulo').innerText = "MODIFICAR " + c.tipo;
-  
-  // Diseño Compacto (Foto 3) aplicado al Modal
   document.getElementById('detalleContenido').innerHTML = Object.keys(COLORES).map(k=> `
     <div class="cuadro-compacto" style="width:100%; margin-bottom:8px;">
       <div class="label-compacto">${ICONOS[k]} ${k.toUpperCase()}</div>
       <input type="number" id="edit-${k}" value="${c[k]}" class="input-compacto">
       <div class="unit-compacto">${k==='agua'?'ml':'gr'}</div>
     </div>`).join('');
-    
   document.getElementById('confirmArea').style.display = 'none';
-  document.getElementById('btnUpdate').onclick = () => { 
-    Object.keys(COLORES).forEach(k=> c[k] = +document.getElementById('edit-'+k).value || 0); 
-    cerrarDetalle(); guardarYActualizar(); 
-  };
-  document.getElementById('btnTrashIcon').onclick = () => { 
-    document.getElementById('confirmArea').style.display = 'block'; 
-    callbackConfirm = () => { perfiles[usuarioActual].hoy = perfiles[usuarioActual].hoy.filter(x=>x.id!==id); cerrarDetalle(); guardarYActualizar(); };
-  };
-  document.getElementById('modalDetalle').style.display='flex'; // Ventana Flotante Central
+  document.getElementById('btnUpdate').onclick = () => { Object.keys(COLORES).forEach(k=> c[k] = +document.getElementById('edit-'+k).value || 0); cerrarDetalle(); guardarYActualizar(); };
+  document.getElementById('btnTrashIcon').onclick = () => { document.getElementById('confirmArea').style.display = 'block'; callbackConfirm = () => { perfiles[usuarioActual].hoy = perfiles[usuarioActual].hoy.filter(x=>x.id!==id); cerrarDetalle(); guardarYActualizar(); }; };
+  document.getElementById('modalDetalle').style.display='flex';
 }
 
 function renderReporte(tipo){
@@ -283,6 +261,7 @@ function guardarYActualizar(){ localStorage.setItem('nutriDataV6', JSON.stringif
 function actualizarFechas(){ const f = new Date(), meses = ['ENERO','FEBRERO','MARZO','ABRIL','MAYO','JUNIO','JULIO','AGOSTO','SEPTIEMBRE','OCTUBRE','NOVIEMBRE','DICIEMBRE']; document.getElementById('fechaHoy').innerText = f.getDate() + " DE " + meses[f.getMonth()]; let hoy = new Date(), lun = new Date(hoy.setDate(hoy.getDate()-hoy.getDay()+(hoy.getDay()===0?-6:1))), dom = new Date(lun); dom.setDate(lun.getDate()+6); document.getElementById('rangoSemanaTexto').innerText = `LUN ${lun.getDate()}/${lun.getMonth()+1} - DOM ${dom.getDate()}/${dom.getMonth()+1}`; document.getElementById('rangoMesTexto').innerText = meses[new Date().getMonth()]; }
 function verificarSoloAgua(){ let es = document.getElementById('tipoComida').value === "💧 Solo Agua"; ['kcal','prot','carbs','grasas','fibra'].forEach(id => { document.getElementById(id).disabled = es; if(es) document.getElementById(id).value=''; }); }
 function cerrarDetalle(){ document.getElementById('modalDetalle').style.display='none'; }
+function ingresarUsuario(){ let n = document.getElementById('inputNombre').value.trim().toUpperCase(); if(!n) return; if(!perfiles[n]) perfiles[n] = { METAS:{kcal:1800,prot:110,carbs:200,grasas:60,fibra:45,agua:2500}, hoy:[], historial:[] }; seleccionarPerfil(n); }
 function guardarMetas(){ Object.keys(perfiles[usuarioActual].METAS).forEach(k => { perfiles[usuarioActual].METAS[k] = +document.getElementById('m-' + k).value || 0; }); guardarYActualizar(); alert("Metas guardadas"); }
 document.getElementById('confirmAction').onclick = () => { if(callbackConfirm) callbackConfirm(); };
 function cambiarPerfil(){ localStorage.removeItem('nutriUsuarioActivo'); location.reload(); }
