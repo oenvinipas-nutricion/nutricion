@@ -9,43 +9,58 @@
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   body { font-family:-apple-system,BlinkMacSystemFont,sans-serif; padding:10px; background:#000; color:#eee; margin:0; padding-bottom:120px; }
   .container { max-width:420px; margin:auto; }
+  
   .page { display: none !important; } 
   .active-page { display: block !important; } 
+
   h2, h3 { text-align:center; color:#fff; text-transform: uppercase; letter-spacing: 1px; }
   .subtitulo { text-align:center; color:#0a84ff; font-size:0.9em; margin-bottom:20px; font-weight:bold; text-transform: uppercase; }
 
-  /* PANEL Y CABECERAS */
   .panel-card { background: #161618; border: 1px solid #2c2c2e; border-radius: 20px; padding: 20px 15px; margin-bottom: 25px; }
   .panel-header { font-size: 0.85em; font-weight: 800; text-align: center; margin-bottom: 18px; text-transform: uppercase; color: #aaa; }
 
-  /* DISEÑO COMPACTO (FOTO 3) */
+  /* --- SUGERENCIAS --- */
+  .guia-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .guia-item { background: #1c1c1e; border: 1px solid #333; border-radius: 15px; padding: 15px 5px; text-align: center; }
+  .guia-lab { font-size: 0.55em; color: #8e8e93; display: block; font-weight: 800; text-transform: uppercase; margin-bottom: 4px; }
+  .guia-val { font-size: 1.1em; font-weight: 900; }
+
+  /* --- DISEÑO COMPACTO (FOTO 3) --- */
   .grid-registro { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
   .cuadro-compacto { background: #1c1c1e; border: 1px solid #333; border-radius: 12px; padding: 8px 5px; display: flex; align-items: center; justify-content: space-between; height: 48px; }
   .label-compacto { font-size: 0.55em; color: #bbb; font-weight: 800; display: flex; align-items: center; gap: 4px; width: 60px; }
   .input-compacto { background: transparent; border: none; color: #fff; font-size: 1.15em; font-weight: bold; text-align: center; width: 60px; outline: none; }
   .unit-compacto { font-size: 0.55em; color: #8e8e93; font-weight: bold; width: 30px; text-align: left; }
 
-  /* SELECTORES FIJOS */
-  .selector-fijo { background:#1c1c1e; border:1px solid #333; color:#fff; padding:15px; border-radius:12px; width:100%; margin-bottom:10px; text-align-last:center; font-weight:bold; font-size: 1em; }
+  /* --- SELECTORES FIJOS (ESTILO DROPDOWN) --- */
+  .selector-fijo { background:#1c1c1e; border:1px solid #333; color:#fff; padding:15px; border-radius:12px; width:100%; margin-bottom:10px; text-align-last:center; font-weight:bold; font-size: 1em; cursor:pointer; }
+  .selector-modificar { background:#ff9f0a; color:white; border:none; padding:18px; border-radius:15px; font-weight:800; cursor:pointer; text-transform:uppercase; letter-spacing:1px; width:100%; text-align-last:center; font-size:1em; -webkit-appearance: none; appearance: none; }
 
-  /* BOTONES */
-  .btn-blue { background: #1c3d99; color: white; width: 100%; padding: 18px; border: none; border-radius: 12px; font-weight: 800; cursor: pointer; text-transform: uppercase; }
-  .btn-orange { background: #ff9f0a; color: white; width: 100%; padding: 18px; border: none; border-radius: 12px; font-weight: 800; cursor: pointer; text-transform: uppercase; }
-  .btn-green { background: #248a3d; color: white; width: 100%; padding: 18px; border: none; border-radius: 12px; font-weight: bold; text-transform: uppercase; }
+  /* --- CÍRCULOS DE PROGRESO (3x2) --- */
+  .grid-circles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px 5px; text-align: center; }
+  .circle-container { position:relative; width:70px; height:70px; margin:auto; } 
+  .circle-svg { transform:rotate(-90deg); width:100%; height:100%; }
+  .circle-bg { fill:none; stroke:#1c1c1e; stroke-width:6; } 
+  .circle-bar { fill:none; stroke-width:6; stroke-linecap:round; transition:stroke-dasharray 0.5s ease; }
+  .circle-text { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); font-size:0.9em; font-weight:bold; }
 
-  /* VENTANAS FLOTANTES (MODALES) */
+  /* --- VENTANAS FLOTANTES (MODALES) --- */
   .modal-overlay { display:none; position:fixed; z-index:9999; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.9); backdrop-filter:blur(8px); align-items: center; justify-content: center; }
-  .modal-content { background:#161618; padding:25px; border:1px solid #333; width:90%; max-width:380px; border-radius:25px; color:white; position: relative; }
+  .modal-content { background:#161618; padding:25px; border:1px solid #333; width:90%; max-width:380px; border-radius:25px; color:white; position: relative; max-height: 90vh; overflow-y: auto; }
 
-  /* HISTORIAL SEMÁFORO */
+  /* --- HISTORIAL SEMÁFORO --- */
   table { width: 100%; border-collapse: collapse; table-layout: fixed; }
   th { background: #1c1c1e; padding: 8px 1px; font-size: 0.45em; text-align: center; vertical-align: top; }
   th .h-icon { display: block; font-size: 1.8em; margin: 4px 0; }
   th .m-val { display: block; color: #0a84ff; font-size: 1.2em; font-weight: 900; }
   td { padding: 12px 1px; border-bottom: 1px solid #222; text-align: center; font-weight: 800; font-size: 0.7em; }
 
-  .nav-bar { position:fixed; bottom:0; left:0; right:0; background:rgba(15,15,15,0.98); display:flex; padding:12px 5px 30px; border-top:0.5px solid #333; z-index: 1000; }
-  .nav-btn { background:none; border:none; color:#8e8e93; display:flex; flex-direction:column; align-items:center; font-size:0.7em; flex:1; }
+  /* --- BOTONES --- */
+  .btn-blue { background: #1c3d99; color: white; width: 100%; padding: 18px; border: none; border-radius: 12px; font-weight: 800; cursor: pointer; text-transform: uppercase; }
+  .btn-green { background: #248a3d; color: white; width: 100%; padding: 18px; border: none; border-radius: 12px; font-weight: bold; text-transform: uppercase; cursor:pointer; }
+  
+  .nav-bar { position:fixed; bottom:0; left:0; right:0; background:rgba(15,15,15,0.98); display:none; padding:12px 5px 30px; border-top:0.5px solid #333; z-index: 1000; }
+  .nav-btn { background:none; border:none; color:#8e8e93; display:flex; flex-direction:column; align-items:center; font-size:0.7em; flex:1; cursor:pointer; }
   .nav-btn.active { color:#0a84ff; font-weight:bold; }
 </style>
 </head>
@@ -63,6 +78,11 @@
   <div id="page-hoy" class="page">
     <h2 id="saludoHoy">HOLA</h2>
     <p class="subtitulo" id="fechaHoy"></p>
+    
+    <div class="panel-card" id="guiaDinamica" style="display:none;">
+      <div class="panel-header" id="tituloSugerencia" style="color:#0a84ff;"></div>
+      <div id="guiaValores" class="guia-grid"></div>
+    </div>
     
     <div class="panel-card">
       <div class="panel-header">✍️ REGISTRO DIARIO</div>
@@ -82,7 +102,7 @@
     
     <div class="panel-card">
       <div class="panel-header">📋 TUS REGISTROS</div>
-      <select id="selectorModificar" class="selector-fijo" onchange="abrirModificarDesdeSelector()">
+      <select id="selectorModificar" class="selector-modificar" onchange="abrirModificarDesdeSelector()">
         <option value="" disabled selected>SELECCIONAR PARA MODIFICAR</option>
       </select>
     </div>
@@ -92,18 +112,18 @@
 
   <div id="page-semanal" class="page"><h2>Semana</h2><p class="subtitulo" id="rangoSemanaTexto"></p><div class="panel-card"><div id="circulosSemanal" class="grid-circles"></div></div></div>
   <div id="page-mensual" class="page"><h2>Mes</h2><p class="subtitulo" id="rangoMesTexto"></p><div class="panel-card"><div id="circulosMensual" class="grid-circles"></div></div></div>
-  <div id="page-historial" class="page"><h2>Historial</h2><div class="panel-card"><table><thead><tr id="historialHeader"></tr></thead><tbody id="tablaHistorial"></tbody></table></div></div>
+  <div id="page-historial" class="page"><h2>Historial</h2><div class="panel-card"><table style="table-layout:fixed;"><thead><tr id="historialHeader"></tr></thead><tbody id="tablaHistorial"></tbody></table></div></div>
 </div>
 
 <div id="modalDetalle" class="modal-overlay" style="display:none;">
   <div class="modal-content">
-    <div id="btnTrashIcon" style="position:absolute; top:15px; right:20px; font-size:1.6em; cursor:pointer;">🗑️</div>
-    <h3 id="detalleTitulo">MODIFICAR</h3>
+    <div id="btnTrashIcon" style="position:absolute; top:15px; right:20px; font-size:1.8em; cursor:pointer;">🗑️</div>
+    <h3 id="detalleTitulo" style="margin-top:10px;">EDITAR</h3>
     <div id="detalleContenido"></div>
-    <button class="btn-green" style="margin-top:20px;" id="btnUpdate">✅ ACTUALIZAR</button>
-    <button class="btn-blue" style="background:#444; margin-top:10px;" onclick="cerrarDetalle()">↩️ VOLVER</button>
+    <button class="btn-green" style="margin-top:25px;" id="btnUpdate">✅ ACTUALIZAR</button>
+    <button class="btn-blue" style="background:#444; margin-top:12px;" onclick="cerrarDetalle()">↩️ VOLVER</button>
     
-    <div id="confirmArea" style="display:none; text-align:center; margin-top:20px; border-top:1px solid #333; padding-top:15px;">
+    <div id="confirmArea" style="display:none; text-align:center; margin-top:25px; border-top:1px solid #333; padding-top:20px;">
       <h3 style="color:#ff453a;">¿ESTÁS SEGURO?</h3>
       <button class="btn-blue" style="background:#ff453a;" id="confirmAction">SÍ, CONTINUAR</button>
     </div>
@@ -112,10 +132,11 @@
 
 <div id="modalCierreDia" class="modal-overlay" style="display:none;">
   <div class="modal-content" style="text-align:center;">
-    <h2 style="color:#ff453a;">⚠️ ATENCIÓN</h2>
-    <p>¿ESTÁS SEGURO DE FINALIZAR EL DÍA?</p>
+    <h1 style="font-size:3em;">⚠️</h1>
+    <h3 style="color:#ff453a;">¿ESTÁS SEGURO DE FINALIZAR EL DÍA?</h3>
+    <p style="color:#aaa; font-size:0.8em; margin-bottom:25px;">Esta acción guardará los datos en el historial y limpiará el registro de hoy.</p>
     <button class="btn-green" onclick="cerrarDia()">SÍ, FINALIZAR</button>
-    <button class="btn-blue" style="background:#444; margin-top:10px;" onclick="document.getElementById('modalCierreDia').style.display='none'">CANCELAR</button>
+    <button class="btn-blue" style="background:#444; margin-top:12px;" onclick="document.getElementById('modalCierreDia').style.display='none'">CANCELAR</button>
   </div>
 </div>
 
@@ -168,6 +189,18 @@ function renderCircle(k, a, m){
 function actualizarUI(){
   let p = perfiles[usuarioActual], t = p.hoy.reduce((a,c)=>({kcal:a.kcal+c.kcal,prot:a.prot+c.prot,carbs:a.carbs+c.carbs,grasas:a.grasas+c.grasas,fibra:a.fibra+c.fibra,agua:a.agua+c.agua}),{kcal:0,prot:0,carbs:0,grasas:0,fibra:0,agua:0});
   document.getElementById('circulosHoy').innerHTML = Object.keys(p.METAS).map(k=> renderCircle(k, t[k], p.METAS[k])).join('');
+  
+  // Sugerencias
+  let pen = ["🍳 Desayuno", "Almuerzo", "🍽️ Cena"].filter(c=> !p.hoy.map(x=>x.tipo).includes(c));
+  if(!pen.length) document.getElementById('guiaDinamica').style.display='none';
+  else {
+    document.getElementById('guiaDinamica').style.display='block';
+    document.getElementById('tituloSugerencia').innerText = `💡 SUGERENCIA: ${pen[0].toUpperCase()}`;
+    document.getElementById('guiaValores').innerHTML = Object.keys(p.METAS).map(k=> {
+      let v = Math.round(Math.max(0, p.METAS[k]-t[k])/pen.length);
+      return `<div class="guia-item"><span class="guia-lab">${ICONOS[k]} ${k}</span><span class="guia-val" style="color:${COLORES[k]}">${v}${k==='agua'?'ml':'g'}</span></div>`;
+    }).join('');
+  }
   actualizarDropdowns();
 }
 
@@ -185,14 +218,14 @@ function abrirModificarDesdeSelector(){
   if(!val) return;
   let registro = perfiles[usuarioActual].hoy.find(r => r.tipo === val);
   if(registro) abrirDetalle(registro.id);
-  document.getElementById('selectorModificar').value = "";
+  document.getElementById('selectorModificar').value = ""; // Limpiar selector
 }
 
 function abrirDetalle(id){
   let c = perfiles[usuarioActual].hoy.find(x=>x.id===id);
   document.getElementById('detalleTitulo').innerText = "MODIFICAR " + c.tipo;
   document.getElementById('detalleContenido').innerHTML = Object.keys(COLORES).map(k=> `
-    <div class="cuadro-compacto" style="width:100%; margin-bottom:8px;">
+    <div class="cuadro-compacto" style="width:100%; margin-bottom:8px; height:50px;">
       <div class="label-compacto">${ICONOS[k]} ${k.toUpperCase()}</div>
       <input type="number" id="edit-${k}" value="${c[k]}" class="input-compacto">
       <div class="unit-compacto">${k==='agua'?'ml':'gr'}</div>
@@ -206,7 +239,7 @@ function abrirDetalle(id){
     document.getElementById('confirmArea').style.display = 'block'; 
     callbackConfirm = () => { perfiles[usuarioActual].hoy = perfiles[usuarioActual].hoy.filter(x=>x.id!==id); cerrarDetalle(); guardarYActualizar(); };
   };
-  document.getElementById('modalDetalle').style.display='flex';
+  document.getElementById('modalDetalle').style.display='flex'; // Flotante
 }
 
 function renderReporte(tipo){
